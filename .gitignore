@@ -38,3 +38,4 @@ build/CTestTestfile.cmake
 build/Makefile
 build/cmake_install.cmake
 build/compile_commands.json
+todo.md
