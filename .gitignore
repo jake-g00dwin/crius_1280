@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+.cache/clangd/index
+build/CMakeFiles
+build/src
+build/CMakeCache.txt
+build/CTestTestfile.cmake
+build/Makefile
+build/cmake_install.cmake
+build/compile_commands.json

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.20)
 project(camera
     VERSION 1.0
     DESCRIPTION "Camera cmake file"
-    LANGUAGES   C, CXX
+    LANGUAGES   C CXX
 )
 enable_testing()
 
@@ -18,6 +18,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic")
+
+# SETUP THE CXX flags for .cpp
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_FLAGS "-Wall -Werror -Wpedantic")
 
 # Add CMocka CMake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmocka)
@@ -47,7 +52,32 @@ find_package_handle_standard_args(CMocka DEFAULT_MSG CMOCKA_INCLUDE_DIRS CMOCKA_
 # Hide variables from cmake GUIs.
 mark_as_advanced(CMOCKA_PATH CMOCKA_INCLUDE_DIR CMOCKA_INCLUDE_DIRS CMOCKA_LIBRARY CMOCKA_LIBRARIES)
 
+#Find the needed libs for the camera
+find_library(DALProxy1280 
+    libDALProxy1280_12USB.so 
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera_sdk
+)
+
+#check if found.
+if(NOT DALProxy1280)
+    message(FATAL_ERROR "Library not found!")
+endif()
+
+#Find the needed libs for the camera
+find_library(libusb
+    libusb-1.0.so 
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera_sdk
+)
+
+#check if found.
+if(NOT DALProxy1280)
+    message(FATAL_ERROR "Library not found!")
+endif()
+
+
 add_subdirectory(src)
+
+
 
 if (UNIT_TESTING)
      find_package(cmocka 1.1.5 REQUIRED)
