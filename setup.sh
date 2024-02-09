@@ -29,6 +29,16 @@ install_cmocka () {
 }
 
 
+# Insalls the shared library files to the system.
+# This is optional as the cmake setup can just link to the local ones.
+install_camera_sdk () {
+    echo "Installing the pre-compiled library files..."
+    cp camera_sdk/lib* /usr/lib
+    
+    echo "Installing the header files..."
+    cp camera_sdk/*.h /usr/include
+}
+
 
 install_software
 #install_cpputest
