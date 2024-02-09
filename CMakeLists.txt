@@ -15,7 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # For if we need to use the C ABI
 # Request C 17 standard features
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic")
 
@@ -52,27 +52,42 @@ find_package_handle_standard_args(CMocka DEFAULT_MSG CMOCKA_INCLUDE_DIRS CMOCKA_
 # Hide variables from cmake GUIs.
 mark_as_advanced(CMOCKA_PATH CMOCKA_INCLUDE_DIR CMOCKA_INCLUDE_DIRS CMOCKA_LIBRARY CMOCKA_LIBRARIES)
 
+# #######################################
+# CAMERA SPECIFIC
+# #######################################
+
+message("Project source directory: ${PROJECT_SOURCE_DIR}")
+
+#Add in the needed defines for the camera stuff.
+add_definitions(-DIRLUGX1M3)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/camrea_sdk)
+
 #Find the needed libs for the camera
-find_library(DALProxy1280 
+# Find libusb-1.0 package
+find_library(USB_LIB
+    NAMES usb-1.0 libusb-1.0 libusb-1.0.so
+    PATHS ${PROJECT_SOURCE_DIR}/camera_sdk
+    DOC "Where the libusb library is."
+)
+
+#check if found.
+if(NOT USB_LIB)
+    message(FATAL_ERROR "Library: libusb not found!")
+endif()
+
+#Find the needed libs for the camera
+find_library(DALProxy1280_12USB 
     libDALProxy1280_12USB.so 
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_sdk
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera_sdk/
 )
 
 #check if found.
-if(NOT DALProxy1280)
-    message(FATAL_ERROR "Library not found!")
+if(NOT DALProxy1280_12USB)
+    message(FATAL_ERROR "Library: DALProxy1280_12USB not found!")
 endif()
 
-#Find the needed libs for the camera
-find_library(libusb
-    libusb-1.0.so 
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_sdk
-)
 
-#check if found.
-if(NOT DALProxy1280)
-    message(FATAL_ERROR "Library not found!")
-endif()
 
 
 add_subdirectory(src)
