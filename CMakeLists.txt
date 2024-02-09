@@ -61,32 +61,13 @@ message("Project source directory: ${PROJECT_SOURCE_DIR}")
 #Add in the needed defines for the camera stuff.
 add_definitions(-DIRLUGX1M3)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/camrea_sdk)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-#Find the needed libs for the camera
-# Find libusb-1.0 package
-find_library(USB_LIB
-    NAMES usb-1.0 libusb-1.0 libusb-1.0.so
-    PATHS ${PROJECT_SOURCE_DIR}/camera_sdk
-    DOC "Where the libusb library is."
+# This is an older style of include for *.so files but works for current 
+# project setup.
+LINK_DIRECTORIES(
+    ${PROJECT_SOURCE_DIR}/camera_sdk
 )
-
-#check if found.
-if(NOT USB_LIB)
-    message(FATAL_ERROR "Library: libusb not found!")
-endif()
-
-#Find the needed libs for the camera
-find_library(DALProxy1280_12USB 
-    libDALProxy1280_12USB.so 
-    ${CMAKE_CURRENT_SOURCE_DIR}/camera_sdk/
-)
-
-#check if found.
-if(NOT DALProxy1280_12USB)
-    message(FATAL_ERROR "Library: DALProxy1280_12USB not found!")
-endif()
-
 
 
 
