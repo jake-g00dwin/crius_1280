@@ -69,8 +69,6 @@ LINK_DIRECTORIES(
     ${PROJECT_SOURCE_DIR}/camera_sdk
 )
 
-
-
 add_subdirectory(src)
 
 
