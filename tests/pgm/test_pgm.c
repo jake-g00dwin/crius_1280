@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <setjmp.h>
 #include <cmocka.h>
+#include <stdio.h>
 
 #include "pgm.h" 
 //GLOBALS???
@@ -53,6 +54,21 @@ static void test_pgm_new(void **state) {
     assert_true(test_image.height == 1080);
 }
 
+
+static void test_save_pgm_image(void **state) {
+    pgm_t test_image = new_pgm_image(600, 600);
+    int result = save_pgm_image(&test_image, "tmp/test_image.pgm");
+    assert_true(result == 0);
+
+    //now check if the image file exists by opening it.
+    FILE *fp = fopen("/tmp/test_image.pgm", "r");
+    if(fp == NULL) {
+        assert_true(0);
+    }
+    else {
+        assert_true(1);
+    }
+}
 
 /*
  * ############################
