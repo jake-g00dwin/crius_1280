@@ -40,3 +40,5 @@ build/cmake_install.cmake
 build/compile_commands.json
 todo.md
 build/Testing/Temporary
+build/DartConfiguration.tcl
+build/tests
