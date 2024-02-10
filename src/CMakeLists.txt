@@ -1,3 +1,5 @@
+add_subdirectory(pgm)
+
 add_executable(main
     main.c
 )
