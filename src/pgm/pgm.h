@@ -9,17 +9,23 @@
 #define MAX_2D_ROWS 1080 
 
 typedef struct {
+    size_t x; //The number of cols
+    size_t y; //The number of rows
+    uint16_t data[MAX_2D_COLS][MAX_2D_ROWS];
+}matrix_t;
+
+typedef struct {
     uint16_t width;
     uint16_t height;
     uint8_t val;
+    matrix_t data_matrix;
 }pgm_t;
 
-typedef struct {
-    size_t x; //The number of cols
-    size_t y; //The number of rows 
-}matrix_t;
+
+void clear_matrix(matrix_t *m);
 
 void self_test(void);
+
 
 
 
