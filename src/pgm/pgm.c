@@ -38,3 +38,5 @@ pgm_t new_pgm_image(size_t width, size_t height) {
     clear_matrix(&img.data_matrix);
     return img; 
 }
+
+
