@@ -39,3 +39,4 @@ build/Makefile
 build/cmake_install.cmake
 build/compile_commands.json
 todo.md
+build/Testing/Temporary
