@@ -34,20 +34,12 @@ build_main () {
     make main
 }
 
-build_main_test () {
+run_tests ()  {
     clear_cmake_cache
-    
-    cmake -DUNIT_TESTING=1 ../
+    cmake -DUNIT_TESTING=ON ../ && make all
     ctest
 }
 
-
-build_pgm_test ()  {
-    clear_cmake_cache
-    cmake -DUNIT_TESTING=1 ../
-    ctest
-}
-
-build_pgm_test
+run_tests
 #build_calibration_example 
 
