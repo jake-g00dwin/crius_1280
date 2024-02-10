@@ -1,25 +1,8 @@
 #include <stdarg.h>
 #include <stddef.h>
-#include <stdint.h>
 #include <setjmp.h>
+#include <stdint.h>
 #include <cmocka.h>
-
-#include "pgm.h" 
-//GLOBALS???
-
-
-/*
- * ###################################
- * MOCKS
- * ##################################
- */
-
-/*
- * ###################################
- * END OF MOCKS
- * ##################################
- */
-
 
 /* A test case that does nothing and succeeds. */
 static void null_test_success(void **state) {
@@ -30,6 +13,7 @@ int main(void)
 {
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(null_test_success),
-    }; 
-    return cmocka_run_group_tests(tests, NULL, NULL);
+    };
+
+return cmocka_run_group_tests(tests, NULL, NULL);
 }

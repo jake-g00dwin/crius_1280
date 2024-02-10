@@ -11,3 +11,4 @@ add_cmocka_test(test_pgm
                 LINK_LIBRARIES "${TEST_LIBS}")
 add_cmocka_test_environment(test_pgm)
 target_include_directories(test_pgm PUBLIC "${TEST_DIRS}")
+
