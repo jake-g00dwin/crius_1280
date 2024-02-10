@@ -36,7 +36,9 @@ build_main () {
 
 run_tests ()  {
     clear_cmake_cache
-    cmake -DUNIT_TESTING=ON ../ && make all
+    cmake -DUNIT_TESTING=ON ../
+    make simple_test
+    make pgm && make test_pgm
     ctest
 }
 
