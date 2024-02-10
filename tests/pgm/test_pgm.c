@@ -21,6 +21,12 @@
  */
 
 
+/*
+ * ############################
+ * Tests for PGM
+ * ############################
+ */ 
+
 /*Test case for ensuring the correct structures exist.*/
 static void test_pgm_struct(void **state) {
     (void) state;
@@ -39,6 +45,20 @@ static void test_pgm_struct(void **state) {
     //Now try to access the 2d data array. 
     assert_non_null(my_pgm_img.data_matrix.x);
 }
+
+
+static void test_pgm_new(void **state) {
+    pgm_t test_image = new_pgm_image(1920, 1080);
+    assert_true(test_image.width == 1920);
+    assert_true(test_image.height == 1080);
+}
+
+
+/*
+ * ############################
+ * Tests for Matrix
+ * ############################
+ */ 
 
 /*Test case for the 2D matrix implimentation.*/
 static void test_2dmatrix_struct(void **state)
