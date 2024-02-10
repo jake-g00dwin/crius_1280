@@ -56,7 +56,7 @@ mark_as_advanced(CMOCKA_PATH CMOCKA_INCLUDE_DIR CMOCKA_INCLUDE_DIRS CMOCKA_LIBRA
 # CAMERA SPECIFIC
 # #######################################
 
-message("Project source directory: ${PROJECT_SOURCE_DIR}")
+message(STATUS "Project source directory: ${PROJECT_SOURCE_DIR}")
 
 #Add in the needed defines for the camera stuff.
 add_definitions(-DIRLUGX1M3)
@@ -77,6 +77,7 @@ add_subdirectory(src)
 
 if (UNIT_TESTING)
      find_package(cmocka 1.1.5 REQUIRED)
+     message(STATUS "CMOCKA_LIBRARIES: ${CMOCKA_LIBRARIES}")
      include(AddCMockaTest)
      add_subdirectory(tests)
 endif()
