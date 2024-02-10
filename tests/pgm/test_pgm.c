@@ -99,8 +99,10 @@ int main(void)
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(null_test_success),
         cmocka_unit_test(test_pgm_struct),
+        cmocka_unit_test(test_pgm_new),
         cmocka_unit_test(test_2dmatrix_struct),
         cmocka_unit_test(test_clear_matrix),
+
     }; 
     return cmocka_run_group_tests(tests, NULL, NULL);
 }
