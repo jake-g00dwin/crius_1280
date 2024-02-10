@@ -18,7 +18,7 @@ install_cpputest () {
 }
 
 # Builds and installs CMocka the unit testing harness.
-install_cmocka () {
+install_source_cmocka () {
     echo "Downloading CMOCKA unit testing harness..."
     git clone https://git.cryptomilk.org/projects/cmocka.git
     cd cmocka
@@ -26,6 +26,12 @@ install_cmocka () {
     cmake -S . -B build -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Debug
     cmake --build build
     echo "cmocka should be ready now."
+}
+
+install_binary_cmocka () {
+    echo "Installing the binary for cmocka"   
+    sudo apt install cmocka-doc
+    sudo apt install libcmocka0
 }
 
 
@@ -42,5 +48,5 @@ install_camera_sdk () {
 
 install_software
 #install_cpputest
-install_cmocka
+#install_cmocka
 
