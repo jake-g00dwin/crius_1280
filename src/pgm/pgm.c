@@ -2,6 +2,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 
 void self_test(void)
 {
@@ -40,3 +44,23 @@ pgm_t new_pgm_image(size_t width, size_t height) {
 }
 
 
+int save_pmg_image(pgm_t *image, char* pth)
+{
+    int result = 0;
+    
+    /*Open the file at the passed path.*/
+    int fd = open(pth, O_CREAT | O_WRONLY);
+
+    /*Check that the file handle isnt null*/
+    if(fd == -1) {
+        printf("Error Number % d\n", errno);
+        perror("Program");
+        result = -1;
+    }
+
+    /*close the file handler.*/
+
+    /*return the result of the file handle being closed.*/
+
+    return result; 
+}

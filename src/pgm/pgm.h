@@ -26,7 +26,7 @@ void clear_matrix(matrix_t *m);
 
 pgm_t new_pgm_image(size_t width, size_t height);
 //pmg_t load_pgm_image();
-//int save_pmg_image(pmg_t *image);
+int save_pmg_image(pgm_t *image, char* pth);
 
 
 void self_test(void);
