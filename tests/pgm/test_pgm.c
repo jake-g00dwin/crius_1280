@@ -84,16 +84,17 @@ static void test_save_pgm_image(void **state) {
     //The first two chars should be 'P5'
     assert_true(file_contents[0] == 'P');
     assert_true(file_contents[1] == '5');
-    printf("file_contents: %s\n", file_contents);
+    assert_true(file_contents[2] == '\n');
+    //printf("file_contents: %s\n", file_contents);
 
     //The next two should be the size parameters
-    assert_true(file_contents[4] == '6');
+    assert_true(file_contents[3] == '6');
+    assert_true(file_contents[4] == '0');
     assert_true(file_contents[5] == '0');
-    assert_true(file_contents[6] == '0');
-    assert_true(file_contents[7] == ' ');
-    assert_true(file_contents[8] == '6');
+    assert_true(file_contents[6] == ' ');
+    assert_true(file_contents[7] == '6');
+    assert_true(file_contents[8] == '0');
     assert_true(file_contents[9] == '0');
-    assert_true(file_contents[10] == '0');
 
 
     int close_result = close(fd);
