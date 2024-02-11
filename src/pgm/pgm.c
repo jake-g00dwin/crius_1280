@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
 
 
 void self_test(void)
@@ -63,7 +64,19 @@ int save_pgm_image(pgm_t *image, char* pth)
         return fd;
     }
     
+    /*Write the header info*/
+    char wbuf[WBUF_SIZE];
+    strncpy(wbuf, "P5\n\0", 4); 
+    int write_result = write(fd, wbuf, sizeof(wbuf));
+    
 
+
+    if(write_result < 0) {
+        printf("Error: Number % d\n", errno);
+        printf("Issue writing to file!\n");
+        perror("Program");
+        return write_result;
+    } 
 
     /*close the file handler.*/
     int close_result = close(fd);

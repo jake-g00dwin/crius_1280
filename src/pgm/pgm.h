@@ -8,6 +8,8 @@
 #define MAX_2D_COLS 1920
 #define MAX_2D_ROWS 1080 
 
+#define WBUF_SIZE   256
+
 typedef struct {
     size_t x; //The number of cols
     size_t y; //The number of rows
