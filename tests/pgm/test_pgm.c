@@ -1,9 +1,12 @@
+#include <fcntl.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <setjmp.h>
 #include <cmocka.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #include "pgm.h" 
 //GLOBALS???
@@ -56,18 +59,38 @@ static void test_pgm_new(void **state) {
 
 
 static void test_save_pgm_image(void **state) {
+    char s[] = "/tmp/test_image.pgm";
+
     pgm_t test_image = new_pgm_image(600, 600);
-    int result = save_pgm_image(&test_image, "tmp/test_image.pgm");
+    
+    char* file_contents = malloc(600);
+
+
+    int result = save_pgm_image(&test_image, s);
+    
     assert_true(result == 0);
 
     //now check if the image file exists by opening it.
-    FILE *fp = fopen("/tmp/test_image.pgm", "r");
-    if(fp == NULL) {
+    int fd = open(s, O_RDONLY);
+
+    //Check if it 1.) Exists, 2.) Opens without issue.
+    if(fd < 0) {
         assert_true(0);
     }
-    else {
-        assert_true(1);
-    }
+    
+    //check for correct header types
+    read(fd, file_contents, 600);
+    
+    //The first two chars should be 'P5'
+    assert_true(file_contents[0] == 'P');
+    assert_true(file_contents[0] == '5');
+    printf("file_contents: %s\n", file_contents);
+
+
+    int close_result = close(fd);
+    assert_true(0 <= close_result);
+
+    free(file_contents);
 }
 
 /*
@@ -116,6 +139,7 @@ int main(void)
         cmocka_unit_test(null_test_success),
         cmocka_unit_test(test_pgm_struct),
         cmocka_unit_test(test_pgm_new),
+        cmocka_unit_test(test_save_pgm_image),
         cmocka_unit_test(test_2dmatrix_struct),
         cmocka_unit_test(test_clear_matrix),
 
