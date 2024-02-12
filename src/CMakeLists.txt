@@ -9,6 +9,8 @@ target_link_libraries(main PUBLIC
     pgm
 )
 
+
+# Utility to convert rawbinary image data into pgm files.
 add_executable(rawtopgm
     rawtopgm.c
 )
@@ -19,7 +21,7 @@ target_link_libraries(rawtopgm PUBLIC
 
 
 
-
+# The example CPP code for calibration
 add_executable(calibrationExample
     calibrationExample.cpp    
 )
@@ -34,8 +36,16 @@ target_link_libraries(calibrationExample PUBLIC
     pthread
 )
 
+
+# The example CPP code for the camera 
 add_executable(exampleSmartIR
     exampleSmartIR.cpp    
+)
+
+target_link_libraries(calibrationExample PUBLIC
+    DALProxy1280_12USB
+    usb-1.0 
+    pthread
 )
 
 
