@@ -28,37 +28,39 @@
  */
 
 static void test_camera_init(void **state) { 
-    int fps = 5;
+    char nuc = 0;
+    float fps = 5;
     bool SL = false;
     bool BP = false;
     enum agc AGC = no_agc; 
-    int result = init_camera(fps, SL, BP, AGC);
+    int result = init_camera(fps, SL, BP, AGC, nuc);
     assert_true(result == 0);
     
  
 }
 
 static void test_args_camera_init(void **state) {
-    int fps = 5;
+    char nuc = 0;
+    float fps = 5;
     bool SL = false;
     bool BP = false;
     enum agc AGC = no_agc; 
-    int result = init_camera(fps, SL, BP, AGC);
+    int result = init_camera(fps, SL, BP, AGC, nuc);
     assert_true(result == 0);
 
     fps = 0;
-    result = init_camera(fps, SL, BP, AGC);
+    result = init_camera(fps, SL, BP, AGC, nuc);
     assert_false(result == 0);
 
     fps = 175;
-    result = init_camera(fps, SL, BP, AGC);
+    result = init_camera(fps, SL, BP, AGC, nuc);
     assert_false(result == 0); 
 
     fps = 30;
-    result = init_camera(fps, SL, BP, AGC);
+    result = init_camera(fps, SL, BP, AGC, nuc);
     assert_true(result == 0); 
 
-    result = init_camera(fps, SL, BP, 100);
+    result = init_camera(fps, SL, BP, 100, nuc);
     assert_false(result == 0); 
 
 } 

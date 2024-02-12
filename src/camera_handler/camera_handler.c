@@ -27,7 +27,7 @@ uint8_t num_attached(void)
 }
 
 bool is_correct_name(void) {
-    char name[300] = {'\0'};
+    char name[310] = {'\0'};
     Proxy1280_12USB_GetModuleName(0, name, 300);
     
     int result = strcmp(name, "");
@@ -37,31 +37,48 @@ bool is_correct_name(void) {
     return true;
 }
 
-int init_camera(uint8_t fps, bool SL, bool BP, uint8_t agc)
+
+int connect_camera(int *camera_handle)
 {
-    if(fps > MAX_FPS || fps < MIN_FPS) {
+    eDALProxy1280_12USBErr result_code;
+    result_code = Proxy1280_12USB_ConnectToModule(0, (HANDLE) &camera_handle);
+
+    if (result_code != eProxy1280_12USBSuccess){
         return -1;
+    }
+    return 0;
+}
+
+int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
+{
+    HANDLE camera_handle = NULL;
+    if(fps > MAX_FPS || fps < MIN_FPS) {
+        return NULL;
     }
     
     if(agc > 3){
-        return -1;
+        return NULL;
     }    
 
+    /*Defaulting for now*/
+    enum eAGCProcessingValue agc_val = eNoAGC;
     
     /*See how many devices are attached.*/
-    if(num_attached() <= 0){return -1;}
+    if(num_attached() <= 0){return NULL;}
 
     /*Check for the correct name*/
-    if(correct_name() != true){return -1;}
+    if(correct_name() != true){return NULL;}
 
     /*connect to module(camera)*/
-    if( connect_camera() < 0){return -1;}
-
-    /*do a self-test*/
+    if( connect_camera(camera_handle) < 0){return NULL;}
 
     /*Set the configuration*/
+    Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
+    Proxy1280_12USB_SetShutterLessProcessing(camera_handle, SL);
+    Proxy1280_12USB_SetFloatFeature(camera_handle, efFrameRate, fps);
+    Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
 
-    return 0;
+    return camera_handle;
 }
 
 
