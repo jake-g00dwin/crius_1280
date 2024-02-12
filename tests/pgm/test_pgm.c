@@ -81,19 +81,84 @@ static void test_build_pgm_header(void **state) {
 }
 
 static void test_parse_raw_data(void **state) {
-    assert_true(0);
+    pgm_t test_image = new_pgm_image(64, 64);
+
+    /*64 * 64 = 4096, which is: 8192 Bytes*/
+    uint16_t *test_arr = malloc(sizeof(uint16_t) * 4096);  
+    
+    /*Fill the array with data.*/ 
+    for(int i = 0; i < 4096; i++) {
+        test_arr[i] = i;
+    }
+
+    int result = parse_raw_data(&test_image, test_arr);
+    assert_true(result >= 4096);
+ 
+    /*
+    for(int i = 0; i < 8; i++) {
+        printf("test_arr[%d]: %u\n", i, test_arr[i]);
+        printf("matrix[%d][0]: %u\n", i,  test_image.data_matrix.data[i][0]);
+    }
+    */
+    
+    int one_d_idx = 0;
+    for(int row = 0; row < 64; row++) {
+        for(int col = 0; col < 64; col++) {
+            assert_true(test_image.data_matrix.data[col][row] == test_arr[one_d_idx]);
+            one_d_idx++;
+        }
+    }       
+
+    free(test_arr); 
+
+    //just for curiosity lets print out the image.     
+    /*
+    char s[] = "/tmp/6464_image.pgm";
+    result = save_pgm_image(&test_image, s);
+    assert_true(result == 0);
+    */
+}
+
+static void test_write_matrix(void **state) {
+    char file_name[] = "/tmp/test_matrix_write.pgm";
+
+    pgm_t test_image = new_pgm_image(64, 64);
+
+    /*Fill the matrix with values*/
+    for(int row = 0; row < 64; row++) {
+        for(int col = 0; col < 64; col++) {
+            test_image.data_matrix.data[col][row] = UINT16_MAX;
+        }
+    }       
+
+    mode_t image_mode = S_IRUSR | S_IRWXU | S_IRGRP | S_IROTH;
+    
+    int fd = open(file_name, O_CREAT | O_WRONLY | image_mode);
+    assert_true(0 <= fd);
+    
+    int written = write_matrix(&test_image, &fd);
+    assert_true(written > 0);
+
+    int result = close(fd);
+    assert_true(0 <= result);
+
+    /*Confirm the written contents*/
+    fd = open(file_name, O_RDONLY);
+    char rbuf[8192]; 
+    size_t read_bytes = read(fd, rbuf, 4096);   
+    assert_true(read_bytes > 0);  
+
+    close(fd);
 }
 
 static void test_save_pgm_image(void **state) {
     char s[] = "/tmp/test_image.pgm";
 
-    pgm_t test_image = new_pgm_image(600, 600);
+    pgm_t test_image = new_pgm_image(64, 64);
     
-    char* file_contents = malloc(600);
+    char* file_contents = malloc(sizeof(uint16_t) * 4096);
 
-
-    int result = save_pgm_image(&test_image, s);
-    
+    int result = save_pgm_image(&test_image, s); 
     assert_true(result == 0);
 
     //now check if the image file exists by opening it.
@@ -158,6 +223,7 @@ int main(void)
         cmocka_unit_test(test_pgm_new),
         cmocka_unit_test(test_build_pgm_header),
         cmocka_unit_test(test_parse_raw_data),
+        cmocka_unit_test(test_write_matrix),
         cmocka_unit_test(test_save_pgm_image),
         cmocka_unit_test(test_2dmatrix_struct),
         cmocka_unit_test(test_clear_matrix),
