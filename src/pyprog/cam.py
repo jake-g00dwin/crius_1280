@@ -3,7 +3,8 @@
 #
 from ctypes import CDLL, POINTER
 from ctypes import c_size_t, c_double
-# from ctypes import *
+
+import cv2 as cv
 import numpy as np
 
 
@@ -27,16 +28,35 @@ def quicktest():
     mylib.print_array(X, X.size)
 
 
+# Displays the image in a window
+def check_img():
+    img = cv.imread("./image.pgm")
+    cv.imshow("IR CAM", img)
+    k = cv.waitKey(0)
+    return k
+
+
 def main():
-    camlib = CDLL("./camera_handler.so")
+    print("TESTING!\n")
+
+    camlib = CDLL("./libcamera_handler.so")
+
+    # check it works
+    camlib.self_test()
+    camlib.self_test.restype = np.ctypeslib.integer
+
+    print("self_test(): " + str(camlib.self_test()))
+
     # Pass in args to the C function to get a camera 'HANDLE' type.
-    camera_handle = camlib.init_camera()
+    # camera_handle = camlib.init_camera()
 
     # Now request frame/image from the camera that's formatted.
     ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
 
-    #define prototypes camlib
+    # define prototypes camlib
     camlib.get_frame(ND_POINTER_1, c_size_t)
     camlib.get_fame.restype = None
 
-main
+
+main()
+# check_img()
