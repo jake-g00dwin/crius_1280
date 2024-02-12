@@ -41,9 +41,15 @@ static void test_camera_init(void **state) {
 
     fps = 175;
     result = init_camera(fps, SL, BP, AGC);
-    assert_false(result == 0);
+    assert_false(result == 0); 
 
-   
+    fps = 30;
+    result = init_camera(fps, SL, BP, AGC);
+    assert_true(result == 0); 
+
+    result = init_camera(fps, SL, BP, 100);
+    assert_false(result == 0); 
+
 } 
 
 
