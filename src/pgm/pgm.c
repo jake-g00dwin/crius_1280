@@ -79,11 +79,11 @@ int write_matrix(pgm_t *img, int *file_descriptor)
     size_t row_size = img->width * sizeof(uint16_t);
 
     /*Fill up the buffer*/
-    for(int col = 0; col < img->height; col++) {  
-        void *row_data = &img->data_matrix.data[0][col];
-        
+    for(int row = 0; row < img->height; row++) {  
+        void *row_data = &img->data_matrix.data[row][0];
+ 
         /*Write the buffer*/
-        written_bytes += write(*file_descriptor, row_data, row_size);
+        written_bytes += write(*file_descriptor, (char*)row_data, row_size);
     }
     
     return written_bytes;
