@@ -10,7 +10,6 @@
 #include <string.h>
 
 #include "pgm.h" 
-//GLOBALS???
 
 
 /*
@@ -178,9 +177,7 @@ static void test_doodle_box(void **state) {
         test_image.data_matrix.data[i][31] = UINT16_MAX;
     }
     
-
     int result = save_pgm_image(&test_image, s); 
-    printf("result: %d", result);
     assert_true(result == 0);
 
 }
