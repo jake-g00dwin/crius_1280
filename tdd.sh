@@ -42,6 +42,7 @@ run_tests ()  {
     cmake -DUNIT_TESTING=ON ../
     make simple_test
     make pgm && make test_pgm
+    make camera_handler && make test_camera_handler
     ctest
 }
 
