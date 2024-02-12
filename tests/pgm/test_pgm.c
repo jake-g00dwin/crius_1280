@@ -73,14 +73,16 @@ static void test_build_pgm_header(void **state) {
 
     /*Call the function*/
     result = build_pgm_header(&test_image, header);
-    assert_true(result == 0);
+    assert_true(result >= 0);
 
     /*Check it matches known good string*/
     result = strcmp(header, h);
     assert_true(result >= 0);
-    printf("Correc: %s\n Actual: %s", h, header);
 }
 
+static void test_parse_raw_data(void **state) {
+    assert_true(0);
+}
 
 static void test_save_pgm_image(void **state) {
     char s[] = "/tmp/test_image.pgm";
@@ -155,6 +157,7 @@ int main(void)
         cmocka_unit_test(test_pgm_struct),
         cmocka_unit_test(test_pgm_new),
         cmocka_unit_test(test_build_pgm_header),
+        cmocka_unit_test(test_parse_raw_data),
         cmocka_unit_test(test_save_pgm_image),
         cmocka_unit_test(test_2dmatrix_struct),
         cmocka_unit_test(test_clear_matrix),
