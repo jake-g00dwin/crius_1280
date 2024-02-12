@@ -9,6 +9,17 @@ target_link_libraries(main PUBLIC
     pgm
 )
 
+add_executable(rawtopgm
+    rawtopgm.c
+)
+
+target_link_libraries(rawtopgm PUBLIC
+    pgm
+)
+
+
+
+
 add_executable(calibrationExample
     calibrationExample.cpp    
 )
