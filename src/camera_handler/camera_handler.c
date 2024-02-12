@@ -8,7 +8,19 @@
 #include "DALProxySwitchUSBDef.h"
 
 
-uint16_t paImage[IRIMAGE_NBPIXELS*2];
+//uint16_t paImage[IRIMAGE_NBPIXELS*2];
+
+
+int init_camera(uint8_t fps, bool SL, bool BP, uint8_t agc)
+{
+    if(fps > MAX_FPS || fps < MIN_FPS) {
+        return -1;
+    }
+
+
+    return 0;
+}
+
 
 int cam_self_test(void)
 {
