@@ -161,6 +161,10 @@ static void test_save_pgm_image(void **state) {
     free(file_contents);
 }
 
+/*
+ * This test will draw a white outlined black square
+ * You should open the image manually to verify
+ */
 static void test_doodle_box(void **state) {
     char s[] = "/tmp/test_doodle_box.pgm";
 
@@ -169,8 +173,11 @@ static void test_doodle_box(void **state) {
     /*Modify image to have full contrast in square*/
     for(int i = 0; i < 32; i++){
         test_image.data_matrix.data[0][i] = UINT16_MAX;
-        //test_image.data_matrix.data[i][31] = UINT16_MAX;
+        test_image.data_matrix.data[31][i] = UINT16_MAX;
+        test_image.data_matrix.data[i][0] = UINT16_MAX;
+        test_image.data_matrix.data[i][31] = UINT16_MAX;
     }
+    
 
     int result = save_pgm_image(&test_image, s); 
     printf("result: %d", result);
