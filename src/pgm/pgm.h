@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 /*This should be a power of two ideally 255 or 2^16*/
-#define PIXEL_DEPTH UINT16_MAX
+#define PIXEL_DEPTH UINT16_MAX 
 
 #define MAX_2D_COLS 1920
 #define MAX_2D_ROWS 1080 

@@ -1,5 +1,7 @@
 #include "pgm.h"
 
+#include <inttypes.h>
+
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -66,7 +68,12 @@ int parse_raw_data(pgm_t *img, uint16_t *arr)
 
 int build_pgm_header(pgm_t *img, char* wbuf)
 {   
-    int result = sprintf(wbuf, "P5\n%u %u\n%u\n", img->width, img->height, PIXEL_DEPTH);
+    if(img->width <=0 || img->height <= 0){
+        printf("ERROR: zero sized image!\n");
+        return -1;
+    }
+    //int result = sprintf(wbuf, "P5\n%u %u\n%u\n", img->width, img->height, PIXEL_DEPTH);
+    int result = sprintf(wbuf, "P5\n%" PRIu16 " %" PRIu16 "\n%u\n", img->width, img->height, PIXEL_DEPTH);
     return result;
 }
 
@@ -107,7 +114,7 @@ int save_pgm_image(pgm_t *image, char* pth)
     }
     
     /*Write the header info*/
-    char wbuf[WBUF_SIZE] = {'\0'};
+    char wbuf[128] = {'\0'};
     build_pgm_header(image, wbuf);
 
     int header_length = strlen(wbuf); 

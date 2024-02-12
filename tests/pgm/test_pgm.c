@@ -61,22 +61,24 @@ static void test_build_pgm_header(void **state) {
 
     /*Check for correct sting function*/
     char h[128] = {'\0'};
-    int result = sprintf(h, "P5\n%u %u\n%u", 64, 64, 255);
+    int result = sprintf(h, "P5\n%u %u\n%u", 1280, 1024, UINT16_MAX);
     assert_true(result >= 0);
 
-    result = strcmp(h, "P5\n64 64\n255");
+    result = strcmp(h, "P5\n1280 1024\n255");
     assert_true(result >= 0);
    
     char header[128] = {'\0'};
-    pgm_t test_image = new_pgm_image(64, 64);
+    pgm_t test_image = new_pgm_image(1280, 1024);
 
     /*Call the function*/
     result = build_pgm_header(&test_image, header);
     assert_true(result >= 0);
 
     /*Check it matches known good string*/
-    result = strcmp(header, h);
+    result = strcmp(header, "P5\n1280 1024\n65535");
     assert_true(result >= 0);
+
+    /*Ensure it writes correctly*/
 }
 
 static void test_parse_raw_data(void **state) {
@@ -139,9 +141,9 @@ static void test_write_matrix(void **state) {
 static void test_save_pgm_image(void **state) {
     char s[] = "/tmp/test_image.pgm";
 
-    pgm_t test_image = new_pgm_image(64, 64);
+    pgm_t test_image = new_pgm_image(1280, 1024);
     
-    char* file_contents = malloc(sizeof(uint16_t) * 4096);
+    char* file_contents = malloc(sizeof(uint16_t) * 1280 * 1024);
 
     int result = save_pgm_image(&test_image, s); 
     assert_true(result == 0);
