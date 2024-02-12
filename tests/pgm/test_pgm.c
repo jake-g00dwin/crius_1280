@@ -93,30 +93,16 @@ static void test_parse_raw_data(void **state) {
 
     int result = parse_raw_data(&test_image, test_arr);
     assert_true(result >= 4096);
- 
-    /*
-    for(int i = 0; i < 8; i++) {
-        printf("test_arr[%d]: %u\n", i, test_arr[i]);
-        printf("matrix[%d][0]: %u\n", i,  test_image.data_matrix.data[i][0]);
-    }
-    */
-    
+     
     int one_d_idx = 0;
     for(int row = 0; row < 64; row++) {
         for(int col = 0; col < 64; col++) {
-            assert_true(test_image.data_matrix.data[col][row] == test_arr[one_d_idx]);
+            assert_true(test_image.data_matrix.data[row][col] == test_arr[one_d_idx]);
             one_d_idx++;
         }
     }       
 
     free(test_arr); 
-
-    //just for curiosity lets print out the image.     
-    /*
-    char s[] = "/tmp/6464_image.pgm";
-    result = save_pgm_image(&test_image, s);
-    assert_true(result == 0);
-    */
 }
 
 static void test_write_matrix(void **state) {
@@ -137,7 +123,7 @@ static void test_write_matrix(void **state) {
     assert_true(0 <= fd);
     
     int written = write_matrix(&test_image, &fd);
-    assert_true(written > 0);
+    assert_true(written >= 8192);
 
     int result = close(fd);
     assert_true(0 <= result);
@@ -175,6 +161,23 @@ static void test_save_pgm_image(void **state) {
     free(file_contents);
 }
 
+static void test_doodle_box(void **state) {
+    char s[] = "/tmp/test_doodle_box.pgm";
+
+    pgm_t test_image = new_pgm_image(32, 32);
+
+    /*Modify image to have full contrast in square*/
+    for(int i = 0; i < 32; i++){
+        test_image.data_matrix.data[0][i] = UINT16_MAX;
+        //test_image.data_matrix.data[i][31] = UINT16_MAX;
+    }
+
+    int result = save_pgm_image(&test_image, s); 
+    printf("result: %d", result);
+    assert_true(result == 0);
+
+}
+
 /*
  * ############################
  * Tests for Matrix
@@ -204,7 +207,7 @@ static void test_clear_matrix(void **state)
     
     for(int row = 0; row < MAX_2D_ROWS; row++) {
         for(int col = 0; col < MAX_2D_COLS; col++){
-            assert_true(my_matrix.data[col][row] == 0);
+            assert_true(my_matrix.data[row][col] == 0);
         }
     }
 }
@@ -225,6 +228,7 @@ int main(void)
         cmocka_unit_test(test_parse_raw_data),
         cmocka_unit_test(test_write_matrix),
         cmocka_unit_test(test_save_pgm_image),
+        cmocka_unit_test(test_doodle_box),
         cmocka_unit_test(test_2dmatrix_struct),
         cmocka_unit_test(test_clear_matrix),
 

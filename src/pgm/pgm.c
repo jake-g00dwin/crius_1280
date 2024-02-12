@@ -28,7 +28,7 @@ void clear_matrix(matrix_t *m)
 {
     for(int row = 0; row < MAX_2D_ROWS ;row++){
         for(int col = 0; col < MAX_2D_COLS; col++){
-            m->data[col][row] = 0;
+            m->data[row][col] = 0;
         } 
     }
      
@@ -56,7 +56,7 @@ int parse_raw_data(pgm_t *img, uint16_t *arr)
     /*Iterate through the 2D array and set it from the passed array.*/
     for(int rows = 0; rows < img->height; rows++){
         for(int cols = 0; cols < img->width; cols++){
-           img->data_matrix.data[cols][rows] = arr[array_idx]; 
+           img->data_matrix.data[rows][cols] = arr[array_idx]; 
            array_idx++;
         } 
     }
@@ -73,16 +73,14 @@ int build_pgm_header(pgm_t *img, char* wbuf)
 
 int write_matrix(pgm_t *img, int *file_descriptor)
 {
-    /*Create a write buffer*/
-    //char* wbuf[WBUF_SIZE];
 
     int written_bytes = 0;
 
     size_t row_size = img->width * sizeof(uint16_t);
 
     /*Fill up the buffer*/
-    for(int row = 0; row < img->height; row++) {  
-        void *row_data = &img->data_matrix.data[0][row];
+    for(int col = 0; col < img->height; col++) {  
+        void *row_data = &img->data_matrix.data[0][col];
         
         /*Write the buffer*/
         written_bytes += write(*file_descriptor, row_data, row_size);
