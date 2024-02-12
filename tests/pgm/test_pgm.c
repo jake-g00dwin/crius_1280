@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "pgm.h" 
 //GLOBALS???
@@ -55,6 +56,31 @@ static void test_pgm_new(void **state) {
     pgm_t test_image = new_pgm_image(1920, 1080);
     assert_true(test_image.width == 1920);
     assert_true(test_image.height == 1080);
+}
+
+static void test_build_pgm_header(void **state) {
+    
+    /*Check for correct sting function*/
+    char h[256] = {'\0'};
+    int result = sprintf(h, "P5\n%u %u\n%u", 64, 64, 255);
+    assert_true(result >= 0);
+
+    result = strcmp(h, "P5\n64 64\n255");
+    assert_true(result >= 0);
+
+    //char s[] = "/tmp/test_image.pgm"; 
+   
+    char header[256] = {'\0'};
+    pgm_t test_image = new_pgm_image(64, 64);
+
+    /*Call the function*/
+    result = build_pgm_header(&test_image, header);
+    assert_true(result == 0);
+
+    /*Check it matches known good string*/
+    result = strcmp(h, header);
+    assert_true(result >= 0);
+
 }
 
 
@@ -149,6 +175,7 @@ int main(void)
         cmocka_unit_test(null_test_success),
         cmocka_unit_test(test_pgm_struct),
         cmocka_unit_test(test_pgm_new),
+        cmocka_unit_test(test_build_pgm_header),
         cmocka_unit_test(test_save_pgm_image),
         cmocka_unit_test(test_2dmatrix_struct),
         cmocka_unit_test(test_clear_matrix),
