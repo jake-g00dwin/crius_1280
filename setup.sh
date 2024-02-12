@@ -10,6 +10,8 @@ install_software () {
     sudo apt install cmake
     sudo apt install make
     sudo apt install git
+    sudo apt install python3.11
+    sudo apt install python3.11-venv
 }
 
 # Installs the CXX(cpp) unit testing framework
