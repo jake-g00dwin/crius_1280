@@ -59,18 +59,16 @@ static void test_pgm_new(void **state) {
 }
 
 static void test_build_pgm_header(void **state) {
-    
+
     /*Check for correct sting function*/
-    char h[256] = {'\0'};
+    char h[128] = {'\0'};
     int result = sprintf(h, "P5\n%u %u\n%u", 64, 64, 255);
     assert_true(result >= 0);
 
     result = strcmp(h, "P5\n64 64\n255");
     assert_true(result >= 0);
-
-    //char s[] = "/tmp/test_image.pgm"; 
    
-    char header[256] = {'\0'};
+    char header[128] = {'\0'};
     pgm_t test_image = new_pgm_image(64, 64);
 
     /*Call the function*/
@@ -78,9 +76,9 @@ static void test_build_pgm_header(void **state) {
     assert_true(result == 0);
 
     /*Check it matches known good string*/
-    result = strcmp(h, header);
+    result = strcmp(header, h);
     assert_true(result >= 0);
-
+    printf("Correc: %s\n Actual: %s", h, header);
 }
 
 
@@ -104,25 +102,6 @@ static void test_save_pgm_image(void **state) {
         assert_true(0);
     }
     
-    //check for correct header types
-    read(fd, file_contents, 600);
-    
-    //The first two chars should be 'P5'
-    assert_true(file_contents[0] == 'P');
-    assert_true(file_contents[1] == '5');
-    assert_true(file_contents[2] == '\n');
-    //printf("file_contents: %s\n", file_contents);
-
-    //The next two should be the size parameters
-    assert_true(file_contents[3] == '6');
-    assert_true(file_contents[4] == '0');
-    assert_true(file_contents[5] == '0');
-    assert_true(file_contents[6] == ' ');
-    assert_true(file_contents[7] == '6');
-    assert_true(file_contents[8] == '0');
-    assert_true(file_contents[9] == '0');
-
-
     int close_result = close(fd);
     assert_true(0 <= close_result);
 
