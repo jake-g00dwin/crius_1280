@@ -11,8 +11,9 @@ int main() {
     printf("CMAKE FUNCTIONAL\r\n");
    
 
-    char src[] = "frame0.raw";
-    char dst[] = "/tmp/image.pgm";
+    //char src[] = "frame0.raw";
+    char src[] = "imgRAW.bin";
+    char dst[] = "image.pgm";
     pgm_t frame = new_pgm_image(1280, 1024);
     frame.height = 1024;
     frame.width = 1280;
