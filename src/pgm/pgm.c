@@ -1,5 +1,6 @@
 #include "pgm.h"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -47,10 +48,15 @@ pgm_t new_pgm_image(size_t width, size_t height) {
 }
 
 
-
-int build_pgm_header(pgm_t *img, char* wbuf)
+int parse_raw_data(pgm_t *img, uint16_t *arr)
 {
     return 0;
+}
+
+int build_pgm_header(pgm_t *img, char* wbuf)
+{   
+    int result = sprintf(wbuf, "P5\n%u %u\n%u\n", img->width, img->height, PIXEL_DEPTH);
+    return result;
 }
 
 int save_pgm_image(pgm_t *image, char* pth)
@@ -72,10 +78,10 @@ int save_pgm_image(pgm_t *image, char* pth)
     
     /*Write the header info*/
     char wbuf[WBUF_SIZE];
-    strncpy(wbuf, "P5\n\0", 4); 
+    build_pgm_header(image, wbuf); 
+
     int write_result = write(fd, wbuf, sizeof(wbuf));
     
-
     if(write_result < 0) {
         printf("Error: Number % d\n", errno);
         printf("Issue writing to file!\n");

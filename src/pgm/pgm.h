@@ -5,6 +5,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/*This should be a power of two ideally 255 or 2^16*/
+#define PIXEL_DEPTH UINT16_MAX
+
 #define MAX_2D_COLS 1920
 #define MAX_2D_ROWS 1080 
 
@@ -28,6 +31,7 @@ void clear_matrix(matrix_t *m);
 pgm_t new_pgm_image(size_t width, size_t height);
 int save_pgm_image(pgm_t *image, char* pth);
 int build_pgm_header(pgm_t *img, char* wbuf);
+int parse_raw_data(pgm_t *img, uint16_t *arr);
 
 
 void self_test(void);
