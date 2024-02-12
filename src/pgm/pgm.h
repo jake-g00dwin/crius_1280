@@ -11,7 +11,7 @@
 #define MAX_2D_COLS 1920
 #define MAX_2D_ROWS 1080 
 
-#define WBUF_SIZE   256
+#define WBUF_SIZE   MAX_2D_COLS * 2
 
 typedef struct {
     size_t x; //The number of cols
@@ -32,7 +32,7 @@ pgm_t new_pgm_image(size_t width, size_t height);
 int save_pgm_image(pgm_t *image, char* pth);
 int build_pgm_header(pgm_t *img, char* wbuf);
 int parse_raw_data(pgm_t *img, uint16_t *arr);
-
+int write_matrix(pgm_t *img, int *file_descriptor); 
 
 void self_test(void);
 

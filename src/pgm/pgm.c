@@ -1,5 +1,6 @@
 #include "pgm.h"
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,13 +51,44 @@ pgm_t new_pgm_image(size_t width, size_t height) {
 
 int parse_raw_data(pgm_t *img, uint16_t *arr)
 {
-    return 0;
+    int array_idx= 0;
+
+    /*Iterate through the 2D array and set it from the passed array.*/
+    for(int rows = 0; rows < img->height; rows++){
+        for(int cols = 0; cols < img->width; cols++){
+           img->data_matrix.data[cols][rows] = arr[array_idx]; 
+           array_idx++;
+        } 
+    }
+        
+    return array_idx;
 }
 
 int build_pgm_header(pgm_t *img, char* wbuf)
 {   
     int result = sprintf(wbuf, "P5\n%u %u\n%u\n", img->width, img->height, PIXEL_DEPTH);
     return result;
+}
+
+
+int write_matrix(pgm_t *img, int *file_descriptor)
+{
+    /*Create a write buffer*/
+    //char* wbuf[WBUF_SIZE];
+
+    int written_bytes = 0;
+
+    size_t row_size = img->width * sizeof(uint16_t);
+
+    /*Fill up the buffer*/
+    for(int row = 0; row < img->height; row++) {  
+        void *row_data = &img->data_matrix.data[0][row];
+        
+        /*Write the buffer*/
+        written_bytes += write(*file_descriptor, row_data, row_size);
+    }
+    
+    return written_bytes;
 }
 
 int save_pgm_image(pgm_t *image, char* pth)
@@ -77,17 +109,26 @@ int save_pgm_image(pgm_t *image, char* pth)
     }
     
     /*Write the header info*/
-    char wbuf[WBUF_SIZE];
-    build_pgm_header(image, wbuf); 
+    char wbuf[WBUF_SIZE] = {'\0'};
+    build_pgm_header(image, wbuf);
 
-    int write_result = write(fd, wbuf, sizeof(wbuf));
-    
+    int header_length = strlen(wbuf); 
+
+    int write_result = write(fd, wbuf, sizeof(char) * header_length);
+ 
     if(write_result < 0) {
         printf("Error: Number % d\n", errno);
         printf("Issue writing to file!\n");
         perror("Program");
         return write_result;
     } 
+
+    /*Now write the matrix*/
+    int written = write_matrix(image, &fd); 
+    if(written < (image->height * image->width)) {
+        perror("Program");
+        return written;
+    }
 
     /*close the file handler.*/
     int close_result = close(fd);
