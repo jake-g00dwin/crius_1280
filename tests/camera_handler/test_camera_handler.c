@@ -27,7 +27,18 @@
  * ############################
  */
 
-static void test_camera_init(void **state) {
+static void test_camera_init(void **state) { 
+    int fps = 5;
+    bool SL = false;
+    bool BP = false;
+    enum agc AGC = no_agc; 
+    int result = init_camera(fps, SL, BP, AGC);
+    assert_true(result == 0);
+    
+ 
+}
+
+static void test_args_camera_init(void **state) {
     int fps = 5;
     bool SL = false;
     bool BP = false;
@@ -63,6 +74,7 @@ int main(void)
      
     const struct CMUnitTest tests[] = {
         cmocka_unit_test(null_test_success),
+        cmocka_unit_test(test_args_camera_init),
         cmocka_unit_test(test_camera_init),
     };
     return cmocka_run_group_tests(tests, NULL, NULL);
