@@ -47,6 +47,12 @@ pgm_t new_pgm_image(size_t width, size_t height) {
 }
 
 
+
+int build_pgm_header(pgm_t *img, char* wbuf)
+{
+    return 0;
+}
+
 int save_pgm_image(pgm_t *image, char* pth)
 {
 
@@ -69,7 +75,6 @@ int save_pgm_image(pgm_t *image, char* pth)
     strncpy(wbuf, "P5\n\0", 4); 
     int write_result = write(fd, wbuf, sizeof(wbuf));
     
-
 
     if(write_result < 0) {
         printf("Error: Number % d\n", errno);

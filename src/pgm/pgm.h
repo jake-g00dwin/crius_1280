@@ -23,11 +23,11 @@ typedef struct {
     matrix_t data_matrix;
 }pgm_t;
 
-
 void clear_matrix(matrix_t *m);
 
 pgm_t new_pgm_image(size_t width, size_t height);
 int save_pgm_image(pgm_t *image, char* pth);
+int build_pgm_header(pgm_t *img, char* wbuf);
 
 
 void self_test(void);
