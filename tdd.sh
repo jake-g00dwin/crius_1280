@@ -6,6 +6,9 @@ CROSS_COMPILE=1
 
 echo $CROSS_TC
 
+clear_old_pgms () {
+    rm /tmp/*.pgm
+}
 
 clear_cmake_cache () {
     cd ./build
@@ -41,6 +44,8 @@ run_tests ()  {
     make pgm && make test_pgm
     ctest
 }
+
+
 
 run_tests
 #build_calibration_example 
