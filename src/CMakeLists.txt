@@ -4,6 +4,9 @@ add_subdirectory(camera_handler)
 add_executable(main
     main.c
 )
+target_link_libraries(main PUBLIC
+    pgm
+)
 
 add_executable(calibrationExample
     calibrationExample.cpp    
