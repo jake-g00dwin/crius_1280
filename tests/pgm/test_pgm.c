@@ -218,6 +218,16 @@ static void test_clear_matrix(void **state)
     }
 }
 
+static void test_swap_u16_endian(void **stat) {
+    uint16_t chunk = 0x00FF;
+    swap_u16_endian(&chunk);
+    assert_true(chunk == 0xFF00);
+
+    chunk = 0xAAFF;
+    swap_u16_endian(&chunk);
+    assert_true(chunk == 0xFFAA);
+
+}
 
 /* A test case that does nothing and succeeds. */
 static void null_test_success(void **state) {
@@ -237,6 +247,7 @@ int main(void)
         cmocka_unit_test(test_doodle_box),
         cmocka_unit_test(test_2dmatrix_struct),
         cmocka_unit_test(test_clear_matrix),
+        cmocka_unit_test(test_swap_u16_endian),
 
     }; 
     return cmocka_run_group_tests(tests, NULL, NULL);
