@@ -13,6 +13,7 @@
 #define MAX_FPS 120
 #define MIN_FPS 5
 
+/*AGC: Auto gain control*/
 enum agc {
     no_agc= 0,
     hist,
@@ -29,6 +30,11 @@ enum agc {
 int cam_self_test(void);
 int init_camera(uint8_t fps, bool SL, bool BP, uint8_t agc);
 int close_camera();
+
+uint8_t num_attached(void);
+bool correct_name(void);
+int connect_camera(void);
+
 
 void get_pgm_frame();
 void get_frame_matrix();

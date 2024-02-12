@@ -24,4 +24,3 @@ X = np.ones(5)
 # call function
 mylib.print_array(X, X.size)
 
-
