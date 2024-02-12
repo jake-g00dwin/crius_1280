@@ -33,7 +33,7 @@ static void test_camera_init(void **state) {
     bool SL = false;
     bool BP = false;
     enum agc AGC = no_agc; 
-    int result = init_camera(fps, SL, BP, AGC, nuc);
+    int* result = init_camera(fps, SL, BP, AGC, nuc);
     assert_true(result == 0);
     
  
@@ -45,7 +45,7 @@ static void test_args_camera_init(void **state) {
     bool SL = false;
     bool BP = false;
     enum agc AGC = no_agc; 
-    int result = init_camera(fps, SL, BP, AGC, nuc);
+    int* result = init_camera(fps, SL, BP, AGC, nuc);
     assert_true(result == 0);
 
     fps = 0;

@@ -136,6 +136,9 @@ static void test_write_matrix(void **state) {
     assert_true(read_bytes > 0);  
 
     close(fd);
+
+    /*Clean up the file*/
+    remove(file_name);
 }
 
 static void test_save_pgm_image(void **state) {
@@ -160,6 +163,9 @@ static void test_save_pgm_image(void **state) {
     assert_true(0 <= close_result);
 
     free(file_contents);
+
+    /*Now remove the image file.*/
+    remove(s);
 }
 
 /*
