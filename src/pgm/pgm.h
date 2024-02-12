@@ -33,6 +33,8 @@ int save_pgm_image(pgm_t *image, char* pth);
 int build_pgm_header(pgm_t *img, char* wbuf);
 int parse_raw_data(pgm_t *img, uint16_t *arr);
 int write_matrix(pgm_t *img, int *file_descriptor); 
+void swap_u16_endian(uint16_t *word);
+
 
 void self_test(void);
 

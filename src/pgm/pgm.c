@@ -26,6 +26,15 @@ void self_test(void)
  * ############################
  */ 
 
+/*Swaps the order of bytes, needed for the camera*/
+void swap_u16_endian(uint16_t *word)
+{
+    uint8_t hibyte = (uint8_t)((*word) & 0x00FF);
+    uint8_t lobyte = (uint8_t)( ((*word) & 0xFF00)>>8 );
+
+    *word = (hibyte<<8)|(lobyte);
+}
+
 void clear_matrix(matrix_t *m)
 {
     for(int row = 0; row < MAX_2D_ROWS ;row++){
@@ -53,6 +62,14 @@ pgm_t new_pgm_image(size_t width, size_t height) {
 
 int parse_raw_data(pgm_t *img, uint16_t *arr)
 {
+    
+    /*Swap endian-ness in place.*/
+    int num_pixels = img->height * img->width;
+    for(int i = 0; i < num_pixels; i++){
+        swap_u16_endian(&arr[i]);
+    }
+        
+
     int array_idx= 0;
 
     /*Iterate through the 2D array and set it from the passed array.*/
