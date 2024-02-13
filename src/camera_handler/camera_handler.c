@@ -214,7 +214,7 @@ HANDLE* init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 
 
     eDALProxy1280_12USBErr conres = Proxy1280_12USB_ConnectToModule(0, camera_handle);
-    for(int i = 0; i < num_devices; i++) {
+    for(int i = 0; i < 5; i++) {
         conres = Proxy1280_12USB_ConnectToModule(i, camera_handle);
         if(conres == eProxy1280_12USBSuccess) {
             break;
