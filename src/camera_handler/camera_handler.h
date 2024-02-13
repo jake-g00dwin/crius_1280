@@ -9,6 +9,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "DALProxy1280_12USB.h"
 
 #define MAX_FPS 120
 #define MIN_FPS 5
@@ -32,11 +33,11 @@ enum agc {
 
 int cam_self_test(void);
 int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc);
-int close_camera(int *camera_handle);
+int close_camera(HANDLE *camera_handle);
 
 int num_attached(void);
 bool is_correct_name(void);
-int connect_camera(int *camera_handle);
+int connect_camera(HANDLE *camera_handle);
 
 int load_frame_buffer();
 void get_frame_matrix(uint16_t *mat);

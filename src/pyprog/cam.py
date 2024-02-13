@@ -2,7 +2,7 @@
 # test.py
 #
 from ctypes import CDLL, POINTER, pointer
-from ctypes import c_size_t, c_double, c_uint8, c_int, c_char, c_bool, c_float
+from ctypes import c_size_t, c_uint8, c_int, c_char, c_bool, c_float, c_long
 from ctypes import byref
 
 import cv2 as cv
@@ -46,17 +46,17 @@ def define_c_funcs(camlib):
     camlib.num_attached.restype = c_uint8
 
     # int connect_camera(int *camera_handle);
-    camlib.connect_camera.argtypes = [POINTER(c_int)]
+    camlib.connect_camera.argtypes = [POINTER(c_long)]
     camlib.connect_camera.restype = c_int
 
-    camlib.close_camera.argtypes = [POINTER(c_int)]
+    camlib.close_camera.argtypes = [POINTER(c_long)]
     camlib.close_camera.restype = c_int
 
     camlib.init_camera.argtypes = [c_float, c_bool, c_bool, c_uint8, c_char]
-    camlib.init_camera.restype = POINTER(c_int)
+    camlib.init_camera.restype = POINTER(c_long)
 
     # int load_frame_buffer(int *camera_handle)
-    camlib.load_frame_buffer.argtypes = [POINTER(c_int)]
+    camlib.load_frame_buffer.argtypes = [POINTER(c_long)]
     camlib.load_frame_buffer.restype = c_int
 
     # void get_frame_matrix(uint16_t *mat)

@@ -40,10 +40,10 @@ bool is_correct_name(void) {
 }
 
 
-int connect_camera(int *camera_handle)
+int connect_camera(HANDLE *camera_handle)
 {
     eDALProxy1280_12USBErr result_code;
-    result_code = Proxy1280_12USB_ConnectToModule(0, (HANDLE*) camera_handle);
+    result_code = Proxy1280_12USB_ConnectToModule(0, camera_handle);
 
     if (result_code != eProxy1280_12USBSuccess){
         return (int) result_code;
@@ -51,18 +51,18 @@ int connect_camera(int *camera_handle)
     return 0;
 }
 
-int close_camera(int *camera_handle)
+int close_camera(HANDLE *camera_handle)
 {
-    Proxy1280_12USB_DisconnectFromModule((HANDLE) camera_handle);
+    Proxy1280_12USB_DisconnectFromModule(camera_handle);
     return 0;
 }
 
-int load_frame_buffer(int *camera_handle)
+int load_frame_buffer(HANDLE *camera_handle)
 {
     eDALProxy1280_12USBErr result_code;
     int32_t paMeta[135];
 
-    result_code = Proxy1280_12USB_GetImage((HANDLE*) camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    result_code = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
     if (result_code != eProxy1280_12USBSuccess){
         return (int) result_code;
     }
@@ -106,7 +106,7 @@ int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
     //if(is_correct_name() != true){return NULL;}
 
     /*connect to module(camera)*/
-    if( connect_camera((int*) &camera_handle) != 0){return NULL;}
+    if( connect_camera(&camera_handle) != 0){return NULL;}
 
     /*Set the configuration*/
     Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
