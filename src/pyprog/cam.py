@@ -44,22 +44,21 @@ def define_c_funcs(camlib):
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
-    handle = c_int()
-    camlib.close_camera(handle)
+    cam_handle = POINTER(c_int)
+
+    camlib.close_camera(cam_handle)
     camlib.close_camera.restype = c_int
 
     camlib.init_camera.argtypes = [c_float, c_bool, c_bool, c_uint8, c_char]
-    camlib.init_camera.restype = POINTER(c_int)
+    camlib.init_camera.restype = cam_handle
 
     # int load_frame_buffer(int *camera_handle)
-    camlib.load_frame_buffer(handle)
+    camlib.load_frame_buffer(cam_handle)
     camlib.load_frame_buffer.restype = c_int
 
     # void get_frame_matrix(uint16_t *mat)
     ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
     camlib.get_frame_matrix.argtypes = [ND_POINTER]
-
-    return handle
 
 
 def main():
@@ -67,7 +66,7 @@ def main():
     camlib = CDLL("./shared/libcamera_handler.so")
 
     print("defining C function params...")
-    handle = define_c_funcs(camlib)
+    define_c_funcs(camlib)
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
     number_modules = camlib.num_attached()
