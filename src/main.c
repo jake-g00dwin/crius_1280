@@ -4,7 +4,6 @@
  * filename: main.c
  * Description: Acts as interface to C API for camera for python calls.
  */
-#include <ctime>
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdint.h>
