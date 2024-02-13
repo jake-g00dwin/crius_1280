@@ -4,6 +4,7 @@
  * filename: main.c
  * Description: Acts as interface to C API for camera for python calls.
  */
+#include <ctime>
 #include <fcntl.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -67,8 +68,9 @@ int main() {
    
 
     printf("load_frame_buffer(): %d\n", result);
+    printf("waiting for frame buffer...\n");
     while(!is_buffer_ready()) {
-        printf(".");
+        //printf(".");
         //printf("waiting for frame buffer...\n");
         //sleep(1);
     }
