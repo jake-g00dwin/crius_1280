@@ -20,7 +20,6 @@ target_link_libraries(rawtopgm PUBLIC
 )
 
 
-
 # The example CPP code for calibration
 add_executable(calibrationExample
     calibrationExample.cpp    
@@ -31,9 +30,9 @@ target_include_directories(calibrationExample PUBLIC
 )
 
 target_link_libraries(calibrationExample PUBLIC
-    DALProxy1280_12USB
-    usb-1.0 
     pthread
+    usb-1.0 
+    DALProxy1280_12USB
 )
 
 
@@ -42,10 +41,10 @@ add_executable(exampleSmartIR
     exampleSmartIR.cpp    
 )
 
-target_link_libraries(calibrationExample PUBLIC
-    DALProxy1280_12USB
-    usb-1.0 
+target_link_libraries(exampleSmartIR PUBLIC
     pthread
+    usb-1.0 
+    DALProxy1280_12USB
 )
 
 
