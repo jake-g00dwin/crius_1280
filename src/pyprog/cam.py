@@ -44,14 +44,14 @@ def define_c_funcs(camlib):
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
-    camlib.close_camera(POINTER(c_int))
+    camlib.close_camera.argtypes = [POINTER(c_int)]
     camlib.close_camera.restype = c_int
 
     camlib.init_camera.argtypes = [c_float, c_bool, c_bool, c_uint8, c_char]
     camlib.init_camera.restype = POINTER(c_int)
 
     # int load_frame_buffer(int *camera_handle)
-    camlib.load_frame_buffer(POINTER(c_int))
+    camlib.load_frame_buffer.argtypes = [POINTER(c_int)]
     camlib.load_frame_buffer.restype = c_int
 
     # void get_frame_matrix(uint16_t *mat)
