@@ -162,7 +162,7 @@ bool is_buffer_ready(void)
     return buffer_filled;
 }
 
-HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
+HANDLE* init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 {
     HANDLE camera_handle = NULL;
     enum eAGCProcessingValue agc_val = eNoAGC;
@@ -172,13 +172,27 @@ HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
         fps = 30;
     }
     
-    if(agc > 3){
-        printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
-        agc_val = eNoAGC;
+    switch(agc_val){
+        case eNoAGC:
+                agc_val = eNoAGC; 
+                break;
+        case eAGCEqHisto:
+                agc_val = eAGCEqHisto;
+                break;
+        case eAGCLocal:
+                agc_val = eAGCLocal;
+                break;
+        case eAGCLinear:
+                agc_val = eAGCLinear;
+                break;
+        case eAGCTotal:
+                agc_val = eAGCTotal;
+                break;
+        default:
+                printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
+                agc_val = eNoAGC;
+                break;
     }
-    else{
-        agc_val = agc;
-    }    
 
     /*See how many devices are attached.*/
     if(num_attached() < 1){
@@ -186,12 +200,20 @@ HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
         return NULL;
     }
 
-
     /*Check for the correct name*/
     //if(is_correct_name() != true){return NULL;}
 
     /*connect to module(camera)*/
-    if( connect_camera(&camera_handle) != 0){return NULL;}
+    eDALProxy1280_12USBErr connect_result = connect_camera(camera_handle);
+    if(connect_result != eProxy1280_12USBSuccess)
+    {
+        printf("Error on connection attept: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
+        return NULL;
+    } 
+
+    printf("Camera handle ptr: %p\n", camera_handle);
+
+    //if( connect_camera(&camera_handle) != 0){return NULL;}
 
     /*Set the configuration*/
     Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
