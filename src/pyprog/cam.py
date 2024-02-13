@@ -44,7 +44,7 @@ def define_c_funcs(camlib):
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
-    CAMPOINTER = pointer(c_int) 
+    CAMPOINTER = POINTER(c_int)
     camlib.close_camera(CAMPOINTER)
     camlib.close_camera.restype = c_int
 
