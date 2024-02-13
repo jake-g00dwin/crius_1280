@@ -36,7 +36,7 @@ int num_attached(void)
     result_code = Proxy1280_12USB_GetModuleCount(&num_cams);
     
     if (result_code != eProxy1280_12USBSuccess){
-        return -1;
+        return result_code;
     }
     return num_cams;
 }

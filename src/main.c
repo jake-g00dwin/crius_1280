@@ -53,7 +53,7 @@ int main() {
  
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
-    printf("name: %s", name);
+    printf("name: %s\n", name);
 
     //HANDLE cam = NULL; 
     //result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
