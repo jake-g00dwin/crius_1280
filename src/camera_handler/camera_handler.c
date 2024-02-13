@@ -46,7 +46,7 @@ int connect_camera(int *camera_handle)
     if (result_code != eProxy1280_12USBSuccess){
         return -1;
     }
-    return 0;
+    return ();
 }
 
 int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)

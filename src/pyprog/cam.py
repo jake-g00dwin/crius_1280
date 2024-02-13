@@ -41,11 +41,11 @@ def define_c_funcs(camlib):
     camlib.cam_self_test()
     camlib.cam_self_test.restype = c_int
 
-    camlib.init_camera(c_float, c_bool, c_bool, c_uint8, c_char)
-    camlib.init_camera.restype = POINTER(c_int)
-
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
+
+    camlib.init_camera(c_float, c_bool, c_bool, c_uint8, c_char)
+    camlib.init_camera.restype = POINTER(c_int)
 
 
 def main():
