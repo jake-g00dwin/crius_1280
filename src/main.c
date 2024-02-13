@@ -39,7 +39,7 @@
 #define HEIGHT 1080
 #endif
 
-//HANDLE m_Handle = NULL;
+HANDLE m_Handle = NULL;
 
 int main() {
     m_Handle = NULL; 
