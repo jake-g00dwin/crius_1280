@@ -64,7 +64,7 @@ int load_frame_buffer(int *camera_handle)
 
     result_code = Proxy1280_12USB_GetImage((HANDLE) camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
     if (result_code != eProxy1280_12USBSuccess){
-        return -1;
+        return (int) result_code;
     }
 
     raw_into_matrix(&frame_matrix, paImage); 
