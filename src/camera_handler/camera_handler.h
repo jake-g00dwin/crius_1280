@@ -29,7 +29,7 @@ enum agc {
 
 int cam_self_test(void);
 int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc);
-int close_camera();
+int close_camera(int *camera_handle);
 
 int num_attached(void);
 bool is_correct_name(void);
