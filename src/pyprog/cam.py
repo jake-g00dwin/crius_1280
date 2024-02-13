@@ -79,7 +79,7 @@ def main():
     print("camlib.load_frame_buffer(handle): " + str(result))
 
     # create a empty 2D array for filling.
-    mat = np.zeros((1280, 1024), dtype=np.uint16)
+    mat = np.ones((1280, 1024), dtype=np.uint16)
     camlib.get_frame_matrix(mat)
 
     print("image data:" + str(mat))

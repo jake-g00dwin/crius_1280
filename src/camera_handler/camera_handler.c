@@ -62,12 +62,12 @@ int load_frame_buffer(int *camera_handle)
     eDALProxy1280_12USBErr result_code;
     int32_t paMeta[135];
 
-    result_code = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    result_code = Proxy1280_12USB_GetImage((HANDLE) camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
     if (result_code != eProxy1280_12USBSuccess){
         return -1;
     }
 
-   raw_into_matrix(&frame_matrix, paImage); 
+    raw_into_matrix(&frame_matrix, paImage); 
 
     return 0;
 }
