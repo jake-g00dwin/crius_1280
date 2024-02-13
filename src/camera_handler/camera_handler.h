@@ -12,6 +12,9 @@
 
 #define MAX_FPS 120
 #define MIN_FPS 5
+#define GETIMAGE_TIMEOUT 5000
+#define WIDTH 1280
+#define HEIGHT 1024
 
 /*AGC: Auto gain control*/
 enum agc {
@@ -35,9 +38,10 @@ int num_attached(void);
 bool is_correct_name(void);
 int connect_camera(int *camera_handle);
 
+int load_frame_buffer();
+void get_frame_matrix(int *camera_handle, uint16_t *mat);
 
 void get_pgm_frame();
-void get_frame_matrix();
 void get_meta_data();
 void chagne_parameters();
 

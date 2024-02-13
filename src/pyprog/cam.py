@@ -53,7 +53,10 @@ def define_c_funcs(camlib):
 
 
 def main():
+    print("Loading shared libs...")
     camlib = CDLL("./shared/libcamera_handler.so")
+
+    print("defining C function params...")
     define_c_funcs(camlib)
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
@@ -63,6 +66,9 @@ def main():
     handle = camlib.init_camera(1, False, False, 0, 0)
     print("camlib.init_camera(): " + str(handle))
 
+    # show that we can get camera frames.
+
+    # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
 
     # Now request frame/image from the camera that's formatted.
