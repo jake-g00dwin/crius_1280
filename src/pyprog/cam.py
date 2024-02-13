@@ -39,7 +39,7 @@ def check_img():
 def main():
     print("TESTING!\n")
 
-    camlib = CDLL("./libcamera_handler.so")
+    camlib = CDLL("./shared/libcamera_handler.so")
 
     # check it works
     camlib.self_test()
