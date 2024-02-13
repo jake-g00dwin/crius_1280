@@ -61,14 +61,18 @@ int main() {
     printf("result_code: %d", result_code);
     printf("cam ptr: %p\n", cam); 
 
+    sleep(2);
+
     int result = load_frame_buffer();
    
 
-    printf("load_frame_buffer(): %d", result);
+    printf("load_frame_buffer(): %d\n", result);
     while(!is_buffer_ready()) {
-        printf("waiting for frame buffer...\n");
-        sleep(1);
-    }    
+        printf(".");
+        //printf("waiting for frame buffer...\n");
+        //sleep(1);
+    }
+    stop_capture();    
     
     
     /*Get a copy of the frame matrix.*/

@@ -23,6 +23,12 @@ HANDLE m_HandleThread = NULL;
 bool stop = false;
 bool buffer_filled = false;
 
+
+void stop_capture(void)
+{
+    stop = true;
+}
+
 int num_attached(void)
 {
     eDALProxy1280_12USBErr result_code;
@@ -171,7 +177,7 @@ HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
     enum eAGCProcessingValue agc_val = eNoAGC;
     
     /*See how many devices are attached.*/
-    if(num_attached() <= 0){return NULL;}
+    //if(num_attached() <= 0){return NULL;}
 
     /*Check for the correct name*/
     //if(is_correct_name() != true){return NULL;}

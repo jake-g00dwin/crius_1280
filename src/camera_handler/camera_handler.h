@@ -44,6 +44,7 @@ void get_frame_matrix(uint16_t *mat);
 void *thread_1(void *pHandle);
 void *thread_load_frame_buffer(void *vargp);
 
+void stop_capture(void);
 bool is_buffer_ready(void);
 
 void get_pgm_frame();
