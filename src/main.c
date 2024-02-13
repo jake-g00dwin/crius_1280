@@ -53,9 +53,17 @@
 
 
 int main() {
+    int num = num_attached();
+    printf("number attached: %d", num);
+    
     HANDLE cam = init_camera(30, 0, 0, 0, 0); 
-    printf("cam ptr: %p\n", cam);
+    printf("cam ptr: %p\n", cam); 
 
+    int result = load_frame_buffer();
+    printf("load_frame_buffer(): %d", result);
+    
+
+    close_camera(&cam);
 
     return 0;
 }
