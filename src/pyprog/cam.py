@@ -36,19 +36,21 @@ def check_img():
     return k
 
 
-def main():
-    print("TESTING!\n")
-
-    camlib = CDLL("./shared/libcamera_handler.so")
-
+def define_c_funcs(camlib):
     # check it works
     camlib.cam_self_test()
     camlib.cam_self_test.restype = int
 
-    print("cam_self_test(): " + str(camlib.cam_self_test()))
 
+def main():
+    print("TESTING!\n")
+
+    camlib = CDLL("./shared/libcamera_handler.so")
+    define_c_funcs(camlib)
     # Pass in args to the C function to get a camera 'HANDLE' type.
     # camera_handle = camlib.init_camera()
+
+    print("cam_self_test(): " + str(camlib.cam_self_test()))
 
     # Now request frame/image from the camera that's formatted.
     ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
