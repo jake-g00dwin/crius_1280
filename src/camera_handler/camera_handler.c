@@ -12,7 +12,7 @@
 
 
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
-
+matrix_t frame_matrix = {WIDTH, HEIGHT};
 
 
 int num_attached(void)
@@ -66,12 +66,22 @@ int load_frame_buffer(int *camera_handle)
     if (result_code != eProxy1280_12USBSuccess){
         return -1;
     }
+
+   raw_into_matrix(&frame_matrix, paImage); 
+
     return 0;
 }
 
-void get_frame_matrix(int *camera_handle, uint16_t *mat)
+void get_frame_matrix(uint16_t *mat)
 {
-
+    int idx = 0;
+    /*Iterate through the 2D array and set it from the passed array.*/
+    for(int rows = 0; rows < frame_matrix.y; rows++){
+        for(int cols = 0; cols < frame_matrix.x; cols++){
+            mat[idx] =  frame_matrix.data[rows][cols];
+            idx++;
+        } 
+    }
 }
 
 

@@ -39,7 +39,7 @@ bool is_correct_name(void);
 int connect_camera(int *camera_handle);
 
 int load_frame_buffer();
-void get_frame_matrix(int *camera_handle, uint16_t *mat);
+void get_frame_matrix(uint16_t *mat);
 
 void get_pgm_frame();
 void get_meta_data();

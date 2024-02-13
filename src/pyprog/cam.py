@@ -51,6 +51,14 @@ def define_c_funcs(camlib):
     camlib.init_camera.argtypes = [c_float, c_bool, c_bool, c_uint8, c_char]
     camlib.init_camera.restype = POINTER(c_int)
 
+    # int load_frame_buffer(int *camera_handle)
+    camlib.load_frame_buffer(handle)
+    camlib.load_frame_buffer.restype = c_int
+
+    # void get_frame_matrix(uint16_t *mat)
+    ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
+    camlib.get_frame_matrix.argtypes = [ND_POINTER]
+
 
 def main():
     print("Loading shared libs...")
@@ -67,6 +75,12 @@ def main():
     print("camlib.init_camera(): " + str(handle))
 
     # show that we can get camera frames.
+    result = camlib.load_frame_buffer(handle)
+    print("camlib.load_frame_buffer(handle): " + str(result))
+
+    # create a empty 2D array for filling.
+    mat = np.zeros((1280, 1024), dtype=np.uint16)
+    camlib.get_frame_matrix(mat)
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
