@@ -75,7 +75,7 @@ def main():
     number_modules = camlib.num_attached()
     print("camlib.num_attached(): " + str(number_modules))
 
-    handle = c_int()
+    handle = c_long()
     con_result = camlib.connect_camera(byref(handle))
     print("camlib.connect_camera(): " + str(con_result))
 
