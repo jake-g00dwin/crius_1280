@@ -73,7 +73,7 @@ int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
     if(num_attached() <= 0){return NULL;}
 
     /*Check for the correct name*/
-    if(is_correct_name() != true){return NULL;}
+    //if(is_correct_name() != true){return NULL;}
 
     /*connect to module(camera)*/
     if( connect_camera(camera_handle) < 0){return NULL;}
