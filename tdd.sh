@@ -6,10 +6,6 @@ CROSS_COMPILE=1
 
 echo $CROSS_TC
 
-clear_old_pgms () {
-    rm /tmp/*.pgm
-}
-
 clear_cmake_cache () {
     cd ./build
     rm -rf CMakeCache.txt CMakeFiles/
@@ -48,6 +44,6 @@ run_tests ()  {
 
 
 
-run_tests
-#build_calibration_example 
+#run_tests
+build_calibration_example 
 
