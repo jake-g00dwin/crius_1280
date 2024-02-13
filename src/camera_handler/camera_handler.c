@@ -85,7 +85,7 @@ void get_frame_matrix(uint16_t *mat)
 }
 
 
-int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
+HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
 {
     HANDLE camera_handle = NULL;
     if(fps > MAX_FPS || fps < MIN_FPS) {
@@ -122,3 +122,4 @@ int cam_self_test(void)
 {
     return 1;
 }
+

@@ -20,6 +20,7 @@
 #include <DALProxySwitchUSBDef.h>
 
 /*The pgm image functions structs, used for matrix ops at the moment*/
+#include "camera_handler.h"
 #include "pgm.h"
 
 /*
@@ -52,15 +53,8 @@
 
 
 int main() {
-    /*Stores a single frame in 1D array*/
-    uint16_t paImage[IRIMAGE_NBPIXELS*2];
-
-    /*Stores in PGM struct, Uses 2D array*/
-    pgm_t frame = new_pgm_image(WIDTH, HEIGHT);
-
-    printf("CMAKE FUNCTIONAL\r\n"); 
-
-    /*check for camera device.*/
+    HANDLE cam = init_camera(30, 0, 0, 0, 0); 
+    printf("cam ptr: %p\n", cam);
 
 
     return 0;

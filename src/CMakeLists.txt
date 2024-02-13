@@ -7,6 +7,7 @@ add_executable(main
 
 target_link_libraries(main PUBLIC
     pgm
+    camera_handler
 )
 
 
