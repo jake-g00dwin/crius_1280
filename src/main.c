@@ -57,7 +57,9 @@ int main() {
 
     //HANDLE cam = NULL; 
     //result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
-    HANDLE cam = init_camera(30, 0, 0, 0, 0); 
+    printf("initalizing camera(may take a fer moments)\n");
+    HANDLE cam = NULL;
+    cam = init_camera(30, 0, 0, 0, 0); 
     printf("result_code: %d", result_code);
     printf("cam ptr: %p\n", cam); 
     
