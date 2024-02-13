@@ -18,8 +18,9 @@ uint8_t num_attached(void)
     eDALProxy1280_12USBErr result_code;
     int num_cams = 0;
     result_code = Proxy1280_12USB_GetModuleCount(&num_cams);
-
+    
     if (result_code != eProxy1280_12USBSuccess){
+        printf("result_code: %d\n", result_code);
         return 0;
     }
 
