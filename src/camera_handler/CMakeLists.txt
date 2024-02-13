@@ -7,4 +7,11 @@ target_include_directories(camera_handler PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
+target_link_libraries(calibrationExample PUBLIC
+    DALProxy1280_12USB
+    usb-1.0 
+    pthread
+)
+
+
 
