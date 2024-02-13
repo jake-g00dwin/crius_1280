@@ -20,7 +20,7 @@ matrix_t frame_matrix = {WIDTH, HEIGHT};
 int32_t paMeta[135];
 
 
-//HANDLE m_HandleThread = NULL;
+HANDLE m_HandleThread = NULL;
 bool stop = false;
 bool buffer_filled = false;
 
