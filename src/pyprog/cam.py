@@ -57,8 +57,8 @@ def main():
     # camera_handle = camlib.init_camera()
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
-
-    print("camlib.num_attached(): " + str(camlib.num_attached()))
+    number_modules = camlib.num_attached()
+    print("camlib.num_attached(): " + str(number_modules))
 
     # Now request frame/image from the camera that's formatted.
     # ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
