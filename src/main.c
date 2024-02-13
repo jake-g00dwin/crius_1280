@@ -60,7 +60,7 @@ int main() {
     result_code = Proxy1280_12USB_GetModuleCount(&num);
     //int num = num_attached();
     printf("number attached: %d\n", num);
-    printf("result_code: %d", result_code);
+    printf("result_code: %d", (int)result_code);
  
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
