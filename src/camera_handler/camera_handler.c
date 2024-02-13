@@ -43,7 +43,7 @@ bool is_correct_name(void) {
 int connect_camera(int *camera_handle)
 {
     eDALProxy1280_12USBErr result_code;
-    result_code = Proxy1280_12USB_ConnectToModule(0, (HANDLE) &camera_handle);
+    result_code = Proxy1280_12USB_ConnectToModule(0, (HANDLE*) camera_handle);
 
     if (result_code != eProxy1280_12USBSuccess){
         return (int) result_code;
@@ -62,7 +62,7 @@ int load_frame_buffer(int *camera_handle)
     eDALProxy1280_12USBErr result_code;
     int32_t paMeta[135];
 
-    result_code = Proxy1280_12USB_GetImage((HANDLE) camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    result_code = Proxy1280_12USB_GetImage((HANDLE*) camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
     if (result_code != eProxy1280_12USBSuccess){
         return (int) result_code;
     }
