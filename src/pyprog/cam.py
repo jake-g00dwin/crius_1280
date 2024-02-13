@@ -42,10 +42,10 @@ def main():
     camlib = CDLL("./shared/libcamera_handler.so")
 
     # check it works
-    camlib.self_test()
-    camlib.self_test.restype = np.ctypeslib.integer
+    camlib.cam_self_test()
+    camlib.cam_self_test.restype = np.ctypeslib.integer
 
-    print("self_test(): " + str(camlib.self_test()))
+    print("cam_self_test(): " + str(camlib.cam_self_test()))
 
     # Pass in args to the C function to get a camera 'HANDLE' type.
     # camera_handle = camlib.init_camera()
