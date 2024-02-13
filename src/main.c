@@ -40,9 +40,10 @@
 #endif
 
 HANDLE m_Handle = NULL;
+HANDLE cam = NULL;
 
 int main() {
-    m_Handle = NULL; 
+    cam = NULL; 
     eDALProxy1280_12USBErr result_code;
     
     int num; 
@@ -58,11 +59,11 @@ int main() {
     //HANDLE cam = NULL; 
     printf("initalizing camera(may take a few moments)\n");
     //cam = init_camera(30, true, 1, 2, 1); 
-    result_code = Proxy1280_12USB_ConnectToModule(0, &m_Handle);
+    result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
     printf("result_code: %d\n", result_code);
-    printf("cam ptr: %p\n", m_Handle); 
+    printf("cam ptr: %p\n", cam); 
     
-    if(m_Handle == NULL){
+    if(cam == NULL){
         printf("Handle is null\n");
         return -1;
     }

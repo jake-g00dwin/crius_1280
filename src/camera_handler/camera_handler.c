@@ -19,7 +19,6 @@ uint16_t paImage[IRIMAGE_NBPIXELS*2];
 matrix_t frame_matrix = {WIDTH, HEIGHT};
 int32_t paMeta[135];
 
-
 bool stop = false;
 bool buffer_filled = false;
 
