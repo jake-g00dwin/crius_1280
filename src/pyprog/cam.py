@@ -55,12 +55,15 @@ def define_c_funcs(camlib):
 def main():
     camlib = CDLL("./shared/libcamera_handler.so")
     define_c_funcs(camlib)
-    # Pass in args to the C function to get a camera 'HANDLE' type.
-    # camera_handle = camlib.init_camera()
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
     number_modules = camlib.num_attached()
     print("camlib.num_attached(): " + str(number_modules))
+
+    handle = camlib.init_camera(1, False, False, 0, 0)
+    print("camlib.init_camera(): " + str(handle))
+
+    print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
 
     # Now request frame/image from the camera that's formatted.
     # ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
