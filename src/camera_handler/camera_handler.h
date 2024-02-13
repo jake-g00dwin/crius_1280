@@ -32,7 +32,7 @@ int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc);
 int close_camera();
 
 uint8_t num_attached(void);
-bool correct_name(void);
+bool is_correct_name(void);
 int connect_camera(int *camera_handle);
 
 
