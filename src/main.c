@@ -60,6 +60,11 @@ int main() {
     HANDLE cam = init_camera(30, 0, 0, 0, 0); 
     printf("result_code: %d", result_code);
     printf("cam ptr: %p\n", cam); 
+    
+    if(cam == NULL){
+        printf("Handle is null\n");
+        return -1;
+    }
 
     sleep(2);
 
