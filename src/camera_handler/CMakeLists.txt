@@ -3,6 +3,10 @@ add_library(camera_handler SHARED
     camera_handler.h
 )
 
+LINK_DIRECTORIES(
+    ${PROJECT_SOURCE_DIR}/camera_sdk
+)
+
 target_include_directories(camera_handler PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/inc
