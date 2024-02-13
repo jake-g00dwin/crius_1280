@@ -31,7 +31,7 @@ int cam_self_test(void);
 int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc);
 int close_camera();
 
-uint8_t num_attached(void);
+int num_attached(void);
 bool is_correct_name(void);
 int connect_camera(int *camera_handle);
 

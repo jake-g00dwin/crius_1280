@@ -13,14 +13,14 @@ uint16_t paImage[IRIMAGE_NBPIXELS*2];
 
 
 
-uint8_t num_attached(void)
+int num_attached(void)
 {
     eDALProxy1280_12USBErr result_code;
     int num_cams = 0;
     result_code = Proxy1280_12USB_GetModuleCount(&num_cams);
     
     if (result_code != eProxy1280_12USBSuccess){
-        return 0;
+        return -1;
     }
 
     return num_cams;
