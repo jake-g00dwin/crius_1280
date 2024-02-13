@@ -82,6 +82,8 @@ def main():
     mat = np.zeros((1280, 1024), dtype=np.uint16)
     camlib.get_frame_matrix(mat)
 
+    print("image data:" + str(mat))
+
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
 
