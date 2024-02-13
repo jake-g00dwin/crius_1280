@@ -9,26 +9,6 @@ import cv2 as cv
 import numpy as np
 
 
-def quicktest():
-    # load the library
-    # mylib = CDLL("mylib.so")
-    mylib = CDLL("./mylib.so")
-
-    # C-type corresponding to numpy array
-    ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.float64,
-                                          ndim=1,
-                                          flags="C")
-
-    # define prototypes
-    mylib.print_array.argtypes = [ND_POINTER_1, c_size_t]
-    mylib.print_array.restype = None
-
-    # create array X = [1 1 1 1 1]
-    X = np.ones(5)
-    # call function
-    mylib.print_array(X, X.size)
-
-
 # Displays the image in a window
 def check_img():
     img = cv.imread("./image.pgm")
