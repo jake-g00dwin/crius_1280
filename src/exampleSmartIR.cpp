@@ -16,8 +16,6 @@
 #include <unistd.h>
 #endif
 
-#include <format>
-
 #include "DALProxy1280_12USB.h"
 #include "DALProxy1280_12USBDef.h"
 #include "DALProxySwitchUSBDef.h"
@@ -376,7 +374,8 @@ int main(int argc, char* argv[])
         std::cout << *paMeta_ushort << " // Epoch : " << *paMeta_uint64_t << std::endl;
         imAvg = 0;
 
-        std::string file_name = std::format("/tmp/imgRaw{}.bin", iNb);
+        char file_name[128] = {'\0'};
+        sprintf(file_name, "/tmp/imgRaw%d.bin", iNb);
         std::cout << "saved file: " << file_name << std::endl;
 
         std::ofstream file(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
