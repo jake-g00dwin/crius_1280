@@ -16,6 +16,7 @@
 #define GETIMAGE_TIMEOUT 5000
 #define WIDTH 1280
 #define HEIGHT 1024
+#define NUM_TEST_FRAMES 30
 
 /*AGC: Auto gain control*/
 enum agc {

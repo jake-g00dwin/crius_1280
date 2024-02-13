@@ -117,7 +117,7 @@ void *thread_1(void *pHandle)
         printf("Image %lu Framecounter %d, Avg val: %lu\n", iNb, *paMeta_ushort, (imAvg/(IRIMAGE_NBPIXELS)));
         imAvg = 0;
         iNb++;
-    }while(!stop);
+    }while(!stop && iNb < NUM_TEST_FRAMES);
 
     if (eReturnCode == eProxy1280_12USBSuccess)
     {
