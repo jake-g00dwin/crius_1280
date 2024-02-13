@@ -195,7 +195,8 @@ HANDLE* init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     }
 
     /*See how many devices are attached.*/
-    if(num_attached() < 1){
+    int num_devices = num_attached();
+    if(num_devices < 1){
         printf("No devices found!\n");
         return NULL;
     }
@@ -211,12 +212,19 @@ HANDLE* init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     //    return NULL;
     //}
 
+
     eDALProxy1280_12USBErr conres = Proxy1280_12USB_ConnectToModule(0, camera_handle);
-     if(conres != eProxy1280_12USBSuccess)
+    for(int i = 0; i < num_devices; i++) {
+        conres = Proxy1280_12USB_ConnectToModule(i, camera_handle);
+        if(conres == eProxy1280_12USBSuccess) {
+            break;
+        }
+    }   
+    if(conres != eProxy1280_12USBSuccess)
     {
         printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(conres)); 
         return NULL;
-    }   
+    }
 
 
     printf("Camera handle ptr: %p\n", camera_handle);
