@@ -204,7 +204,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     //if(is_correct_name() != true){return NULL;}
 
     /*connect to module(camera)*/
-    eDALProxy1280_12USBErr connect_result = connect_camera(camera_handle);
+    eDALProxy1280_12USBErr connect_result = connect_camera(&camera_handle);
     if(connect_result != eProxy1280_12USBSuccess)
     {
         printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
