@@ -377,6 +377,7 @@ int main(int argc, char* argv[])
         imAvg = 0;
 
         std::string file_name = std::format("/tmp/imgRaw{}.bin", iNb);
+        std::cout << "saved file: " << file_name << std::endl;
 
         std::ofstream file(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
         file.write ((char*) paImage,IRIMAGE_NBPIXELS*2);
