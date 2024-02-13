@@ -1,18 +1,26 @@
 #include "camera_handler.h"
 
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <pthread.h>
+#include <unistd.h>
+
 #include "DALProxy1280_12USB.h"
 #include "DALProxy1280_12USBDef.h"
 #include "DALProxySwitchUSBDef.h"
 
 #include "pgm.h"
 
-#include <string.h>
-#include <stdbool.h>
-
 
 
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
 matrix_t frame_matrix = {WIDTH, HEIGHT};
+int32_t paMeta[135];
+HANDLE m_Handle = NULL;
+HANDLE m_HandleThread = NULL;
+bool stop = false;
 
 
 int num_attached(void)
@@ -57,20 +65,83 @@ int close_camera(HANDLE *camera_handle)
     return 0;
 }
 
-int load_frame_buffer(HANDLE *camera_handle)
+void *thread_load_frame_buffer(void *vargp)
 {
-    eDALProxy1280_12USBErr result_code;
-    int32_t paMeta[135];
-
-    result_code = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
-    if (result_code != eProxy1280_12USBSuccess){
-        return (int) result_code;
-    }
+    HANDLE *camera_handle = (HANDLE*)vargp;
+    //eDALProxy1280_12USBErr *result_code = (eDALProxy1280_12USBErr*)vargp;
+    //result_code = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    //if (result_code != eProxy1280_12USBSuccess){
+    //    return (int) result_code;
+   //}
 
     raw_into_matrix(&frame_matrix, paImage); 
 
+    return NULL;
+}
+
+
+void *thread_1(void *pHandle)
+{
+    uint64_t imAvg = 0;
+    eDALProxy1280_12USBErr eReturnCode;
+    uint64_t iNb = 0;
+    HANDLE handle = (HANDLE) pHandle;
+    int exiting = 0;
+
+    eReturnCode = Proxy1280_12USB_GetImage(handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    do{
+        //get image
+        eReturnCode = Proxy1280_12USB_GetImage(handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+        printf("Im %lu : %s\n", iNb, Proxy1280_12USB_GetErrorString(eReturnCode));
+        if (eReturnCode == eProxy1280_12USBCommFailed)
+        {
+            printf("Communication Lost with the USB device.Exiting...\n");
+            exiting = 1;
+            break;
+        }
+
+        //make avg of pixel values
+        for(int i=0; i<(IRIMAGE_NBPIXELS); i++)
+        {
+            imAvg += ((uint16_t*)paImage)[i];
+        }
+
+        unsigned short *paMeta_ushort;
+        paMeta_ushort = (unsigned short*)(paMeta+IRIMAGE_META_COUNTER);
+        printf("Image %lu Framecounter %d, Avg val: %lu\n", iNb, *paMeta_ushort, (imAvg/(IRIMAGE_NBPIXELS)));
+        imAvg = 0;
+        iNb++;
+    }while(!stop);
+
+    if (eReturnCode == eProxy1280_12USBSuccess)
+    {
+        int fd = open("imgRAW.bin", O_CREAT | O_WRONLY); 
+        write(fd, paImage, IRIMAGE_NBPIXELS*2);
+        close(fd);
+    }
+    Proxy1280_12USB_DisconnectFromModule(handle);
+    handle = NULL;
+
+    if (exiting) {
+        exit(EXIT_FAILURE);
+    }
+
+    pthread_exit(NULL);
+}
+
+int load_frame_buffer(HANDLE *camera_handle)
+{
+    //eDALProxy1280_12USBErr result_code;
+    //pthread_t thread_id;
+    //pthread_create(&thread_id, NULL, thread_load_frame_buffer, (void*)camera_handle);
+
+    pthread_t thread_id;
+    pthread_create(&thread_id, NULL, thread_1, (void*)camera_handle);
+
     return 0;
 }
+
 
 void get_frame_matrix(uint16_t *mat)
 {
@@ -83,7 +154,6 @@ void get_frame_matrix(uint16_t *mat)
         } 
     }
 }
-
 
 HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
 {

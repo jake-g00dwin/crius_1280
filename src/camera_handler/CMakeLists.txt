@@ -13,10 +13,10 @@ target_include_directories(camera_handler PUBLIC
 )
 
 target_link_libraries(camera_handler  PUBLIC
+    DALProxy1280_12USB
+    usb-1.0 
     pgm
     pthread
-    usb-1.0 
-    DALProxy1280_12USB
 )
 
 
