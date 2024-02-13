@@ -16,6 +16,8 @@
 #include <unistd.h>
 #endif
 
+#include <format>
+
 #include "DALProxy1280_12USB.h"
 #include "DALProxy1280_12USBDef.h"
 #include "DALProxySwitchUSBDef.h"
@@ -373,6 +375,12 @@ int main(int argc, char* argv[])
         paMeta_ushort = (unsigned short*)(paMeta+IRIMAGE_META_COUNTER);
         std::cout << *paMeta_ushort << " // Epoch : " << *paMeta_uint64_t << std::endl;
         imAvg = 0;
+
+        std::string file_name = std::format("imgRaw{}.bin", iNb);
+
+        std::ofstream file(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
+        file.write ((char*) paImage,IRIMAGE_NBPIXELS*2);
+        file.close();
     }
 
     Proxy1280_12USB_DisconnectFromModule(m_Handle);
