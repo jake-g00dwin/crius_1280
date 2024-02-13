@@ -28,7 +28,7 @@ extern HANDLE m_Handle;
 
 
 int cam_self_test(void);
-HANDLE* init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
+HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
 int close_camera(HANDLE *camera_handle);
 
 int num_attached(void);

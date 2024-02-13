@@ -39,6 +39,7 @@
 #define HEIGHT 1080
 #endif
 
+//using the extenrally linked global in camera_handler
 HANDLE m_Handle = NULL;
 
 int main() {
@@ -58,8 +59,8 @@ int main() {
 
     //HANDLE cam = NULL; 
     printf("initalizing camera(may take a few moments)\n");
-    //cam = init_camera(30, true, 1, 2, 1); 
-    result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
+    cam = init_camera(30, true, 1, 2, 1); 
+    //result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
     printf("result_code: %d\n", result_code);
     printf("cam ptr: %p\n", cam); 
     
