@@ -41,7 +41,6 @@
 
 //HANDLE m_Handle = NULL;
 
-
 int main() {
     m_Handle = NULL; 
     eDALProxy1280_12USBErr result_code;

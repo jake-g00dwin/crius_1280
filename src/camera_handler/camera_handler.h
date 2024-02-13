@@ -18,7 +18,7 @@
 #define HEIGHT 1024
 #define NUM_TEST_FRAMES 30
 
-extern HANDLE m_Handle;
+extern HANDLE m_Handle; 
 
 /*AGC: Auto gain control*/
 /*SL shutterless processing*/
