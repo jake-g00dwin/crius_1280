@@ -70,9 +70,7 @@ def main():
     number_modules = camlib.num_attached()
     print("camlib.num_attached(): " + str(number_modules))
 
-    handle = POINTER(c_int)
-    print("handle: " + str(handle))
-    handle = camlib.init_camera(1, False, False, 0, 0)
+    handle = pointer(camlib.init_camera(1, False, False, 0, 0))
     print("camlib.init_camera(): " + str(handle))
 
     # show that we can get camera frames.
