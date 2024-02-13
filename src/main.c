@@ -40,9 +40,9 @@
 #endif
 
 HANDLE m_Handle = NULL;
-HANDLE cam = NULL;
 
 int main() {
+    HANDLE cam = NULL;
     cam = NULL; 
     eDALProxy1280_12USBErr result_code;
     
