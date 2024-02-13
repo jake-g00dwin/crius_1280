@@ -49,8 +49,6 @@ def define_c_funcs(camlib):
 
 
 def main():
-    print("TESTING!\n")
-
     camlib = CDLL("./shared/libcamera_handler.so")
     define_c_funcs(camlib)
     # Pass in args to the C function to get a camera 'HANDLE' type.
