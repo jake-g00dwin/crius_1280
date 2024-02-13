@@ -49,7 +49,7 @@ int main() {
     result_code = Proxy1280_12USB_GetModuleCount(&num);
     //int num = num_attached();
     printf("number attached: %d\n", num);
-    printf("result_code: %d", (int)result_code);
+    printf("result_code: %d\n", (int)result_code);
  
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
@@ -59,8 +59,8 @@ int main() {
     //result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
     printf("initalizing camera(may take a fer moments)\n");
     HANDLE cam = NULL;
-    cam = init_camera(30, 0, 0, 0, 0); 
-    printf("result_code: %d", result_code);
+    cam = init_camera(5, 0, 0, 0, 0); 
+    printf("result_code: %d\n", result_code);
     printf("cam ptr: %p\n", cam); 
     
     if(cam == NULL){
@@ -76,9 +76,7 @@ int main() {
     printf("load_frame_buffer(): %d\n", result);
     printf("waiting for frame buffer...\n");
     while(!is_buffer_ready()) {
-        //printf(".");
-        //printf("waiting for frame buffer...\n");
-        //sleep(1);
+        sleep(1);
     }
     stop_capture();    
     

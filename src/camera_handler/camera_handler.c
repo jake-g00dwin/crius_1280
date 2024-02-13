@@ -165,19 +165,27 @@ bool is_buffer_ready(void)
 HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
 {
     HANDLE camera_handle = NULL;
+    enum eAGCProcessingValue agc_val = eNoAGC;
+
     if(fps > MAX_FPS || fps < MIN_FPS) {
-        return NULL;
+        printf("Invalid fps parameter: %f, defaulting to 30\n", fps);
+        fps = 30;
     }
     
     if(agc > 3){
-        return NULL;
+        printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
+        agc_val = eNoAGC;
+    }
+    else{
+        agc_val = agc;
     }    
 
-    /*Defaulting for now*/
-    enum eAGCProcessingValue agc_val = eNoAGC;
-    
     /*See how many devices are attached.*/
-    //if(num_attached() <= 0){return NULL;}
+    if(num_attached() < 1){
+        printf("No devices found!\n");
+        return NULL;
+    }
+
 
     /*Check for the correct name*/
     //if(is_correct_name() != true){return NULL;}
