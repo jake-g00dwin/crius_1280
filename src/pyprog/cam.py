@@ -43,7 +43,7 @@ def main():
 
     # check it works
     camlib.cam_self_test()
-    camlib.cam_self_test.restype = np.ctypeslib.integer
+    camlib.cam_self_test.restype = int
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
 
