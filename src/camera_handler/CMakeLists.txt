@@ -5,6 +5,7 @@ add_library(camera_handler SHARED
 
 target_include_directories(camera_handler PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
 target_link_libraries(camera_handler  PUBLIC
