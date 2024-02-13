@@ -1,7 +1,7 @@
 #
 # test.py
 #
-from ctypes import CDLL, POINTER
+from ctypes import CDLL, POINTER, pointer
 from ctypes import c_size_t, c_double, c_uint8, c_int, c_char, c_bool, c_float
 
 import cv2 as cv
@@ -44,8 +44,8 @@ def define_c_funcs(camlib):
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
-    handle = POINTER(c_int)
-    camlib.close_camera(handle)
+    CAMPOINTER = pointer(c_int) 
+    camlib.close_camera(CAMPOINTER)
     camlib.close_camera.restype = c_int
 
     camlib.init_camera(c_float, c_bool, c_bool, c_uint8, c_char)
