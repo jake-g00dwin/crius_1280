@@ -3,6 +3,7 @@
 #
 from ctypes import CDLL, POINTER, pointer
 from ctypes import c_size_t, c_double, c_uint8, c_int, c_char, c_bool, c_float
+from ctypes import byref
 
 import cv2 as cv
 import numpy as np
@@ -44,6 +45,10 @@ def define_c_funcs(camlib):
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
+    # int connect_camera(int *camera_handle);
+    camlib.connect_camera.argtypes = [POINTER(c_int)]
+    camlib.connect_camera.restype = c_int
+
     camlib.close_camera.argtypes = [POINTER(c_int)]
     camlib.close_camera.restype = c_int
 
@@ -70,7 +75,12 @@ def main():
     number_modules = camlib.num_attached()
     print("camlib.num_attached(): " + str(number_modules))
 
-    handle = pointer(camlib.init_camera(1, False, False, 0, 0))
+    handle = c_int()
+    con_result = camlib.connect_camera(byref(handle))
+    print("camlib.connect_camera(): " + str(con_result))
+    return
+
+    handle = camlib.init_camera(1, False, False, 0, 0)
     print("camlib.init_camera(): " + str(handle))
 
     # show that we can get camera frames.
