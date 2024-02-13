@@ -315,6 +315,8 @@ int main(int argc, char* argv[])
         return 0;
     }
 
+    std::cout << "m_handle: " << m_Handle << std::endl;
+
     //Set Processing depending of parameters (NUC/AGC/Shutterless/Framerate)
     Proxy1280_12USB_SetNUCProcessing(m_Handle, bBP, nuc);
     Proxy1280_12USB_SetShutterLessProcessing(m_Handle, bSL);
