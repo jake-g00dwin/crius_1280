@@ -1,6 +1,8 @@
-#
-# test.py
-#
+# Author: Jake G
+# Date: 2023
+# FileName: cam.py
+# Description: Calls C interface functions for camera.
+
 from ctypes import CDLL, POINTER, pointer
 from ctypes import c_size_t, c_uint8, c_int, c_char, c_bool, c_float, c_long
 from ctypes import byref
@@ -74,13 +76,6 @@ def main():
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
-
-    # Now request frame/image from the camera that's formatted.
-    # ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
-
-    # define prototypes camlib
-    # camlib.get_frame(ND_POINTER_1, c_size_t)
-    # camlib.get_fame.restype = None
 
 
 main()
