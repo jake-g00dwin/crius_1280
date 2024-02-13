@@ -2,7 +2,7 @@
 # test.py
 #
 from ctypes import CDLL, POINTER
-from ctypes import c_size_t, c_double
+from ctypes import c_size_t, c_double, c_uint8, c_int, c_char, c_bool, c_float
 
 import cv2 as cv
 import numpy as np
@@ -39,7 +39,10 @@ def check_img():
 def define_c_funcs(camlib):
     # check it works
     camlib.cam_self_test()
-    camlib.cam_self_test.restype = int
+    camlib.cam_self_test.restype = c_int
+
+    camlib.init_camera(c_float, c_bool, c_bool, c_uint8, c_char)
+    camlib.init_camera.restype = POINTER(c_int)
 
 
 def main():
