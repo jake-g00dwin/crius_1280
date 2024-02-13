@@ -44,6 +44,9 @@ def define_c_funcs(camlib):
     camlib.init_camera(c_float, c_bool, c_bool, c_uint8, c_char)
     camlib.init_camera.restype = POINTER(c_int)
 
+    camlib.num_attached()
+    camlib.num_attached.restype = c_uint8
+
 
 def main():
     print("TESTING!\n")
@@ -55,12 +58,14 @@ def main():
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
 
+    print("camlib.num_attached(): " + str(camlib.num_attached()))
+
     # Now request frame/image from the camera that's formatted.
-    ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
+    # ND_POINTER_1 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
 
     # define prototypes camlib
-    camlib.get_frame(ND_POINTER_1, c_size_t)
-    camlib.get_fame.restype = None
+    # camlib.get_frame(ND_POINTER_1, c_size_t)
+    # camlib.get_fame.restype = None
 
 
 main()
