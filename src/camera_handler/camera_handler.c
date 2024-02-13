@@ -46,7 +46,7 @@ int connect_camera(int *camera_handle)
     result_code = Proxy1280_12USB_ConnectToModule(0, (HANDLE) &camera_handle);
 
     if (result_code != eProxy1280_12USBSuccess){
-        return -1;
+        return (int) result_code;
     }
     return 0;
 }
@@ -106,7 +106,7 @@ int* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
     //if(is_correct_name() != true){return NULL;}
 
     /*connect to module(camera)*/
-    if( connect_camera(camera_handle) < 0){return NULL;}
+    if( connect_camera((int*)camera_handle) != 0){return NULL;}
 
     /*Set the configuration*/
     Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
