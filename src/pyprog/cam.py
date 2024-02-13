@@ -78,7 +78,6 @@ def main():
     handle = c_int()
     con_result = camlib.connect_camera(byref(handle))
     print("camlib.connect_camera(): " + str(con_result))
-    return
 
     handle = camlib.init_camera(1, False, False, 0, 0)
     print("camlib.init_camera(): " + str(handle))
