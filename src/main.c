@@ -39,10 +39,11 @@
 #define HEIGHT 1080
 #endif
 
+HANDLE m_Handle = NULL;
 
 
 int main() {
-    
+    m_Handle = NULL; 
     eDALProxy1280_12USBErr result_code;
     
     int num; 
@@ -57,17 +58,17 @@ int main() {
 
     //HANDLE cam = NULL; 
     printf("initalizing camera(may take a few moments)\n");
-    HANDLE cam = NULL;
     //cam = init_camera(30, true, 1, 2, 1); 
-    result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
+    result_code = Proxy1280_12USB_ConnectToModule(0, &m_Handle);
     printf("result_code: %d\n", result_code);
-    printf("cam ptr: %p\n", cam); 
+    printf("cam ptr: %p\n", m_Handle); 
     
-    if(cam == NULL){
+    if(m_Handle == NULL){
         printf("Handle is null\n");
         return -1;
     }
 
+    /*
     sleep(2);
 
     int result = load_frame_buffer();
@@ -81,7 +82,6 @@ int main() {
     stop_capture();    
     
     
-    /*Get a copy of the frame matrix.*/
     uint16_t frame_matrix[HEIGHT][WIDTH];
     get_frame_matrix((uint16_t*)&frame_matrix);
 
@@ -93,6 +93,8 @@ int main() {
 
 
     close_camera(&cam);
+    */
 
+    Proxy1280_12USB_DisconnectFromModule(m_Handle);
     return 0;
 }
