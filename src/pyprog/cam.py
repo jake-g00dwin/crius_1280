@@ -59,13 +59,15 @@ def define_c_funcs(camlib):
     ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
     camlib.get_frame_matrix.argtypes = [ND_POINTER]
 
+    return handle
+
 
 def main():
     print("Loading shared libs...")
     camlib = CDLL("./shared/libcamera_handler.so")
 
     print("defining C function params...")
-    define_c_funcs(camlib)
+    handle = define_c_funcs(camlib)
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
     number_modules = camlib.num_attached()
