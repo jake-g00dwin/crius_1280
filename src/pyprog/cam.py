@@ -44,6 +44,10 @@ def define_c_funcs(camlib):
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
+    handle = POINTER(c_int)
+    camlib.close_camera()
+    camlib.close_camera.restype = c_int
+
     camlib.init_camera(c_float, c_bool, c_bool, c_uint8, c_char)
     camlib.init_camera.restype = POINTER(c_int)
 
