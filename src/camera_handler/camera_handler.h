@@ -18,14 +18,9 @@
 #define HEIGHT 1024
 #define NUM_TEST_FRAMES 30
 
-/*AGC: Auto gain control*/
-enum agc {
-    no_agc= 0,
-    hist,
-    local,
-    linear, 
-}; 
+extern HANDLE m_Handle;
 
+/*AGC: Auto gain control*/
 /*SL shutterless processing*/
 /*BP Bad pixels corrections*/
 
