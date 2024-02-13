@@ -59,6 +59,7 @@ mark_as_advanced(CMOCKA_PATH CMOCKA_INCLUDE_DIR CMOCKA_INCLUDE_DIRS CMOCKA_LIBRA
 message(STATUS "Project source directory: ${PROJECT_SOURCE_DIR}")
 
 #Add in the needed defines for the camera stuff.
+add_definitions(-DLINUX)
 add_definitions(-DIRLUGX1M3)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
