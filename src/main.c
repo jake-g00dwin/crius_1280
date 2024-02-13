@@ -54,13 +54,18 @@
 
 int main() {
     int num = num_attached();
-    printf("number attached: %d", num);
-    
-    HANDLE cam = init_camera(30, 0, 0, 0, 0); 
+    printf("number attached: %d\n", num);
+  
+    HANDLE cam = NULL; 
+    eDALProxy1280_12USBErr result_code;
+    result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
+    printf("result_code: %d", result_code);
+
+    //HANDLE cam = init_camera(30, 0, 0, 0, 0); 
     printf("cam ptr: %p\n", cam); 
 
     int result = load_frame_buffer();
-    printf("load_frame_buffer(): %d", result);
+    printf("load_frame_buffer(): %d\n", result);
     
 
     close_camera(&cam);
