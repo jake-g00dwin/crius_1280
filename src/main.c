@@ -29,17 +29,6 @@
  * ############################
  */ 
 
-
-#define DEBUG  1
-
-#if DEBUG == 1
-#define debug(data, data_len) printf(data, data_len)
-#else
-#define debug(data, data_len)
-#endif
-
-
-
 #define GETIMAGE_TIMEOUT 5000
 
 #ifndef WIDTH
@@ -66,15 +55,32 @@ int main() {
     Proxy1280_12USB_GetModuleName(0, name, 300);
     printf("name: %s", name);
 
-    HANDLE cam = NULL; 
-    result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
+    //HANDLE cam = NULL; 
+    //result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
+    HANDLE cam = init_camera(30, 0, 0, 0, 0); 
     printf("result_code: %d", result_code);
-    //HANDLE cam = init_camera(30, 0, 0, 0, 0); 
     printf("cam ptr: %p\n", cam); 
 
     int result = load_frame_buffer();
-    printf("load_frame_buffer(): %d\n", result);
+   
+
+    printf("load_frame_buffer(): %d", result);
+    while(!is_buffer_ready()) {
+        printf("waiting for frame buffer...\n");
+        sleep(1);
+    }    
     
+    
+    /*Get a copy of the frame matrix.*/
+    uint16_t frame_matrix[HEIGHT][WIDTH];
+    get_frame_matrix((uint16_t*)&frame_matrix);
+
+    for(int row = 0; row < 16; row++){
+        for(int col = 0; col < 16; col++){
+            printf("element: %d", frame_matrix[row][col]);
+        }
+    }
+
 
     close_camera(&cam);
 

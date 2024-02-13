@@ -21,7 +21,7 @@ int32_t paMeta[135];
 HANDLE m_Handle = NULL;
 HANDLE m_HandleThread = NULL;
 bool stop = false;
-
+bool buffer_filled = false;
 
 int num_attached(void)
 {
@@ -32,7 +32,6 @@ int num_attached(void)
     if (result_code != eProxy1280_12USBSuccess){
         return -1;
     }
-
     return num_cams;
 }
 
@@ -116,9 +115,10 @@ void *thread_1(void *pHandle)
 
     if (eReturnCode == eProxy1280_12USBSuccess)
     {
-        int fd = open("imgRAW.bin", O_CREAT | O_WRONLY); 
-        write(fd, paImage, IRIMAGE_NBPIXELS*2);
-        close(fd);
+        buffer_filled = true;
+        //int fd = open("imgRAW.bin", O_CREAT | O_WRONLY);
+        //write(fd, paImage, IRIMAGE_NBPIXELS*2);
+        //close(fd);
     }
     Proxy1280_12USB_DisconnectFromModule(handle);
     handle = NULL;
@@ -132,10 +132,6 @@ void *thread_1(void *pHandle)
 
 int load_frame_buffer(HANDLE *camera_handle)
 {
-    //eDALProxy1280_12USBErr result_code;
-    //pthread_t thread_id;
-    //pthread_create(&thread_id, NULL, thread_load_frame_buffer, (void*)camera_handle);
-
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, thread_1, (void*)camera_handle);
 
@@ -153,6 +149,11 @@ void get_frame_matrix(uint16_t *mat)
             idx++;
         } 
     }
+}
+
+bool is_buffer_ready(void)
+{
+    return buffer_filled;
 }
 
 HANDLE* init_camera(float fps, bool SL, bool BP, uint8_t agc, char nuc)
