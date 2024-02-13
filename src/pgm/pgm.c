@@ -45,6 +45,28 @@ void clear_matrix(matrix_t *m)
      
 }
 
+int raw_into_matrix(matrix_t *m, uint16_t *arr)
+{
+    
+    /*Swap endian-ness in place.*/
+    int num_pixels = m->y * m->x;
+    for(int i = 0; i < num_pixels; i++){
+        swap_u16_endian(&arr[i]);
+    }
+
+    int array_idx= 0;
+
+    /*Iterate through the 2D array and set it from the passed array.*/
+    for(int rows = 0; rows < m->y; rows++){
+        for(int cols = 0; cols < m->x; cols++){
+           m->data[rows][cols] = arr[array_idx]; 
+           array_idx++;
+        } 
+    }
+        
+    return array_idx;
+}
+
 /*
  * ############################
  * PGM(PORTABLE GRAY FORMAT) Img 
