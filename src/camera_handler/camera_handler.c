@@ -56,7 +56,7 @@ bool is_correct_name(void) {
 int connect_camera(HANDLE *camera_handle)
 {
     eDALProxy1280_12USBErr result_code;
-    result_code = Proxy1280_12USB_ConnectToModule(0, *camera_handle);
+    result_code = Proxy1280_12USB_ConnectToModule(0, camera_handle);
 
     if (result_code != eProxy1280_12USBSuccess){
         return (int) result_code;
@@ -204,12 +204,20 @@ HANDLE* init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     //if(is_correct_name() != true){return NULL;}
 
     /*connect to module(camera)*/
-    eDALProxy1280_12USBErr connect_result = connect_camera(camera_handle);
-    if(connect_result != eProxy1280_12USBSuccess)
+    //eDALProxy1280_12USBErr connect_result = connect_camera(camera_handle);
+    //if(connect_result != eProxy1280_12USBSuccess)
+    //{
+    //    printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
+    //    return NULL;
+    //}
+
+    eDALProxy1280_12USBErr conres = Proxy1280_12USB_ConnectToModule(0, camera_handle);
+     if(conres != eProxy1280_12USBSuccess)
     {
-        printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
+        printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(conres)); 
         return NULL;
-    } 
+    }   
+
 
     printf("Camera handle ptr: %p\n", camera_handle);
 
