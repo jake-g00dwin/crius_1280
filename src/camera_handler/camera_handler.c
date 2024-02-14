@@ -123,14 +123,16 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     Proxy1280_12USB_SetFloatFeature(camera_handle, efFrameRate, fps);
     Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
 
-    for(int i = 0; i < 60; i++){
+    for(int i = 0; i < NUM_TEST_FRAMES; i++){
         res  = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
         printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
     }
 
+    /*
     int fd = open("/tmp/imgRAW.bin", O_CREAT | O_WRONLY);
     write(fd, paImage, IRIMAGE_NBPIXELS*2);
     close(fd);    
+    */
 
     return camera_handle;
 }
