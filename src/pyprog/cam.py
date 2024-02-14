@@ -41,7 +41,7 @@ def define_c_funcs(camlib):
     camlib.num_attached.restype = c_uint8
 
     # int close_camera(HANDLE *camera_handle);
-    camlib.close_camera.argtypes = [POINTER(c_void_p)]
+    camlib.close_camera.argtypes = [c_void_p]
     camlib.close_camera.restype = c_int
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
@@ -49,7 +49,7 @@ def define_c_funcs(camlib):
     camlib.init_camera.restype = POINTER(c_void_p)
 
     # int load_frame_buffer(HANDLE camera_handle);
-    camlib.load_frame_buffer.argtypes = [POINTER(c_void_p)]
+    camlib.load_frame_buffer.argtypes = [c_void_p]
     camlib.load_frame_buffer.restype = c_int
 
     # void load_matrix_buffer(bool endian_swap);
