@@ -62,7 +62,7 @@ def main():
 
     # create a empty 2D array for filling.
     mat = np.ones((1280, 1024), dtype=np.uint16)
-    camlib.get_frame_matrix(byref(mat))
+    camlib.get_frame_matrix(mat)
 
     print("image data:" + str(mat))
 
