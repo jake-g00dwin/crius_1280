@@ -90,13 +90,14 @@ def main():
 
     # Convert the array to an image using OpenCV
     image = cv.convertScaleAbs(mat)
-    # img8 = (image/256).astype('uint8')
+    img8 = (image/256).astype('uint8')
 
     # Display the image
-    # cv.imshow('IRCAM', img8)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
+    cv.imshow('IRCAM', img8)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
+    # Display it using colordepth of 4096
     plt.imshow(image, cmap="gray", vmin=0, vmax=4096)
     plt.show()
 
