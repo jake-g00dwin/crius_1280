@@ -1,6 +1,7 @@
 #include "camera_handler.h"
 
 #include <fcntl.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -67,6 +68,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
     printf("name: %s\n", name);
+    fflush(stdout);
 
     if(fps > MAX_FPS || fps < MIN_FPS) {
         printf("Invalid fps parameter: %f, defaulting to 30\n", fps);
@@ -102,6 +104,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
         return NULL;
     }
     printf("Found # device: %d", num_devices);
+    fflush(stdout);
 
     /*connect to module(camera)*/
     eDALProxy1280_12USBErr connect_result = Proxy1280_12USB_ConnectToModule(0, &camera_handle);
@@ -121,7 +124,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
 
     for(int i = 0; i < 60; i++){
-        res  = Proxy1280_12USB_GetImage(&camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+        res  = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
         printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
     }
 
