@@ -87,6 +87,7 @@ def get_paimage(camlib, handle, mat):
 def start_video_loop(camlib, handle, mat):
     # frame = np.zeros((1024, 1280), dtype=np.uint16)
     arr = np.zeros(1024 * 1280, dtype=np.uint16)
+    print("Size of the array:", arr.size)
     print("array data" + str(arr))
     while True:
         # get_frame(camlib, handle, mat)
