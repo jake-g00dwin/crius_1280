@@ -19,6 +19,7 @@ def display_menu():
     print("Menu:")
     print("1. Show Video")
     print("2. Show Image")
+    print("0. Quit")
 
 
 def get_choice():
@@ -137,10 +138,13 @@ def main():
     display_menu()
     choice = get_choice()
 
-    if choice == 1:
-        start_video_loop(camlib, handle, mat)
-    else:
-        start_image_plot_loop(camlib, handle, mat)
+    while True:
+        if choice == 0:
+            break
+        elif choice == 1:
+            start_video_loop(camlib, handle, mat)
+        elif choice == 2:
+            start_image_plot_loop(camlib, handle, mat)
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
