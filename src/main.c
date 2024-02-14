@@ -52,6 +52,8 @@ int main() {
         return -1;
     }
 
+
+    print_paimage();
     //int result = load_frame_buffer(&cam);
     //printf("load_frame_buffer(): %d\n", result);
    
