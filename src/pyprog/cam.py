@@ -129,7 +129,7 @@ def main():
     print("camlib.num_attached(): " + str(number_modules))
 
     handle = c_long()
-    handle = camlib.init_camera(1, True, 1, 2, 1)
+    handle = camlib.init_camera(30, True, 1, 2, 1)
     print("camlib.init_camera(): " + str(handle))
 
     # show that we can get camera frames.
@@ -146,11 +146,10 @@ def main():
     # Now do it in a function call.
     get_frame(camlib, handle, mat)
 
-    # Showing two diffent ways to display the data.
-    display_menu()
-    choice = get_choice()
-
     while True:
+        # Showing two diffent ways to display the data.
+        display_menu()
+        choice = get_choice()
         if choice == 0:
             break
         elif choice == 1:
