@@ -19,6 +19,16 @@ bool stop = false;
 bool buffer_filled = false;
 
 
+
+void print_paimage(void)
+{
+    printf("paImage[]:\n");
+    for(int i = 0; i < (IRIMAGE_NBPIXELS*2); i++){
+        printf("%u, ", paImage[i]);
+    }
+        
+}
+
 void stop_capture(void)
 {
     stop = true;

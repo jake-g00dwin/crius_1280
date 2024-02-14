@@ -44,6 +44,8 @@ int load_frame_buffer(HANDLE camera_handle);
 void load_matrix_buffer();
 void swap_u16_endian(uint16_t *word);
 
+void print_paimage(void);
+
 //threaded functions.
 int th_load_frame_buffer();
 void get_frame_matrix(uint16_t *mat);
