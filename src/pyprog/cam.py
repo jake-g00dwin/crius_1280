@@ -62,7 +62,7 @@ def define_c_funcs(camlib):
     camlib.get_frame_matrix.restype = c_int
 
     # void get_paimage(uint16_t *arr);
-    ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
+    ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=1, flags="C")
     camlib.get_paimage.argtypes = [ND_POINTER]
     camlib.get_paimage.restype = c_int
 
