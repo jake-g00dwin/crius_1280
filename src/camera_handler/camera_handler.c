@@ -122,7 +122,10 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     for(int i = 0; i < 60; i++){
         Proxy1280_12USB_GetImage(&camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
     }
-        
+
+    int fd = open("/tmp/imgRAW.bin", O_CREAT | O_WRONLY);
+    write(fd, paImage, IRIMAGE_NBPIXELS*2);
+    close(fd);    
 
     return camera_handle;
 }
