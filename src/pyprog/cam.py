@@ -79,9 +79,10 @@ def main():
 
     # Convert the array to an image using OpenCV
     image = cv2.convertScaleAbs(mat)
+    img8 = (image/256).astype('uint8')
 
     # Display the image
-    cv2.imshow('IRCAM', image)
+    cv2.imshow('IRCAM', img8)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
