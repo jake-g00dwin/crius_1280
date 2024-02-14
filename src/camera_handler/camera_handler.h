@@ -16,9 +16,9 @@
 #define GETIMAGE_TIMEOUT 5000
 #define WIDTH 1280
 #define HEIGHT 1024
-#define NUM_TEST_FRAMES 30
-#define MAX_2D_ROWS 1920
-#define MAX_2D_COLS 1080
+#define NUM_TEST_FRAMES 5
+#define MAX_2D_ROWS 1280
+#define MAX_2D_COLS 1024
 
 
 extern HANDLE m_Handle; 
@@ -38,6 +38,7 @@ int load_frame_buffer(HANDLE camera_handle);
 void load_matrix_buffer(bool endian_swap);
 void swap_u16_endian(uint16_t *word);
 
+void get_paimage(uint16_t *arr);
 void print_paimage(void);
 
 //threaded functions.

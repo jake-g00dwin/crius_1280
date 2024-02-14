@@ -1,6 +1,7 @@
 #include "camera_handler.h"
 
 #include <fcntl.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -141,6 +142,41 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 
 /*
  * ############################
+ * Matrix Helpers
+ * ############################
+ */ 
+
+void rotate_matrix_90(matrix_t *m)
+{
+    int temp;
+
+    // Transpose the matrix
+    for (int i = 0; i < m->y; i++) {
+        for (int j = i + 1; j < m->x; j++) {
+            temp = m->data[i][j];
+            m->data[i][j] = m->data[j][i];
+            m->data[j][i] = temp;
+        }
+    }
+
+    // Reverse each row
+    for (int i = 0; i < m->y; i++) {
+        for (int j = 0; j < m->x / 2; j++) {
+            temp = m->data[i][j];
+            m->data[i][j] = m->data[i][m->x - 1 - j];
+            m->data[i][m->x - 1 - j] = temp;
+        }
+    }
+}
+
+void rotate_matrix_180(matrix_t *m)
+{
+    rotate_matrix_90(m);
+    rotate_matrix_90(m);
+}
+
+/*
+ * ############################
  * FRAME LOADING 
  * ############################
  */
@@ -196,6 +232,11 @@ void get_frame_matrix(uint16_t *mat)
     }
 }
 
+
+void get_paimage(uint16_t *arr)
+{
+    memcpy(arr, paImage, IRIMAGE_NBPIXELS*2);
+}
 
 /*
  * ############################
