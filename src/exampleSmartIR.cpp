@@ -380,7 +380,7 @@ int main(int argc, char* argv[])
         //sprintf(file_name, "/tmp/imgRaw%d.bin", iNb);
         char file_name[128] = "/tmp/imgRaw.bin";
 
-        std::ifstream file(filename);
+        std::ifstream file(file_name);
         if(!file.good()){
             std::ofstream outfile(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
             outfile.write ((char*) paImage,IRIMAGE_NBPIXELS*2);
