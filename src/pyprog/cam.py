@@ -4,7 +4,7 @@
 # Description: Calls C interface functions for camera.
 from ctypes import CDLL, POINTER, pointer
 from ctypes import c_size_t, c_uint8, c_int, c_char, c_bool, c_float, c_long
-from ctypes import byref
+from ctypes import byref, c_void_p
 
 import cv2 as cv
 import numpy as np
@@ -46,7 +46,7 @@ def define_c_funcs(camlib):
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
     camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
-    camlib.init_camera.restype = POINTER(c_long)
+    camlib.init_camera.restype = POINTER(c_void_p)
 
     # int load_frame_buffer(HANDLE camera_handle);
     camlib.load_frame_buffer.argtypes = [POINTER(c_long)]
@@ -135,7 +135,7 @@ def main():
     number_modules = camlib.num_attached()
     print("camlib.num_attached(): " + str(number_modules))
 
-    handle = c_long()
+    handle = c_void_p()
     handle = camlib.init_camera(60, True, 1, 2, 1)
     print("camlib.init_camera(): " + str(handle))
 
