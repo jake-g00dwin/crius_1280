@@ -14,14 +14,15 @@
 #include "DALProxySwitchUSBDef.h"
 
 typedef struct {
-    size_t x; //The number of rows
-    size_t y; //The number of cols
+    size_t num_cols; //The number of cols
+    size_t num_rows; //The number of rows
     uint16_t data[MAX_2D_ROWS][MAX_2D_COLS];
 }matrix_t;
 
 
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
-matrix_t frame_matrix = {WIDTH, HEIGHT};
+matrix_t frame_matrix = { MAX_2D_COLS, MAX_2D_ROWS};
+
 int32_t paMeta[135];
 
 bool stop = false;
@@ -72,6 +73,8 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     HANDLE camera_handle = NULL;
     enum eAGCProcessingValue agc_val = eNoAGC;
     eDALProxy1280_12USBErr res;
+   
+ 
 
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
@@ -151,20 +154,21 @@ void rotate_matrix_90(matrix_t *m)
     int temp;
 
     // Transpose the matrix
-    for (int i = 0; i < m->y; i++) {
-        for (int j = i + 1; j < m->x; j++) {
+    for (int i = 0; i < m->num_rows; i++) {
+        for (int j = i + 1; j < m->num_cols; j++) {
             temp = m->data[i][j];
             m->data[i][j] = m->data[j][i];
             m->data[j][i] = temp;
         }
     }
 
+
     // Reverse each row
-    for (int i = 0; i < m->y; i++) {
-        for (int j = 0; j < m->x / 2; j++) {
+    for (int i = 0; i < m->num_rows; i++) {
+        for (int j = 0; j < m->num_cols / 2; j++) {
             temp = m->data[i][j];
-            m->data[i][j] = m->data[i][m->x - 1 - j];
-            m->data[i][m->x - 1 - j] = temp;
+            m->data[i][j] = m->data[i][m->num_cols - 1 - j];
+            m->data[i][m->num_cols - 1 - j] = temp;
         }
     }
 }
@@ -209,8 +213,8 @@ int load_frame_buffer(HANDLE camera_handle) {
 /*Changes the paImage into 2D matrix and swaps endian*/
 void load_matrix_buffer(bool endian_swap) {
     int idx = 0;
-    for(int rows = 0; rows < frame_matrix.y; rows++){
-        for(int cols = 0; cols < frame_matrix.x; cols++){
+    for(int rows = 0; rows < frame_matrix.num_rows; rows++){
+        for(int cols = 0; cols < frame_matrix.num_cols; cols++){
             
             if(endian_swap){swap_u16_endian(&paImage[idx]);}
 
@@ -224,8 +228,8 @@ void get_frame_matrix(uint16_t *mat)
 {
     int idx = 0;
     /*Iterate through the 2D array and set it from the passed array.*/
-    for(int rows = 0; rows < frame_matrix.y; rows++){
-        for(int cols = 0; cols < frame_matrix.x; cols++){
+    for(int rows = 0; rows < frame_matrix.num_rows; rows++){
+        for(int cols = 0; cols < frame_matrix.num_cols; cols++){
             mat[idx] =  frame_matrix.data[rows][cols];
             idx++;
         } 

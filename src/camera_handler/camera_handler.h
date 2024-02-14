@@ -16,7 +16,7 @@
 #define GETIMAGE_TIMEOUT 5000
 #define WIDTH 1280
 #define HEIGHT 1024
-#define NUM_TEST_FRAMES 5
+#define NUM_TEST_FRAMES 60
 #define MAX_2D_ROWS 1280
 #define MAX_2D_COLS 1024
 
