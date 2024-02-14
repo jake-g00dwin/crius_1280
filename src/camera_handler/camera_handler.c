@@ -156,15 +156,13 @@ void swap_u16_endian(uint16_t *word)
 int load_frame_buffer(HANDLE camera_handle) {
     /*Load the image*/
     eDALProxy1280_12USBErr err;
-    /*
-    err = Proxy1280_12USB_IsConnectToModule(camera_handle);
+    err = Proxy1280_12USB_IsConnectToModule(camera_handle); 
     if(err != eProxy1280_12USBSuccess){
-        printf("Error: not connected!");
+        printf("Error: %s\n", Proxy1280_12USB_GetErrorString(err)); 
         return (int) err;
     }
-    */
 
-    err = Proxy1280_12USB_GetImage(&camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    err = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
 
     return (int) err;
 }
