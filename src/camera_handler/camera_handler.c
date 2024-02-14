@@ -132,7 +132,7 @@ int load_frame_buffer(HANDLE *camera_handle) {
     err = Proxy1280_12USB_IsConnectToModule(camera_handle);
     if(err != eProxy1280_12USBSuccess){
         printf("Error: not connected!");
-        return (int) err;
+        //return (int) err;
     }
 
     Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
