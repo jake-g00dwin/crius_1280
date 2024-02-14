@@ -2,18 +2,34 @@
 
 ## Project Usage
 
-### Image Outputs
+### Building for usage
 
-At the moment to reduce the processing time needed for each image/frame the 
-incoming data in the form of uint16_t for each pixel will be encoded into the
-PGM format.
+To build the shared library of C code that allows interfacing with python
+follow the below prompts.
 
-This format requires minimal processing time and is lossless for 16bit pixel
-values.
+This assumes that the required SDK shared libraries are either installed 
+system wide or the repo's included ones are used.
 
-Image outputs at the moment are setup to default to the systems `/tmp/` 
-directory for speed and to reduce the R/W cycles on the slower storage
-mediums that may also have lower endurance such as uSD cards.
+```sh
+git clone https://github.com/jake-g00dwin/crius_1280.git
+cd crius_1280
+cd build
+cmake ../
+make camera_handler
+```
+
+### Running the Python program
+
+The repo comes included with the needed python script to show the usage of
+the shared C library.
+
+```sh
+# Use the global library path if installed there.
+sudo LD_LBIRARY_PATH=/lib/crius/ python3.8 ./cam.py
+
+# Use the repo's files if needed
+sudo LD_LBIRARY_PATH=../../camera_sdk/ python3.8 ./cam.py
+```
 
 
 ## Project structure:
@@ -45,31 +61,4 @@ directory.
 
 To change the settings when the project is being built the `CMakeLists.txt`
 file in the project root would need to be edited.
-
-
-## Running Tests
-
-The command below shows how to run the tests for a development machine with 
-the correct enviroment setup.
-
-```sh
-./tdd.sh
-
-```
-
-The script is setup to automatically enter the build directory, run cmake,
-make the correct dependencies and run the tests.
-
-If you want to try running tests manually you can do so by passing a flag to 
-the CMake build system like so:
-
-```sh
-cd ./build
-cmake -DUNIT_TESTING=ON ../
-make all
-ctest
-```
-
-Keep in mind it may cause dependency conflicts by running `make all` during
-tests.
 
