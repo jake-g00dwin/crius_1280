@@ -69,10 +69,12 @@ int main() {
     
     get_frame_matrix((uint16_t*)&frame_matrix);
 
+    printf("Printing 16 , 16 elements from matrix...\n");
     for(int row = 0; row < 16; row++){
         for(int col = 0; col < 16; col++){
-            printf("element: %d", frame_matrix[row][col]);
+            printf("%d, ", frame_matrix[row][col]);
         }
+        printf("\n");
     }
 
     printf("Disconnecting from camera!\n");
