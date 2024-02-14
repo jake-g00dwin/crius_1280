@@ -12,6 +12,13 @@
 #include "DALProxy1280_12USBDef.h"
 #include "DALProxySwitchUSBDef.h"
 
+typedef struct {
+    size_t x; //The number of rows
+    size_t y; //The number of cols
+    uint16_t data[MAX_2D_ROWS][MAX_2D_COLS];
+}matrix_t;
+
+
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
 matrix_t frame_matrix = {WIDTH, HEIGHT};
 int32_t paMeta[135];
