@@ -11,8 +11,6 @@
 #include "DALProxy1280_12USBDef.h"
 #include "DALProxySwitchUSBDef.h"
 
-#include "pgm.h"
-
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
 matrix_t frame_matrix = {WIDTH, HEIGHT};
 int32_t paMeta[135];
@@ -181,7 +179,7 @@ void *thread_load_frame_buffer(void *vargp)
     //    return (int) result_code;
    //}
 
-    raw_into_matrix(&frame_matrix, paImage); 
+    //raw_into_matrix(&frame_matrix, paImage); 
 
     return NULL;
 }

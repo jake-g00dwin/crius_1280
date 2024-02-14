@@ -21,7 +21,6 @@
 
 /*The pgm image functions structs, used for matrix ops at the moment*/
 #include "camera_handler.h"
-#include "pgm.h"
 
 /*
  * ############################

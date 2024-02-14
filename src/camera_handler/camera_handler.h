@@ -17,6 +17,15 @@
 #define WIDTH 1280
 #define HEIGHT 1024
 #define NUM_TEST_FRAMES 30
+#define MAX_2D_ROWS 1920
+#define MAX_2D_COLS 1080
+
+
+typedef struct {
+    size_t x; //The number of rows
+    size_t y; //The number of cols
+    uint16_t data[MAX_2D_ROWS][MAX_2D_COLS];
+}matrix_t;
 
 extern HANDLE m_Handle; 
 
