@@ -105,6 +105,9 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     Proxy1280_12USB_SetFloatFeature(camera_handle, efFrameRate, fps);
     Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
 
+
+    Proxy1280_12USB_GetImage(&camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+
     return camera_handle;
 }
 
