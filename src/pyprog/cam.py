@@ -58,9 +58,8 @@ def get_frame(camlib, handle, mat):
 
 
 def start_video_loop(camlib, handle, frame):
-
     while True:
-        frame = get_frame(camlib, handle, frame)
+        get_frame(camlib, handle, frame)
 
         # Now we compress dowwn the bitdepth to make it viewable.
         frame = cv.normalize(frame, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
