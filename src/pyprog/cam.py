@@ -79,13 +79,17 @@ def get_frame(camlib, handle, mat):
 def get_paimage(camlib, handle, mat):
     camlib.load_frame_buffer(handle)
     camlib.get_paimage(mat)
-    mat = mat.reshape(HEIGHT, WIDTH)
+    # mat = mat.reshape(HEIGHT, WIDTH)
 
 
 def start_video_loop(camlib, handle, mat):
+    # frame = np.zeros((1024, 1280), dtype=np.uint16)
+    arr = np.zeros(1024 * 1280, dtype=np.uint16)
+    print("array data" + str(arr))
     while True:
         # get_frame(camlib, handle, mat)
-        get_paimage(camlib, handle, mat)
+        get_paimage(camlib, handle, arr)
+        frame = arr.reshape((1024, 1280))
 
         # Now we compress dowwn the bitdepth to make it viewable.
         frame = cv.normalize(mat,
@@ -145,6 +149,8 @@ def main():
 
     # Now do it in a function call.
     get_frame(camlib, handle, mat)
+
+    print("matrix:" + str(mat))
 
     while True:
         # Showing two diffent ways to display the data.
