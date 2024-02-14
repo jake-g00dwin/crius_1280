@@ -25,11 +25,11 @@ def display_menu():
 def get_choice():
     while True:
         try:
-            choice = int(input("Enter your choice (1/2): "))
-            if choice in [1, 2]:
+            choice = int(input("Enter your choice (0/1/2): "))
+            if choice in [0, 1, 2]:
                 return choice
             else:
-                print("Invalid choice. Please enter 1 or 2.")
+                print("Invalid choice. Please enter 0, 1 or 2.")
         except ValueError:
             print("Invalid input. Please enter a number.")
 
