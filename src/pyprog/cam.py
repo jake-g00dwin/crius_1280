@@ -89,7 +89,7 @@ def main():
     get_frame(camlib, handle, mat)
 
     # Save the matrix for later usage.
-    mat.astype('int16').tofile("matdata.bin")
+    # mat.astype('int16').tofile("matdata.bin")
 
     # Convert the array to an image using OpenCV
     # image = cv.convertScaleAbs(mat)
@@ -100,10 +100,18 @@ def main():
     # cv.waitKey(0)
     # cv.destroyAllWindows()
 
-    # Display it using colordepth of 4096
-    plt.imshow(mat, cmap='gray')
-    plt.axis('off')  # Turn off axis numbers
-    plt.show()
+    while True:
+        user_input = input("Do you want to continue? (y/n): ")
+        if user_input.lower() == 'n':
+            print("Exiting...")
+            break
+        elif user_input.lower() != 'y':
+            print("Invalid input. Please enter 'y' to continue or 'n' to exit.")
+        else:
+            print("Continuing...")
+            plt.imshow(mat, cmap='gray')
+            plt.axis('off')  # Turn off axis numbers
+            plt.show()
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
