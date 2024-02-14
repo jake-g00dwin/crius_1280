@@ -20,13 +20,12 @@ def check_img():
 
 
 def define_c_funcs(camlib):
-    # check it works
-    camlib.cam_self_test()
-    camlib.cam_self_test.restype = c_int
 
+    # int num_attached(void);
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
+    # int close_camera(HANDLE *camera_handle);
     camlib.close_camera.argtypes = [POINTER(c_long)]
     camlib.close_camera.restype = c_int
 
@@ -50,10 +49,8 @@ def main():
     print("defining C function params...")
     define_c_funcs(camlib)
 
-    print("cam_self_test(): " + str(camlib.cam_self_test()))
-
-    # number_modules = camlib.num_attached()
-    # print("camlib.num_attached(): " + str(number_modules))
+    number_modules = camlib.num_attached()
+    print("camlib.num_attached(): " + str(number_modules))
 
     handle = c_long()
     handle = camlib.init_camera(1, False, False, 0, 0)
