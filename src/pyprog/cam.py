@@ -47,7 +47,17 @@ def define_c_funcs(camlib):
     camlib.get_frame_matrix.restype = c_int
 
 
+def get_frame(camlib, handle, mat):
+    # mat = np.zeros((1024, 1280), dtype=np.uint16)
+    camlib.load_frame_buffer(handle)
+    camlib.load_matrix_buffer()
+    camlib.get_frame_matrix(mat)
+
+
 def main():
+    # create a empty 2D array for filling.
+    mat = np.zeros((1024, 1280), dtype=np.uint16)
+
     print("Loading shared libs...")
     camlib = CDLL("./shared/libcamera_handler.so")
 
@@ -62,11 +72,8 @@ def main():
     print("camlib.init_camera(): " + str(handle))
 
     # show that we can get camera frames.
-    # result = camlib.load_frame_buffer(handle)
-    # print("camlib.load_frame_buffer(handle): " + str(result))
-
-    # create a empty 2D array for filling.
-    mat = np.zeros((1024, 1280), dtype=np.uint16)
+    result = camlib.load_frame_buffer(handle)
+    print("camlib.load_frame_buffer(handle): " + str(result))
 
     # tell the shared library to change the 1D array into to big-endian
     # 2D matrix that we can use.
@@ -76,7 +83,10 @@ def main():
     camlib.get_frame_matrix(mat)
 
     # Show the data in the matrix.
-    print("image data:" + str(mat))
+    # print("image data:" + str(mat))
+
+    # Now do it in a function call.
+    get_frame(camlib, handle, mat)
 
     # Convert the array to an image using OpenCV
     image = cv2.convertScaleAbs(mat)
