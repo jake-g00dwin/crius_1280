@@ -27,17 +27,14 @@ def define_c_funcs(camlib):
     camlib.num_attached()
     camlib.num_attached.restype = c_uint8
 
-    # int connect_camera(int *camera_handle);
-    camlib.connect_camera.argtypes = [POINTER(c_long)]
-    camlib.connect_camera.restype = c_int
-
     camlib.close_camera.argtypes = [POINTER(c_long)]
     camlib.close_camera.restype = c_int
 
-    camlib.init_camera.argtypes = [c_float, c_bool, c_bool, c_uint8, c_char]
+    # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
+    camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
     camlib.init_camera.restype = POINTER(c_long)
 
-    # int load_frame_buffer(int *camera_handle)
+    # int load_frame_buffer(HANDLE camera_handle);
     camlib.load_frame_buffer.argtypes = [POINTER(c_long)]
     camlib.load_frame_buffer.restype = c_int
 
@@ -54,23 +51,21 @@ def main():
     define_c_funcs(camlib)
 
     print("cam_self_test(): " + str(camlib.cam_self_test()))
-    number_modules = camlib.num_attached()
-    print("camlib.num_attached(): " + str(number_modules))
+
+    # number_modules = camlib.num_attached()
+    # print("camlib.num_attached(): " + str(number_modules))
 
     handle = c_long()
-    con_result = camlib.connect_camera(byref(handle))
-    print("camlib.connect_camera(): " + str(con_result))
-
     handle = camlib.init_camera(1, False, False, 0, 0)
     print("camlib.init_camera(): " + str(handle))
 
     # show that we can get camera frames.
-    result = camlib.load_frame_buffer(handle)
-    print("camlib.load_frame_buffer(handle): " + str(result))
+    # result = camlib.load_frame_buffer(handle)
+    # print("camlib.load_frame_buffer(handle): " + str(result))
 
     # create a empty 2D array for filling.
     mat = np.ones((1280, 1024), dtype=np.uint16)
-    camlib.get_frame_matrix(mat)
+    camlib.get_frame_matrix(byref(mat))
 
     print("image data:" + str(mat))
 
