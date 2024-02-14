@@ -88,6 +88,9 @@ def main():
     # Now do it in a function call.
     get_frame(camlib, handle, mat)
 
+    # Save the matrix for later usage.
+    mat.astype('int16').tofile("matdata.bin")
+
     # Convert the array to an image using OpenCV
     image = cv.convertScaleAbs(mat)
     img8 = (image/256).astype('uint8')
