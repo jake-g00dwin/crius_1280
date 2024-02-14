@@ -24,7 +24,7 @@ void print_paimage(void)
 {
     printf("paImage[]:\n");
     for(int i = 0; i < (IRIMAGE_NBPIXELS*2); i++){
-        printf("%u, ", paImage[i]);
+        printf("%u, ", ((uint16_t*)paImage)[i]);
     }
         
 }
