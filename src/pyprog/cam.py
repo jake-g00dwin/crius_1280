@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 
 WIDTH = 1280
 HEIGHT = 1080
+MIRROR_FRAME = True
 
 
 # Displays the image in a window
@@ -55,6 +56,9 @@ def get_frame(camlib, handle, mat):
     camlib.load_frame_buffer(handle)
     camlib.load_matrix_buffer(False)
     camlib.get_frame_matrix(mat)
+    if MIRROR_FRAME:
+        mat = np.rot90(mat)
+        mat = np.rot90(mat)
 
 
 def start_video_loop(camlib, handle, mat):
