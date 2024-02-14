@@ -61,6 +61,11 @@ def define_c_funcs(camlib):
     camlib.get_frame_matrix.argtypes = [N2D_POINTER]
     camlib.get_frame_matrix.restype = c_int
 
+    # void get_paimage(uint16_t *arr);
+    ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
+    camlib.get_paimage.argtypes = [ND_POINTER]
+    camlib.get_paimage.restype = c_int
+
 
 def get_frame(camlib, handle, mat):
     camlib.load_frame_buffer(handle)
@@ -71,9 +76,16 @@ def get_frame(camlib, handle, mat):
         mat = np.rot90(mat)
 
 
+def get_paimage(camlib, handle, mat):
+    camlib.load_frame_buffer(handle)
+    camlib.get_paimage(mat)
+    mat = mat.reshape(HEIGHT, WIDTH)
+
+
 def start_video_loop(camlib, handle, mat):
     while True:
-        get_frame(camlib, handle, mat)
+        # get_frame(camlib, handle, mat)
+        get_paimage(camlib, handle, mat)
 
         # Now we compress dowwn the bitdepth to make it viewable.
         frame = cv.normalize(mat,
@@ -151,4 +163,3 @@ def main():
 
 
 main()
-# check_img()
