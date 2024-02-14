@@ -74,7 +74,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
-    printf("name: %s\n", name);
+    printf("name: '%s'\n", name);
     fflush(stdout);
 
     if(fps > MAX_FPS || fps < MIN_FPS) {
