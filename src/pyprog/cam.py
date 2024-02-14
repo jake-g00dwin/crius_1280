@@ -2,7 +2,7 @@
 # Date: 2023
 # FileName: cam.py
 # Description: Calls C interface functions for camera.
-
+import cv2
 from ctypes import CDLL, POINTER, pointer
 from ctypes import c_size_t, c_uint8, c_int, c_char, c_bool, c_float, c_long
 from ctypes import byref
@@ -76,6 +76,14 @@ def main():
 
     # Show the data in the matrix.
     print("image data:" + str(mat))
+
+    # Convert the array to an image using OpenCV
+    image = cv2.convertScaleAbs(mat)
+
+    # Display the image
+    cv2.imshow('IRCAM', image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
