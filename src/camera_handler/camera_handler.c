@@ -86,9 +86,10 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
         printf("No devices found!\n");
         return NULL;
     }
+    printf("Found # device: %d", num_devices);
 
     /*connect to module(camera)*/
-    eDALProxy1280_12USBErr connect_result = Proxy1280_12USB_ConnectToModule(0, camera_handle);
+    eDALProxy1280_12USBErr connect_result = Proxy1280_12USB_ConnectToModule(0, &camera_handle);
     if(connect_result != eProxy1280_12USBSuccess)
     {
         printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
