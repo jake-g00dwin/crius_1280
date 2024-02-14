@@ -43,6 +43,7 @@ HANDLE m_Handle = NULL;
 
 int main() {
     eDALProxy1280_12USBErr result_code;
+    uint16_t frame_matrix[HEIGHT][WIDTH];
     
     int num; 
     result_code = Proxy1280_12USB_GetModuleCount(&num);
@@ -56,22 +57,16 @@ int main() {
 
     printf("initalizing camera(may take a few moments)\n");
     HANDLE cam = init_camera(30, true, 1, 2, 1); 
-    //result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
-    printf("result_code: %d\n", result_code);
-    printf("cam ptr: %p\n", cam); 
     
     if(cam == NULL){
         printf("Handle is null\n");
         return -1;
     }
 
-    sleep(2);
-
     int result = load_frame_buffer(&cam);
     load_matrix_buffer();
     printf("load_frame_buffer(): %d\n", result);
     
-    uint16_t frame_matrix[HEIGHT][WIDTH];
     get_frame_matrix((uint16_t*)&frame_matrix);
 
     for(int row = 0; row < 16; row++){
