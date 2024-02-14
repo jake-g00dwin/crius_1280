@@ -68,7 +68,9 @@ def define_c_funcs(camlib):
 
 
 def get_frame(camlib, handle, mat):
-    camlib.load_frame_buffer(handle)
+    res = camlib.load_frame_buffer(handle)
+    if res != 0:
+        print("Error getting new frame!")
     camlib.load_matrix_buffer(False)
     camlib.get_frame_matrix(mat)
     if MIRROR_FRAME:
@@ -151,6 +153,9 @@ def main():
     get_frame(camlib, handle, mat)
 
     print("matrix:" + str(mat))
+    plt.imshow(mat, cmap='gray')
+    plt.axis('off')  # Turn off axis numbers
+    plt.show()
 
     while True:
         # Showing two diffent ways to display the data.
