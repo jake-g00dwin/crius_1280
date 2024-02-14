@@ -42,19 +42,8 @@
 HANDLE m_Handle = NULL;
 
 int main() {
-    eDALProxy1280_12USBErr result_code;
     uint16_t frame_matrix[HEIGHT][WIDTH];
-    
-    int num; 
-    result_code = Proxy1280_12USB_GetModuleCount(&num);
-    //int num = num_attached();
-    printf("number attached: %d\n", num);
-    printf("result_code: %d\n", (int)result_code);
- 
-    char name[310] = {'\0'}; 
-    Proxy1280_12USB_GetModuleName(0, name, 300);
-    printf("name: %s\n", name);
-
+      
     printf("initalizing camera(may take a few moments)\n");
     HANDLE cam = init_camera(30, true, 1, 2, 1); 
     
@@ -64,10 +53,10 @@ int main() {
     }
 
     //int result = load_frame_buffer(&cam);
-    load_matrix_buffer();
     //printf("load_frame_buffer(): %d\n", result);
-    
-    get_frame_matrix((uint16_t*)&frame_matrix);
+   
+    load_matrix_buffer();
+    get_frame_matrix(&frame_matrix[0][0]);
 
     printf("Printing 16 , 16 elements from matrix...\n");
     for(int row = 0; row < 16; row++){

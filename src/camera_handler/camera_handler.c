@@ -53,6 +53,10 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     HANDLE camera_handle = NULL;
     enum eAGCProcessingValue agc_val = eNoAGC;
 
+    char name[310] = {'\0'}; 
+    Proxy1280_12USB_GetModuleName(0, name, 300);
+    printf("name: %s\n", name);
+
     if(fps > MAX_FPS || fps < MIN_FPS) {
         printf("Invalid fps parameter: %f, defaulting to 30\n", fps);
         fps = 30;
