@@ -65,7 +65,7 @@ def start_video_loop(camlib, handle, mat):
         frame = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
 
         cv.imshow('Video', frame)
-        if cv.waitKey(15) & 0xFF == ord('q'):
+        if cv.waitKey(1000) & 0xFF == ord('q'):
             break
 
 
