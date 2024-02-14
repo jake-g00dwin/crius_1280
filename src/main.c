@@ -74,7 +74,7 @@ int main() {
 
     char file_name[64] = "./rawimage.bin";
     printf("writing test image: %s", file_name);
-    mode_t fmode = S_IRWXU | S_IRGRP | S_IWGRP | S_IROTH;
+    mode_t fmode = S_IRWXU | S_IRWXG | S_IROTH;
     int fd = open(file_name, O_CREAT | O_WRONLY | fmode);
     write(fd, frame_matrix, sizeof(frame_matrix));
     close(fd);
