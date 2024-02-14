@@ -63,9 +63,9 @@ int main() {
         return -1;
     }
 
-    int result = load_frame_buffer(&cam);
+    //int result = load_frame_buffer(&cam);
     load_matrix_buffer();
-    printf("load_frame_buffer(): %d\n", result);
+    //printf("load_frame_buffer(): %d\n", result);
     
     get_frame_matrix((uint16_t*)&frame_matrix);
 
