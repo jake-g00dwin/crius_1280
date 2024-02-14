@@ -98,7 +98,7 @@ def main():
     cv.destroyAllWindows()
 
     # Display it using colordepth of 4096
-    plt.imshow(image, cmap="gray", vmin=0, vmax=4096)
+    plt.imshow(mat, cmap="gray", vmin=0, vmax=4096)
     plt.show()
 
     # Close the camera, using the SDK wrapper.
