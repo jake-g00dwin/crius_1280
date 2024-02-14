@@ -52,7 +52,6 @@ def define_c_funcs(camlib):
 
 
 def get_frame(camlib, handle, mat):
-    # mat = np.zeros((1024, 1280), dtype=np.uint16)
     camlib.load_frame_buffer(handle)
     camlib.load_matrix_buffer(False)
     camlib.get_frame_matrix(mat)
