@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 /*Needed for the camera sdks*/
@@ -70,6 +71,13 @@ int main() {
 
     printf("Disconnecting from camera!\n");
     close_camera(&cam);
+
+    char file_name[64] = "./rawimage.bin";
+    printf("writing test image: %s", file_name);
+    mode_t fmode = S_IRWXU | S_IRGRP | S_IWGRP | S_IROTH;
+    int fd = open(file_name, O_CREAT | O_WRONLY | fmode);
+    write(fd, frame_matrix, sizeof(frame_matrix));
+    close(fd);
 
     return 0;
 }
