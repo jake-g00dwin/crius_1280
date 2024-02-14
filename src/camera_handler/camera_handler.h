@@ -35,7 +35,7 @@ int close_camera(HANDLE *camera_handle);
 int num_attached(void);
 
 int load_frame_buffer(HANDLE camera_handle);
-void load_matrix_buffer();
+void load_matrix_buffer(bool endian_swap);
 void swap_u16_endian(uint16_t *word);
 
 void print_paimage(void);

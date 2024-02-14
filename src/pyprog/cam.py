@@ -37,8 +37,8 @@ def define_c_funcs(camlib):
     camlib.load_frame_buffer.argtypes = [POINTER(c_long)]
     camlib.load_frame_buffer.restype = c_int
 
-    # void load_matrix_buffer();
-    camlib.load_matrix_buffer.argtypes = None
+    # void load_matrix_buffer(bool endian_swap);
+    camlib.load_matrix_buffer.argtypes = [c_bool] 
     camlib.load_matrix_buffer.restype = None
 
     # void get_frame_matrix(uint16_t *mat)
@@ -77,7 +77,7 @@ def main():
 
     # tell the shared library to change the 1D array into to big-endian
     # 2D matrix that we can use.
-    camlib.load_matrix_buffer()
+    camlib.load_matrix_buffer(False)
 
     # Get the matrix info.
     camlib.get_frame_matrix(mat)

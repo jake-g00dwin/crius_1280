@@ -171,11 +171,13 @@ int load_frame_buffer(HANDLE camera_handle) {
 }
 
 /*Changes the paImage into 2D matrix and swaps endian*/
-void load_matrix_buffer() {
+void load_matrix_buffer(bool endian_swap) {
     int idx = 0;
     for(int rows = 0; rows < frame_matrix.y; rows++){
         for(int cols = 0; cols < frame_matrix.x; cols++){
-            swap_u16_endian(&paImage[idx]);
+            
+            if(endian_swap){swap_u16_endian(&paImage[idx]);}
+
             frame_matrix.data[rows][cols] =  paImage[idx]; 
             idx++;
         } 

@@ -58,7 +58,7 @@ int main() {
     //int result = load_frame_buffer(&cam);
     //printf("load_frame_buffer(): %d\n", result);
    
-    load_matrix_buffer();
+    load_matrix_buffer(true);
     get_frame_matrix(&frame_matrix[0][0]);
 
     printf("Printing 16 , 16 elements from matrix...\n");
