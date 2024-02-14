@@ -42,8 +42,6 @@
 HANDLE m_Handle = NULL;
 
 int main() {
-    HANDLE cam = NULL;
-    cam = NULL; 
     eDALProxy1280_12USBErr result_code;
     
     int num; 
@@ -56,9 +54,8 @@ int main() {
     Proxy1280_12USB_GetModuleName(0, name, 300);
     printf("name: %s\n", name);
 
-    //HANDLE cam = NULL; 
     printf("initalizing camera(may take a few moments)\n");
-    cam = init_camera(30, true, 1, 2, 1); 
+    HANDLE cam = init_camera(30, true, 1, 2, 1); 
     //result_code = Proxy1280_12USB_ConnectToModule(0, &cam);
     printf("result_code: %d\n", result_code);
     printf("cam ptr: %p\n", cam); 
