@@ -135,7 +135,7 @@ def main():
     number_modules = camlib.num_attached()
     print("camlib.num_attached(): " + str(number_modules))
 
-    handle = c_void_p()
+    # handle = c_void_p()
     handle = camlib.init_camera(60, True, 1, 2, 1)
     print("camlib.init_camera(): " + str(handle))
 
