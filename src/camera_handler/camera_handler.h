@@ -31,7 +31,7 @@ extern HANDLE m_Handle;
 
 
 HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
-int close_camera(HANDLE *camera_handle);
+int close_camera(HANDLE camera_handle);
 int num_attached(void);
 
 int load_frame_buffer(HANDLE camera_handle);

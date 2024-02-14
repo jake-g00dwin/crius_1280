@@ -56,7 +56,7 @@ int num_attached(void)
     return num_cams;
 }
 
-int close_camera(HANDLE *camera_handle)
+int close_camera(HANDLE camera_handle)
 {
     Proxy1280_12USB_DisconnectFromModule(camera_handle);
     return 0;
