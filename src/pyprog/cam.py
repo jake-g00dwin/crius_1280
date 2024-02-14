@@ -10,8 +10,9 @@ import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 
-WIDTH=1280
-HEIGHT=1080
+WIDTH = 1280
+HEIGHT = 1080
+
 
 # Displays the image in a window
 def check_img():
@@ -73,6 +74,22 @@ def start_video_loop(camlib, handle, frame):
             break
 
 
+def start_image_plot_loop(camlib, handle, frame):
+    while True:
+        user_input = input("Do you want to continue? (y/n): ")
+        if user_input.lower() == 'n':
+            print("Exiting...")
+            break
+        elif user_input.lower() != 'y':
+            print("Invalid. Please enter 'y' to continue or 'n' to exit.")
+        else:
+            print("Continuing...")
+            get_frame(camlib, handle, frame)
+            plt.imshow(frame, cmap='gray')
+            plt.axis('off')  # Turn off axis numbers
+            plt.show()
+
+
 def main():
     # create a empty 2D array for filling.
     mat = np.zeros((WIDTH, HEIGHT), dtype=np.uint16)
@@ -101,27 +118,12 @@ def main():
     # Get the matrix info.
     camlib.get_frame_matrix(mat)
 
-    # Show the data in the matrix.
-    # print("image data:" + str(mat))
-
     # Now do it in a function call.
     get_frame(camlib, handle, mat)
 
+    # Showing two diffent ways to display the data.
     start_video_loop(camlib, handle, mat)
-
-    while True:
-        user_input = input("Do you want to continue? (y/n): ")
-        if user_input.lower() == 'n':
-            print("Exiting...")
-            break
-        elif user_input.lower() != 'y':
-            print("Invalid. Please enter 'y' to continue or 'n' to exit.")
-        else:
-            print("Continuing...")
-            get_frame(camlib, handle, mat)
-            plt.imshow(mat, cmap='gray')
-            plt.axis('off')  # Turn off axis numbers
-            plt.show()
+    start_image_plot_loop(camlib, handle, mat)
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
