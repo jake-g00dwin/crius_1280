@@ -66,12 +66,13 @@ def main():
     # print("camlib.load_frame_buffer(handle): " + str(result))
 
     # create a empty 2D array for filling.
-    mat = np.zeros((1280, 1024), dtype=np.uint16)
+    mat = np.zeros((1024, 1280), dtype=np.uint16)
 
-    # tell the shared library to change the 1D array into ta big-endian
+    # tell the shared library to change the 1D array into to big-endian
     # 2D matrix that we can use.
     camlib.load_matrix_buffer()
 
+    # Get the matrix info.
     camlib.get_frame_matrix(mat)
 
     # Show the data in the matrix.
