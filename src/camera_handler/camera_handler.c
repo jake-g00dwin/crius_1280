@@ -218,7 +218,7 @@ void load_matrix_buffer(bool endian_swap) {
             
             if(endian_swap){swap_u16_endian(&paImage[idx]);}
 
-            frame_matrix.data[rows][cols] =  paImage[idx]; 
+            frame_matrix.data[rows][cols] =  ((uint16_t *)paImage)[idx]; 
             idx++;
         } 
     }
