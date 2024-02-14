@@ -63,11 +63,7 @@ def start_video_loop(camlib, handle, frame):
         frame = get_frame(camlib, handle, frame)
 
         # Now we compress dowwn the bitdepth to make it viewable.
-        frame = cv.normalize(frame,
-                             None,
-                             0,
-                             255,
-                             cv.NORM_MINMAX).astype(np.uint8)
+        frame = cv.normalize(frame, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
 
         cv.imshow('Video', frame)
         if cv.waitKey(15) & 0xFF == ord('q'):
@@ -92,7 +88,7 @@ def start_image_plot_loop(camlib, handle, frame):
 
 def main():
     # create a empty 2D array for filling.
-    mat = np.zeros((WIDTH, HEIGHT), dtype=np.uint16)
+    mat = np.zeros((HEIGHT, WIDTH), dtype=np.uint16)
 
     print("Loading shared libs...")
     camlib = CDLL("./shared/libcamera_handler.so")
