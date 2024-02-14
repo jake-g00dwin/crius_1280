@@ -15,12 +15,22 @@ HEIGHT = 1080
 MIRROR_FRAME = True
 
 
-# Displays the image in a window
-def check_img():
-    img = cv.imread("./image.pgm")
-    cv.imshow("IR CAM", img)
-    k = cv.waitKey(0)
-    return k
+def display_menu():
+    print("Menu:")
+    print("1. Show Video")
+    print("2. Show Image")
+
+
+def get_choice():
+    while True:
+        try:
+            choice = int(input("Enter your choice (1/2): "))
+            if choice in [1, 2]:
+                return choice
+            else:
+                print("Invalid choice. Please enter 1 or 2.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
 
 
 def define_c_funcs(camlib):
@@ -65,14 +75,18 @@ def start_video_loop(camlib, handle, mat):
         get_frame(camlib, handle, mat)
 
         # Now we compress dowwn the bitdepth to make it viewable.
-        frame = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
+        frame = cv.normalize(mat,
+                             None,
+                             0,
+                             255,
+                             cv.NORM_MINMAX).astype(np.uint8)
 
         cv.imshow('Video', frame)
-        if cv.waitKey(1000) & 0xFF == ord('q'):
+        if cv.waitKey(500) & 0xFF == ord('q'):
             break
 
 
-def start_image_plot_loop(camlib, handle, frame):
+def start_image_plot_loop(camlib, handle, mat):
     while True:
         user_input = input("Do you want to continue? (y/n): ")
         if user_input.lower() == 'n':
@@ -82,8 +96,8 @@ def start_image_plot_loop(camlib, handle, frame):
             print("Invalid. Please enter 'y' to continue or 'n' to exit.")
         else:
             print("Continuing...")
-            get_frame(camlib, handle, frame)
-            plt.imshow(frame, cmap='gray')
+            get_frame(camlib, handle, mat)
+            plt.imshow(mat, cmap='gray')
             plt.axis('off')  # Turn off axis numbers
             plt.show()
 
@@ -120,8 +134,13 @@ def main():
     get_frame(camlib, handle, mat)
 
     # Showing two diffent ways to display the data.
-    start_video_loop(camlib, handle, mat)
-    start_image_plot_loop(camlib, handle, mat)
+    display_menu()
+    choice = get_choice()
+
+    if choice == 1:
+        start_video_loop(camlib, handle, mat)
+    else:
+        start_image_plot_loop(camlib, handle, mat)
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
