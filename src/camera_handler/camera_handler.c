@@ -239,7 +239,7 @@ void get_frame_matrix(uint16_t *mat)
 
 void get_paimage(uint16_t *arr)
 {
-    memcpy(arr, paImage, IRIMAGE_NBPIXELS*2);
+    memcpy(arr, paImage, sizeof(paImage));
 }
 
 /*
