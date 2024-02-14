@@ -384,7 +384,7 @@ int main(int argc, char* argv[])
         if(!file.good()){
             std::ofstream outfile(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
             outfile.write ((char*) paImage,IRIMAGE_NBPIXELS*2);
-            outfile.close()
+            outfile.close();
             std::cout << "saved file: " << file_name << std::endl;
         }
     }
