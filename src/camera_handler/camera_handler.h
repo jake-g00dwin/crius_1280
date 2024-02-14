@@ -40,7 +40,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
 int close_camera(HANDLE *camera_handle);
 int num_attached(void);
 
-int load_frame_buffer(HANDLE *camera_handle);
+int load_frame_buffer(HANDLE camera_handle);
 void load_matrix_buffer();
 void swap_u16_endian(uint16_t *word);
 

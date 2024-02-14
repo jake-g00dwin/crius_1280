@@ -126,7 +126,7 @@ void swap_u16_endian(uint16_t *word)
 }
 
 /*Gets a frame and puts it into the matrix*/
-int load_frame_buffer(HANDLE *camera_handle) {
+int load_frame_buffer(HANDLE camera_handle) {
     /*Load the image*/
     eDALProxy1280_12USBErr err;
     /*
@@ -137,7 +137,7 @@ int load_frame_buffer(HANDLE *camera_handle) {
     }
     */
 
-    err = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+    err = Proxy1280_12USB_GetImage(&camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
 
     return (int) err;
 }
