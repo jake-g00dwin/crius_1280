@@ -376,13 +376,17 @@ int main(int argc, char* argv[])
         std::cout << *paMeta_ushort << " // Epoch : " << *paMeta_uint64_t << std::endl;
         imAvg = 0;
 
-        char file_name[128] = {'\0'};
-        sprintf(file_name, "/tmp/imgRaw%d.bin", iNb);
-        std::cout << "saved file: " << file_name << std::endl;
+        //char file_name[128] = {'\0'};
+        //sprintf(file_name, "/tmp/imgRaw%d.bin", iNb);
+        char file_name[128] = "/tmp/imgRaw.bin";
 
-        std::ofstream file(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
-        file.write ((char*) paImage,IRIMAGE_NBPIXELS*2);
-        file.close();
+        std::ifstream file(filename);
+        if(!file.good()){
+            std::ofstream outfile(file_name, std::ios::out | std::ios::trunc | std::ios::binary);
+            outfile.write ((char*) paImage,IRIMAGE_NBPIXELS*2);
+            outfile.close()
+            std::cout << "saved file: " << file_name << std::endl;
+        }
     }
 
     Proxy1280_12USB_DisconnectFromModule(m_Handle);
