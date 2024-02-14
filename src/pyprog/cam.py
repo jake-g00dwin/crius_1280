@@ -37,9 +37,14 @@ def define_c_funcs(camlib):
     camlib.load_frame_buffer.argtypes = [POINTER(c_long)]
     camlib.load_frame_buffer.restype = c_int
 
+    # void load_matrix_buffer();
+    camlib.load_matrix_buffer.argtypes = None
+    camlib.load_matrix_buffer.restype = None
+
     # void get_frame_matrix(uint16_t *mat)
-    ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
-    camlib.get_frame_matrix.argtypes = [ND_POINTER]
+    N2D_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
+    camlib.get_frame_matrix.argtypes = [N2D_POINTER]
+    camlib.get_frame_matrix.restype = c_int
 
 
 def main():
@@ -61,9 +66,15 @@ def main():
     # print("camlib.load_frame_buffer(handle): " + str(result))
 
     # create a empty 2D array for filling.
-    mat = np.ones((1280, 1024), dtype=np.uint16)
+    mat = np.zeros((1280, 1024), dtype=np.uint16)
+
+    # tell the shared library to change the 1D array into ta big-endian
+    # 2D matrix that we can use.
+    camlib.load_matrix_buffer()
+
     camlib.get_frame_matrix(mat)
 
+    # Show the data in the matrix.
     print("image data:" + str(mat))
 
     # Close the camera, using the SDK wrapper.
