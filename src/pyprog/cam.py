@@ -2,13 +2,13 @@
 # Date: 2023
 # FileName: cam.py
 # Description: Calls C interface functions for camera.
-import cv2
 from ctypes import CDLL, POINTER, pointer
 from ctypes import c_size_t, c_uint8, c_int, c_char, c_bool, c_float, c_long
 from ctypes import byref
 
 import cv2 as cv
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # Displays the image in a window
@@ -89,13 +89,16 @@ def main():
     get_frame(camlib, handle, mat)
 
     # Convert the array to an image using OpenCV
-    image = cv2.convertScaleAbs(mat)
-    img8 = (image/256).astype('uint8')
+    image = cv.convertScaleAbs(mat)
+    # img8 = (image/256).astype('uint8')
 
     # Display the image
-    cv2.imshow('IRCAM', img8)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv.imshow('IRCAM', img8)
+    # cv.waitKey(0)
+    # cv.destroyAllWindows()
+
+    plt.imshow(image, cmap="gray", vmin=0, vmax=4096)
+    plt.show()
 
     # Close the camera, using the SDK wrapper.
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
