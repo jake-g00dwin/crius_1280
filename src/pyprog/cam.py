@@ -10,6 +10,8 @@ import cv2 as cv
 import numpy as np
 import matplotlib.pyplot as plt
 
+WIDTH=1280
+HEIGHT=1080
 
 # Displays the image in a window
 def check_img():
@@ -54,9 +56,26 @@ def get_frame(camlib, handle, mat):
     camlib.get_frame_matrix(mat)
 
 
+def start_video_loop(camlib, handle, frame):
+
+    while True:
+        frame = get_frame(camlib, handle, frame)
+
+        # Now we compress dowwn the bitdepth to make it viewable.
+        frame = cv.normalize(frame,
+                             None,
+                             0,
+                             255,
+                             cv.NORM_MINMAX).astype(np.uint8)
+
+        cv.imshow('Video', frame)
+        if cv.waitKey(15) & 0xFF == ord('q'):
+            break
+
+
 def main():
     # create a empty 2D array for filling.
-    mat = np.zeros((1024, 1280), dtype=np.uint16)
+    mat = np.zeros((WIDTH, HEIGHT), dtype=np.uint16)
 
     print("Loading shared libs...")
     camlib = CDLL("./shared/libcamera_handler.so")
@@ -88,17 +107,7 @@ def main():
     # Now do it in a function call.
     get_frame(camlib, handle, mat)
 
-    # Save the matrix for later usage.
-    # mat.astype('int16').tofile("matdata.bin")
-
-    # Convert the array to an image using OpenCV
-    # image = cv.convertScaleAbs(mat)
-    # img8 = (image/256).astype('uint8')
-
-    # Display the image
-    # cv.imshow('IRCAM', img8)
-    # cv.waitKey(0)
-    # cv.destroyAllWindows()
+    start_video_loop(camlib, handle, mat)
 
     while True:
         user_input = input("Do you want to continue? (y/n): ")
