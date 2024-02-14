@@ -106,9 +106,10 @@ def main():
             print("Exiting...")
             break
         elif user_input.lower() != 'y':
-            print("Invalid input. Please enter 'y' to continue or 'n' to exit.")
+            print("Invalid. Please enter 'y' to continue or 'n' to exit.")
         else:
             print("Continuing...")
+            get_frame(camlib, handle, mat)
             plt.imshow(mat, cmap='gray')
             plt.axis('off')  # Turn off axis numbers
             plt.show()
