@@ -45,7 +45,7 @@ int main() {
     uint16_t frame_matrix[HEIGHT][WIDTH];
       
     printf("initalizing camera(may take a few moments)\n");
-    HANDLE cam = init_camera(30, true, 1, 2, 1); 
+    HANDLE cam = init_camera(30, true, 1, eAGCLocal, 1); 
     
     if(cam == NULL){
         printf("Handle is null\n");
@@ -53,7 +53,7 @@ int main() {
     }
 
 
-    print_paimage();
+    //print_paimage();
     //int result = load_frame_buffer(&cam);
     //printf("load_frame_buffer(): %d\n", result);
    

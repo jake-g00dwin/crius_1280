@@ -62,6 +62,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 {
     HANDLE camera_handle = NULL;
     enum eAGCProcessingValue agc_val = eNoAGC;
+    eDALProxy1280_12USBErr res;
 
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
@@ -120,7 +121,8 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
 
     for(int i = 0; i < 60; i++){
-        Proxy1280_12USB_GetImage(&camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+        res  = Proxy1280_12USB_GetImage(&camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
+        printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
     }
 
     int fd = open("/tmp/imgRAW.bin", O_CREAT | O_WRONLY);
