@@ -27,25 +27,23 @@ extern HANDLE m_Handle;
 //put the object type for python export here.
 
 
-int cam_self_test(void);
 HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
 int close_camera(HANDLE *camera_handle);
-
 int num_attached(void);
-bool is_correct_name(void);
-int connect_camera(HANDLE *camera_handle);
 
-int load_frame_buffer();
+int load_frame_buffer(HANDLE *camera_handle);
+void load_matrix_buffer();
+void swap_u16_endian(uint16_t *word);
+
+//threaded functions.
+int th_load_frame_buffer();
 void get_frame_matrix(uint16_t *mat);
+
 void *thread_1(void *pHandle);
 void *thread_load_frame_buffer(void *vargp);
 
 void stop_capture(void);
 bool is_buffer_ready(void);
-
-void get_pgm_frame();
-void get_meta_data();
-void chagne_parameters();
 
 
 #endif

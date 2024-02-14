@@ -69,20 +69,12 @@ int main() {
         return -1;
     }
 
-    /*
     sleep(2);
 
-    int result = load_frame_buffer();
-   
-
+    int result = load_frame_buffer(&cam);
     printf("load_frame_buffer(): %d\n", result);
-    printf("waiting for frame buffer...\n");
-    while(!is_buffer_ready()) {
-        sleep(1);
-    }
-    stop_capture();    
-    
-    
+
+        
     uint16_t frame_matrix[HEIGHT][WIDTH];
     get_frame_matrix((uint16_t*)&frame_matrix);
 
@@ -94,7 +86,6 @@ int main() {
 
 
     close_camera(&cam);
-    */
 
     Proxy1280_12USB_DisconnectFromModule(m_Handle);
     return 0;
