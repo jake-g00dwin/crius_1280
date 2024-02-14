@@ -38,7 +38,7 @@ def define_c_funcs(camlib):
     camlib.load_frame_buffer.restype = c_int
 
     # void load_matrix_buffer(bool endian_swap);
-    camlib.load_matrix_buffer.argtypes = [c_bool] 
+    camlib.load_matrix_buffer.argtypes = [c_bool]
     camlib.load_matrix_buffer.restype = None
 
     # void get_frame_matrix(uint16_t *mat)
@@ -50,7 +50,7 @@ def define_c_funcs(camlib):
 def get_frame(camlib, handle, mat):
     # mat = np.zeros((1024, 1280), dtype=np.uint16)
     camlib.load_frame_buffer(handle)
-    camlib.load_matrix_buffer()
+    camlib.load_matrix_buffer(False)
     camlib.get_frame_matrix(mat)
 
 
