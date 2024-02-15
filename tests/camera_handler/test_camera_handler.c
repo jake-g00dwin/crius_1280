@@ -170,7 +170,7 @@ static void test_get_frame_matrix(void **state)
     load_matrix_buffer(false);
 
     get_paimage((int*)fake_image);
-    get_frame_matrix((uint16_t *)mat);
+    get_frame_matrix((uint16_t *)mat, 0, 0);
    
      
     /*Now check that it's the same as the other data*/
