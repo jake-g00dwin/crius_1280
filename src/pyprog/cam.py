@@ -2,17 +2,59 @@
 # Date: 2023
 # FileName: cam.py
 # Description: Calls C interface functions for camera.
-from ctypes import CDLL, POINTER, pointer
-from ctypes import c_size_t, c_uint8, c_int, c_char, c_bool, c_float, c_long
-from ctypes import byref, c_void_p
+from ctypes import CDLL
+from ctypes import c_uint8, c_int, c_char, c_bool, c_float
+from ctypes import c_void_p
 
 import cv2 as cv
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 WIDTH = 1280
 HEIGHT = 1080
 MIRROR_FRAME = True
+SHARED_LIB = "./shared/libcamera_handler.so"
+
+
+def init():
+    camlib = CDLL("./shared/libcamera_handler.so")
+
+    # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
+    camlib.init_camera.argstypes = [c_float, c_bool, c_char, c_uint8, c_char]
+    camlib.init_camera.restype = c_void_p
+    fps = c_float(60.0)
+    handle = camlib.init_camera(fps, True, 1, 2, 1)
+    return handle
+
+
+def num_attached():
+    camlib = CDLL("./shared/libcamera_handler.so")
+
+    # int num_attached(void);
+    camlib.num_attached.argstypes = []
+    camlib.num_attached.restype = c_int
+    n = camlib.num_attached()
+    return n
+
+
+def close_camera(h):
+    camlib = CDLL("./shared/libcamera_handler.so")
+
+    # int close_camera(void);
+    camlib.close_camera.argstypes = [c_void_p]
+    camlib.close_camera.restype = c_int
+    r = camlib.close_camera(h)
+    return r
+
+
+def load_frame_buffer(h):
+    camlib = CDLL("./shared/libcamera_handler.so")
+
+    # int load_frame_buffer(HANDLE camera_handle);
+    camlib.load_frame_buffer.argstypes = [c_void_p]
+    camlib.load_frame_buffer.restype = c_int
+    r = camlib.load_frame_buffer(h)
+    return r
 
 
 def display_menu():
@@ -57,9 +99,9 @@ def define_c_funcs(camlib):
     camlib.load_matrix_buffer.restype = None
 
     # void get_frame_matrix(uint16_t *mat)
-    N2D_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
-    camlib.get_frame_matrix.argtypes = [N2D_POINTER]
-    camlib.get_frame_matrix.restype = c_int
+    ND_POINTER_2 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
+    camlib.get_frame_matrix.argtypes = [ND_POINTER_2]
+    camlib.get_frame_matrix.restype = None
 
     # void get_paimage(uint16_t *arr);
     ND_POINTER = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=1, flags="C")
@@ -117,9 +159,9 @@ def start_image_plot_loop(camlib, handle, mat):
         else:
             print("Continuing...")
             get_frame(camlib, handle, mat)
-            plt.imshow(mat, cmap='gray')
-            plt.axis('off')  # Turn off axis numbers
-            plt.show()
+            # plt.imshow(mat, cmap='gray')
+            # plt.axis('off')  # Turn off axis numbers
+            # plt.show()
 
 
 def main():
@@ -156,9 +198,9 @@ def main():
     get_frame(camlib, handle, mat)
 
     print("matrix:" + str(mat))
-    plt.imshow(mat, cmap='gray')
-    plt.axis('off')  # Turn off axis numbers
-    plt.show()
+    # plt.imshow(mat, cmap='gray')
+    # plt.axis('off')  # Turn off axis numbers
+    # plt.show()
 
     while True:
         # Showing two diffent ways to display the data.
@@ -196,9 +238,14 @@ def t():
     print("py->*handle: " + str(hex(id(h))))
     print("py->handle: " + str(hex(h)))
 
-    camlib.load_frame_buffer(h)
-    camlib.load_matrix_buffer(True)
-    camlib.get_frame_matrix(mat)
+    res = camlib.load_frame_buffer(h)
+    print("load_frame_buffer: " + str(res))
+
+    camlib.load_matrix_buffer(False)
+
+    M = np.ones(1310720, dtype=np.uint16).reshape(1024, 1280, order="C")
+    camlib.get_frame_matrix(M)
+    print(M)
 
     cv.imshow('data', mat)
     cv.waitKey(0)
@@ -206,4 +253,4 @@ def t():
 
 
 # main()
-t()
+# t()
