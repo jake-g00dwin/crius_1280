@@ -86,7 +86,8 @@ def print_paimage():
 
 
 def get_frame_matrix():
-    mylib = CDLL("./mylib.so")
+    # mylib = CDLL("./mylib.so")
+    mylib = CDLL(SHARED_LIB)
     # C-type corresponding to numpy array
     ND_POINTER_2 = np.ctypeslib.ndpointer(
             dtype=np.uint16,
@@ -94,15 +95,20 @@ def get_frame_matrix():
             flags="C")
 
     # define prototypes
-    mylib.clear_u16_mat.argtypes = [ND_POINTER_2, ctypes.c_size_t]
-    mylib.clear_u16_mat.restype = None
+    # void get_frame_matrix(uint16_t *mat, size_t n, size_t p);
+    # mylib.clear_u16_mat.argtypes = [ND_POINTER_2, ctypes.c_size_t]
+    # mylib.clear_u16_mat.restype = None
+    mylib.get_frame_matrix.argtypes = [ND_POINTER_2, ctypes.c_size_t]
+    mylib.get_frame_matrix.restype = None
+
     mylib.print_matrix.argtypes = [ND_POINTER_2, ctypes.c_size_t]
     mylib.print_matrix.restype = None
 
-    M = np.arange(1, 10, 1, dtype=np.uint16).reshape(3, 3, order="C")
+    M = np.arange(0, NUMPIXELS, 1, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
     # call function
-    mylib.clear_u16_mat(M, *M.shape)
+    # mylib.clear_u16_mat(M, *M.shape)
     mylib.print_matrix(M, *M.shape)
+    mylib.get_frame_matrix(M, *M.shape)
 
 
 def display_menu():
