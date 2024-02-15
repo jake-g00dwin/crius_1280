@@ -71,6 +71,9 @@ static void test_close_camera(void **state) {
 
 
 HANDLE setup_camera(void){
+    close_camera((void*)0x12345678);
+    clear_matrix();
+    clear_paimage();
     HANDLE my_handle = NULL;
     my_handle = init_camera(30, true, 1, eAGCLocal, 1);
     return my_handle;
@@ -107,7 +110,79 @@ static void test_load_frame_buffer(void **state) {
         assert_true(fake_image[i] == paimage[i]);
     }
 
-    close_camera(h);
+    tear_down(h);
+}
+
+static void test_load_matrix_buffer(void **state)
+{
+    uint16_t fake_image[1310720] = {0};
+    //uint16_t paimage[1310720] = {0};
+
+    /*load the test data*/
+    int fd = open("../src/camera_handler/testdata.bin", O_RDONLY);
+    assert_true(fd >= 0);
+    read(fd, fake_image, sizeof(fake_image));
+    close(fd);
+
+    HANDLE h = setup_camera();
+    
+    /*see what's in the matrix buffer first.*/
+    matrix_t *mat_ptr = get_matrix_buffer();
+    assert_true(mat_ptr->num_cols == 1280);
+    assert_true(mat_ptr->num_rows == 1024);
+    assert_true(mat_ptr->data[0][0] == 0);
+    assert_true(mat_ptr->data[255][255] == 0);
+
+    /*Okay now fill it with stuff.*/
+    load_frame_buffer(h);
+
+    /*Check that calling it doesn't throw errors*/
+    load_matrix_buffer(false);
+
+
+    /*Now check that it's the same as the other data*/
+    int idx = 0;
+    for(int row = 0; row < mat_ptr->num_rows; row++){
+        for(int col = 0;col < mat_ptr->num_cols;col++){
+            assert_true(fake_image[idx] == mat_ptr->data[row][col]);
+            idx++;
+        } 
+    }
+
+    /*chcek for reverse endian functionality*/
+    load_matrix_buffer(true);
+    
+    uint16_t endian_val = ((fake_image[0] & 0xFF00)>>8)|((fake_image[0] & 0x00FF)<<8);
+    assert_true(mat_ptr->data[0][0] == endian_val);
+
+    tear_down(h);
+}
+
+static void test_get_frame_matrix(void **state)
+{
+    HANDLE h = setup_camera();
+    
+    uint16_t fake_image[1310720] = {0};
+    uint16_t mat[1024][1280] = {0};
+
+
+    load_frame_buffer(h);
+    load_matrix_buffer(false);
+
+    get_paimage((int*)fake_image);
+    get_frame_matrix((uint16_t *)mat);
+   
+     
+    /*Now check that it's the same as the other data*/
+    int idx = 0;
+    for(int row = 0; row < 1024; row++){
+        for(int col = 0;col < 1280;col++){
+            assert_true(fake_image[idx] == mat[row][col]);
+            idx++;
+        } 
+    }
+
+    tear_down(h);
 }
 
 /* A test case that does nothing and succeeds. */
@@ -124,6 +199,8 @@ int main(void)
     };
 
     const struct CMUnitTest tests[] = {
+        cmocka_unit_test(test_get_frame_matrix),
+        cmocka_unit_test(test_load_matrix_buffer),
         cmocka_unit_test(test_load_frame_buffer),
         cmocka_unit_test(test_close_camera),
         cmocka_unit_test(test_num_attached),
