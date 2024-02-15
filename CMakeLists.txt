@@ -14,7 +14,7 @@ set(TARGET_GROUP production CACHE STRING "Group to build")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # For if we need to use the C ABI
-# Request C 17 standard features
+# Request C 11 standard features
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic")
