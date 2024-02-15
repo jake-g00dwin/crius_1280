@@ -130,63 +130,7 @@ def clear_matrix():
     camlib.clear_matrix()
 
 
-def display_menu():
-    print("Menu:")
-    print("1. Show Video")
-    print("2. Show Image")
-    print("0. Quit")
-
-
-def get_choice():
-    while True:
-        try:
-            choice = int(input("Enter your choice (0/1/2): "))
-            if choice in [0, 1, 2]:
-                return choice
-            else:
-                print("Invalid choice. Please enter 0, 1 or 2.")
-        except ValueError:
-            print("Invalid input. Please enter a number.")
-
-
-def start_video_loop(camlib, handle, mat):
-    # frame = np.zeros((1024, 1280), dtype=np.uint16)
-    arr = np.zeros(1024 * 1280, dtype=np.uint16)
-    print("Size of the array:", arr.size)
-    print("array data" + str(arr))
-    while True:
-        # get_frame(camlib, handle, mat)
-        get_paimage(camlib, handle, arr)
-        frame = arr.reshape((1024, 1280))
-
-        # Now we compress dowwn the bitdepth to make it viewable.
-        frame = cv.normalize(mat,
-                             None,
-                             0,
-                             255,
-                             cv.NORM_MINMAX).astype(np.uint8)
-
-        cv.imshow('Video', frame)
-        if cv.waitKey(500) & 0xFF == ord('q'):
-            break
-
-
-def start_image_plot_loop(camlib, handle, mat):
-    while True:
-        user_input = input("Do you want to continue? (y/n): ")
-        if user_input.lower() == 'n':
-            print("Exiting...")
-            break
-        elif user_input.lower() != 'y':
-            print("Invalid. Please enter 'y' to continue or 'n' to exit.")
-        else:
-            print("Continuing...")
-            # plt.imshow(mat, cmap='gray')
-            # plt.axis('off')  # Turn off axis numbers
-            # plt.show()
-
-
-def demo_video():
+def demo_video(set_8bit):
     clear_matrix()
     clear_paimage()
     h = init()
@@ -195,6 +139,14 @@ def demo_video():
         load_frame_buffer(h)
         load_matrix_buffer(False)
         mat = get_frame_matrix()
+
+        if(set_8bit):
+            mat = cv.normalize(
+                    mat,
+                    None,
+                    0,
+                    255,
+                    cv.NORM_MINMAX).astype(np.uint8)
 
         cv.imshow('data', mat)
         key = cv.waitKey(16)
@@ -205,7 +157,7 @@ def demo_video():
     cv.destroyAllWindows()
 
 
-def demo_image():
+def demo_image(set_8bit):
     clear_matrix()
     clear_paimage()
     h = init()
@@ -215,6 +167,14 @@ def demo_image():
     mat = get_frame_matrix()
 
     close_camera(h)
+
+    if(set_8bit):
+        mat = cv.normalize(
+                mat,
+                None,
+                0,
+                255,
+                cv.NORM_MINMAX).astype(np.uint8)
 
     cv.imshow('data', mat)
     cv.waitKey(0)
