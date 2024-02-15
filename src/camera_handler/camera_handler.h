@@ -9,7 +9,14 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+
+#ifndef UNIT_TESTING
 #include "DALProxy1280_12USB.h"
+#include "DALProxySwitchUSBDef.h"
+#include "DALProxy1280_12USB.h"
+#else
+#include "camera_test_wrap.h"
+#endif
 
 #define MAX_FPS 120
 #define MIN_FPS 5

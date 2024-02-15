@@ -9,10 +9,6 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include "DALProxy1280_12USB.h"
-#include "DALProxy1280_12USBDef.h"
-#include "DALProxySwitchUSBDef.h"
-
 typedef struct {
     size_t num_cols; //The number of cols
     size_t num_rows; //The number of rows

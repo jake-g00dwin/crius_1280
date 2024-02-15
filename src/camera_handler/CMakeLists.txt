@@ -9,15 +9,24 @@ LINK_DIRECTORIES(
 
 target_include_directories(camera_handler PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
-target_link_libraries(camera_handler  PUBLIC
-    DALProxy1280_12USB
-    usb-1.0 
-    pgm
-    pthread
-)
 
+if(UNIT_TESTING)
+    #target_link_libraries(camera_handler PUBLIC
+    #    camera_test_wrap
+    #)
+    set_target_properties(camera_handler
+            PROPERTIES
+            LINK_FLAGS  "-Wl,--wrap=DALProxy1280_12USB"
+    )
+
+else()
+    target_link_libraries(camera_handler  PUBLIC
+        DALProxy1280_12USB
+    )
+endif()
 
 
