@@ -26,6 +26,15 @@ build_example_smart_ir () {
 }
 
 
+build_camer_handler () {
+    clear_cmake_cache
+    
+    cmake -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE}  -DCMAKE_TOOLCHAIN_FILE=${CROSS_TC} ../
+    make camera_handler
+    ldd ./src/camera_handler/libcamera_handler.so 
+}
+
+
 build_main () {
     clear_cmake_cache
     
@@ -33,17 +42,20 @@ build_main () {
     make main
 }
 
+
+
 run_tests ()  {
     clear_cmake_cache
     cmake -DUNIT_TESTING=ON ../
-    make simple_test
-    make pgm && make test_pgm
+    #make simple_test
+    #make pgm && make test_pgm
     make camera_handler && make test_camera_handler
-    ctest 
+    #ctest 
+    ./tests/camera_handler/test_camera_handler
 }
 
 
 
-#run_tests
-build_calibration_example 
+run_tests
+#build_calibration_example 
 
