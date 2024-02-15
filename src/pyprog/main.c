@@ -47,11 +47,8 @@ void clear_u16_mat(uint16_t *v, size_t n, size_t p)
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < p; j++) {
             v[i * n + j] = 0;
-            printf("%hu ", v[i * n + j]);
         }
-        printf("\n");
     }
-    printf("\n");
 }
 
 

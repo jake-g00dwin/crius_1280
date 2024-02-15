@@ -22,7 +22,7 @@ def init():
     camlib = CDLL("./shared/libcamera_handler.so")
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
-    camlib.init_camera.argstypes = [c_float, c_bool, c_char, c_uint8, c_char]
+    camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
     camlib.init_camera.restype = c_void_p
     fps = c_float(60.0)
     handle = camlib.init_camera(fps, True, 1, 2, 1)
@@ -33,7 +33,7 @@ def num_attached():
     camlib = CDLL("./shared/libcamera_handler.so")
 
     # int num_attached(void);
-    camlib.num_attached.argstypes = []
+    camlib.num_attached.argtypes = []
     camlib.num_attached.restype = c_int
     n = camlib.num_attached()
     return n
@@ -43,7 +43,7 @@ def close_camera(h):
     camlib = CDLL("./shared/libcamera_handler.so")
 
     # int close_camera(void);
-    camlib.close_camera.argstypes = [c_void_p]
+    camlib.close_camera.argtypes = [c_void_p]
     camlib.close_camera.restype = c_int
     r = camlib.close_camera(h)
     return r
@@ -53,7 +53,7 @@ def load_frame_buffer(h):
     camlib = CDLL("./shared/libcamera_handler.so")
 
     # int load_frame_buffer(HANDLE camera_handle);
-    camlib.load_frame_buffer.argstypes = [c_void_p]
+    camlib.load_frame_buffer.argtypes = [c_void_p]
     camlib.load_frame_buffer.restype = c_int
     r = camlib.load_frame_buffer(h)
     return r
@@ -65,7 +65,7 @@ def get_paimage():
     camlib = CDLL("./shared/libcamera_handler.so")
 
     # void get_paimage(int *arr);
-    camlib.get_paimage.argstypes = [ctypes.POINTER(ctypes.c_int)]
+    camlib.get_paimage.argtypes = [ctypes.POINTER(ctypes.c_int)]
     camlib.get_paimage.restype = None
 
     c_array_ptr = ctypes.cast(c_arr.ctypes.data, ctypes.POINTER(ctypes.c_int))
@@ -80,9 +80,19 @@ def print_paimage():
     camlib = CDLL("./shared/libcamera_handler.so")
 
     # void print_paimage(void);
-    camlib.print_paimage.argstypes = []
+    camlib.print_paimage.argtypes = []
     camlib.print_paimage.restype = c_int
     camlib.print_paimage()
+
+
+def load_matrix_buffer(swap_endian):
+    camlib = CDLL(SHARED_LIB)
+
+    # void load_matrix_buffer(bool endian_swap);
+    camlib.load_matrix_buffer.argtypes = [c_bool]
+    camlib.load_matrix_buffer.restype = None
+    b = c_bool(swap_endian)
+    camlib.load_matrix_buffer(b)
 
 
 def get_frame_matrix():
@@ -97,9 +107,27 @@ def get_frame_matrix():
     camlib.get_frame_matrix.argtypes = [ND_POINTER_2, ctypes.c_size_t]
     camlib.get_frame_matrix.restype = None
 
-    # M = np.arange(0, NUMPIXELS, 1, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
-    M = np.zeros(NUMPIXELS, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
+    M = np.ones(NUMPIXELS, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
     camlib.get_frame_matrix(M, *M.shape)
+    return M
+
+
+def clear_paimage():
+    camlib = CDLL(SHARED_LIB)
+
+    # void clear_paimage(void);
+    camlib.clear_paimage.argtypes = []
+    camlib.clear_paimage.argtypes = None
+    camlib.clear_paimage()
+
+
+def clear_matrix():
+    camlib = CDLL(SHARED_LIB)
+
+    # void clear_matrix(void);
+    camlib.clear_matrix.argtypes = []
+    camlib.clear_matrix.argtypes = None
+    camlib.clear_matrix()
 
 
 def display_menu():

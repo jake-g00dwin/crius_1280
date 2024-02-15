@@ -89,13 +89,34 @@ class TestCam:
         cam.close_camera(h)
         assert(True)
 
-    def test_get_frame_matrix(self):
+    def test_load_matrix_bufffer(self):
         h = cam.init()
         cam.load_frame_buffer(h)
-        M = cam.get_frame_matrix()
+        cam.load_matrix_buffer(False)
+
+        cam.load_matrix_buffer(True)
+
+        assert(True)
         cam.close_camera(h)
 
-        print(M)
+    def test_get_frame_matrix(self):
+        M = cam.get_frame_matrix()
+        assert M.shape == (1024, 1280)
+        average = np.mean(M)
+        assert average == 0.0
+
+        cam.close_camera(self.cam_address)
+        h = cam.init()
+        cam.load_frame_buffer(h)
+        cam.load_matrix_buffer(False)
+        M = cam.get_frame_matrix()
+
+        assert M.shape == (1024, 1280)
+
+        average = np.mean(M)
+        assert average > 1.0
+
+        cam.close_camera(h)
 
 
 class TestC:
@@ -171,13 +192,14 @@ class TestC:
         mylib.print_matrix.argtypes = [ND_POINTER_2, c_size_t]
         mylib.print_matrix.restype = None
 
-        M = np.arange(1, 10, 1, dtype=np.uint16).reshape(3, 3, order="C")
+        M = np.arange(2, 11, 1, dtype=np.uint16).reshape(3, 3, order="C")
         # call function
+        mylib.print_matrix(M, *M.shape)
         mylib.clear_u16_mat(M, *M.shape)
         mylib.print_matrix(M, *M.shape)
 
         for x in np.nditer(M):
-            print(x, end=' ')
+            # print(x, end=' ')
             assert(x == 0)
         assert(True)
 
