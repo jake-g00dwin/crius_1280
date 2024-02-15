@@ -100,6 +100,7 @@ class TestCam:
         cam.close_camera(h)
 
     def test_get_frame_matrix(self):
+        cam.clear_matrix()
         M = cam.get_frame_matrix()
         assert M.shape == (1024, 1280)
         average = np.mean(M)
@@ -114,7 +115,7 @@ class TestCam:
         assert M.shape == (1024, 1280)
 
         average = np.mean(M)
-        assert average > 1.0
+        assert average > 3000.0
 
         cam.close_camera(h)
 

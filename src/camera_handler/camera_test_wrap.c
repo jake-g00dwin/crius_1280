@@ -12,11 +12,15 @@ bool is_connected = false;
 
 
 /*Read the image file for testing form the file.*/
-void load_fake_data(char *file_name)
+int load_fake_data(char *file_name)
 {
     int fd = open(file_name, O_RDONLY);
+    if(fd < 0){
+        return fd;
+    }
     read(fd, fake_image, IRIMAGE_NBPIXELS*2);
     close(fd);
+    return 0;
 }
 
 
@@ -57,9 +61,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetImage(HANDLE paHandle, unsigned
     if(paHandle != ptr || !is_connected){
         return eProxy1280_12USBHandleError;
     }
-    load_fake_data("../src/camera_handler/testdata.bin");
+    ///home/ronin/Documents/projects/freelance/nick_lechocinski/crius_1280/src/camera_handler
+    int r = load_fake_data("/home/ronin/Documents/projects/freelance/nick_lechocinski/crius_1280/src/camera_handler/testdata.bin");
+    //int r = load_fake_data("../src/camera_handler/testdata.bin");
     memcpy(paImage, fake_image, sizeof(fake_image));
-    return eProxy1280_12USBSuccess;
+    return r;
 }
 
 

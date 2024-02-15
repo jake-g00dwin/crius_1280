@@ -230,7 +230,6 @@ def start_image_plot_loop(camlib, handle, mat):
             # plt.axis('off')  # Turn off axis numbers
             # plt.show()
 
-
 def main():
     # create a empty 2D array for filling.
     mat = np.zeros((HEIGHT, WIDTH), dtype=np.uint16)
@@ -285,34 +284,15 @@ def main():
 
 
 def t():
-    # create a empty 2D array for filling.
-    mat = np.zeros((HEIGHT, WIDTH), dtype=np.uint16)
+    clear_matrix()
+    clear_paimage()
+    h = init()
 
-    print("Loading shared libs...")
-    camlib = CDLL("./shared/libcamera_handler.so")
+    load_frame_buffer(h)
+    load_matrix_buffer(False)
+    mat = get_frame_matrix()
 
-    print("defining C function params...")
-    define_c_funcs(camlib)
-
-    number_modules = camlib.num_attached()
-    print("camlib.num_attached(): " + str(number_modules))
-    if number_modules == 0:
-        return
-
-    h = c_void_p()
-    print("py->*handle: " + str(hex(id(h))))
-    h = camlib.init_camera(60, True, 1, 2, 1)
-    print("py->*handle: " + str(hex(id(h))))
-    print("py->handle: " + str(hex(h)))
-
-    res = camlib.load_frame_buffer(h)
-    print("load_frame_buffer: " + str(res))
-
-    camlib.load_matrix_buffer(False)
-
-    M = np.ones(1310720, dtype=np.uint16).reshape(1024, 1280, order="C")
-    camlib.get_frame_matrix(M)
-    print(M)
+    close_camera(h)
 
     cv.imshow('data', mat)
     cv.waitKey(0)

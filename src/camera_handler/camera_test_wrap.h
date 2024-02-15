@@ -231,7 +231,7 @@ typedef enum
  * ############################
  */ 
 
-void load_fake_data(char *file_name);
+int load_fake_data(char *file_name);
 void get_fake_data_address(void *ptr);
 
 
