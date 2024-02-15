@@ -1,12 +1,11 @@
 #include "camera_test_wrap.h"
 
-
+ void *ptr = (void*)0x12345678;  // Example address
 
 const char* __wrap_Proxy1280_12USB_GetErrorString(eDALProxy1280_12USBErr paeError)
 {
     return "NOT IMPLIMENTED";
 }
-
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetModuleCount(int* paiCount)
 {
@@ -14,6 +13,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetModuleCount(int* paiCount)
 }
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetModuleName(int iIdx, char* paName, int iLen)
+{
+    return eProxy1280_12USBSuccess;
+}
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_ConnectToModule(int iIdx, HANDLE* paHandle)
 {
     return eProxy1280_12USBSuccess;
 }
@@ -42,3 +46,15 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetAGCProcessing(HANDLE paHandle, 
 {
     return eProxy1280_12USBSuccess;
 }
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetFloatFeature(HANDLE paHandle, int paeFeature, float paFloat)
+{
+    return eProxy1280_12USBSuccess;
+}
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_IsConnectToModule(HANDLE paHandle)
+{
+    return eProxy1280_12USBSuccess;
+}
+
+
