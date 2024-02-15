@@ -2,7 +2,8 @@
 #define DALProxy1280_12USBDEF_H
 
 #include <stdbool.h>
-
+#include <stdint.h>
+#include <string.h>
 
 // Largest image properties expected
 #define DAL_PROXY1280_12_IRIMAGE_WIDTH 1280
@@ -224,8 +225,17 @@ typedef enum
 } eDALProxy1280_12USBErr;
 
 
-const char* __wrap_Proxy1280_12USB_GetErrorString(eDALProxy1280_12USBErr paeError);
+/*
+ * ############################
+ * TDD stuff 
+ * ############################
+ */ 
 
+void load_fake_data(char *file_name);
+void get_fake_data_address(void *ptr);
+
+
+const char* __wrap_Proxy1280_12USB_GetErrorString(eDALProxy1280_12USBErr paeError);
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_IsConnectToModule(HANDLE paHandle);
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetModuleCount(int* paiCount);

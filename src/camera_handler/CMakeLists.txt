@@ -15,6 +15,8 @@ target_include_directories(camera_handler PUBLIC
 
 
 if(UNIT_TESTING)
+
+    #add_definitions(-DUNIT_TESTING)
     message("LINKING WITH --wrap")
     target_link_libraries(camera_handler PUBLIC
         camera_test_wrap

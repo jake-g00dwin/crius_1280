@@ -1,6 +1,7 @@
 # The camera_handler module tests
 list(APPEND TEST_LIBS "${CMOCKA_LIBRARIES}")
 list(APPEND TEST_LIBS camera_handler)
+list(APPEND TEST_LIBS camera_test_wrap)
 
 list(APPEND TEST_DIRS "${CMOCKA_INCLUDE_DIRS}")
 list(APPEND TEST_DIRS "${MyProject_SOURCE_DIR}/src")

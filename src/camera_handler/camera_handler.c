@@ -26,6 +26,11 @@ bool buffer_filled = false;
 
 
 
+void paimage_address(int* p)
+{
+    p = (int*)&paImage;
+}
+
 void print_paimage(void)
 {
     printf("paImage[]:\n");
@@ -54,8 +59,8 @@ int num_attached(void)
 
 int close_camera(HANDLE camera_handle)
 {
-    Proxy1280_12USB_DisconnectFromModule(camera_handle);
-    return 0;
+    eDALProxy1280_12USBErr err = Proxy1280_12USB_DisconnectFromModule(camera_handle);
+    return err;
 }
 
 
@@ -110,7 +115,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
         printf("No devices found!\n");
         return NULL;
     }
-    printf("Found # device: %d", num_devices);
+    printf("Found # device: %d\n", num_devices);
     fflush(stdout);
 
     /*connect to module(camera)*/
@@ -132,7 +137,10 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 
     for(int i = 0; i < NUM_TEST_FRAMES; i++){
         res  = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
-        printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
+        if(res != 0){
+            return NULL;
+        }
+        //printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
     }
 
     return camera_handle;
@@ -233,7 +241,7 @@ void get_frame_matrix(uint16_t *mat)
 }
 
 
-void get_paimage(uint16_t *arr)
+void get_paimage(int *arr)
 {
     memcpy(arr, paImage, IRIMAGE_NBPIXELS*2);
 }
