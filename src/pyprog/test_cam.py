@@ -18,11 +18,13 @@ def test_mytest():
 
 class TestCam:
     cam_address = c_void_p(0x12345678)
+    num_pixels = 1310720
 
     def test_init(self):
         handle = cam.init()
         assert(str(hex(handle)) == "0x12345678")
         assert(handle == self.cam_address.value)
+        cam.close_camera(handle)
 
     def test_num_attached(self):
         n = cam.num_attached()
@@ -34,6 +36,10 @@ class TestCam:
         assert(n == 2)
 
         h = self.cam_address
+        n = cam.close_camera(h)
+        assert(n == 2)
+
+        h = cam.init()
         n = cam.close_camera(h)
         assert(n == 0)
 
@@ -49,9 +55,47 @@ class TestCam:
         h = cam.init()
         r = cam.load_frame_buffer(h)
         assert(r == 0)
+        cam.close_camera(h)
 
     def test_get_paimage(self):
-        assert(False)
+        return
+        # X = np.zeros(self.num_pixels, dtype=np.uint16)
+        X = cam.get_paimage()
+
+        # check that it's all zeros
+        avg = 0
+        for i in range(0, self.num_pixels):
+            avg += X[i]
+        avg = avg / self.num_pixels
+        assert(avg == 0.0)
+
+        # Load data then check.
+        h = cam.init()
+        cam.load_frame_buffer(h)
+        cam.close_camera(h)
+        X = cam.get_paimage()
+        avg = 0
+        for i in range(0, self.num_pixels):
+            avg += X[i]
+        avg = avg / self.num_pixels
+        assert(avg != 0.0)
+
+        cam.close_camera(h)
+
+    def test_print_paimage(self):
+        h = cam.init()
+        cam.load_frame_buffer(h)
+        cam.print_paimage()
+        cam.close_camera(h)
+        assert(True)
+
+    def test_get_frame_matrix(self):
+        h = cam.init()
+        cam.load_frame_buffer(h)
+        M = cam.get_frame_matrix()
+        cam.close_camera(h)
+
+        print(M)
 
 
 class TestC:

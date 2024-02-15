@@ -2,7 +2,8 @@
 # Date: 2023
 # FileName: cam.py
 # Description: Calls C interface functions for camera.
-from ctypes import CDLL
+import ctypes
+from ctypes import CDLL, POINTER
 from ctypes import c_uint8, c_int, c_char, c_bool, c_float
 from ctypes import c_void_p
 
@@ -11,7 +12,8 @@ import numpy as np
 # import matplotlib.pyplot as plt
 
 WIDTH = 1280
-HEIGHT = 1080
+HEIGHT = 1024
+NUMPIXELS = 1310720
 MIRROR_FRAME = True
 SHARED_LIB = "./shared/libcamera_handler.so"
 
@@ -55,6 +57,52 @@ def load_frame_buffer(h):
     camlib.load_frame_buffer.restype = c_int
     r = camlib.load_frame_buffer(h)
     return r
+
+
+def get_paimage():
+    arr = np.zeros(NUMPIXELS, dtype=np.uint16)
+    c_arr = arr.astype(np.intc)
+    camlib = CDLL("./shared/libcamera_handler.so")
+
+    # void get_paimage(int *arr);
+    camlib.get_paimage.argstypes = [ctypes.POINTER(ctypes.c_int)]
+    camlib.get_paimage.restype = None
+
+    c_array_ptr = ctypes.cast(c_arr.ctypes.data, ctypes.POINTER(ctypes.c_int))
+
+    camlib.get_paimage(c_array_ptr)
+    arr = c_arr.view(dtype=np.uint16)
+    return c_array_ptr
+
+
+# Doesn't do anything unless called from C
+def print_paimage():
+    camlib = CDLL("./shared/libcamera_handler.so")
+
+    # void print_paimage(void);
+    camlib.print_paimage.argstypes = []
+    camlib.print_paimage.restype = c_int
+    camlib.print_paimage()
+
+
+def get_frame_matrix():
+    mylib = CDLL("./mylib.so")
+    # C-type corresponding to numpy array
+    ND_POINTER_2 = np.ctypeslib.ndpointer(
+            dtype=np.uint16,
+            ndim=2,
+            flags="C")
+
+    # define prototypes
+    mylib.clear_u16_mat.argtypes = [ND_POINTER_2, ctypes.c_size_t]
+    mylib.clear_u16_mat.restype = None
+    mylib.print_matrix.argtypes = [ND_POINTER_2, ctypes.c_size_t]
+    mylib.print_matrix.restype = None
+
+    M = np.arange(1, 10, 1, dtype=np.uint16).reshape(3, 3, order="C")
+    # call function
+    mylib.clear_u16_mat(M, *M.shape)
+    mylib.print_matrix(M, *M.shape)
 
 
 def display_menu():
@@ -118,12 +166,6 @@ def get_frame(camlib, handle, mat):
     if MIRROR_FRAME:
         mat = np.rot90(mat)
         mat = np.rot90(mat)
-
-
-def get_paimage(camlib, handle, mat):
-    camlib.load_frame_buffer(handle)
-    camlib.get_paimage(mat)
-    # mat = mat.reshape(HEIGHT, WIDTH)
 
 
 def start_video_loop(camlib, handle, mat):
