@@ -44,7 +44,7 @@ install_camera_sdk () {
     cp camera_sdk/lib* /usr/lib
     
     echo "Installing the header files..."
-    cp camera_sdk/*.h /usr/include
+    cp inc/*.h /usr/include
 }
 
 
