@@ -45,8 +45,14 @@ build_main () {
 
 
 run_tests ()  {
+    #copy the needed data file for the tests to the /tmp dir.
+    #This is required for the tests of the shared libs to work correctly.
+    cp ./src/camera_handler/testdata.bin /tmp/
+
     clear_cmake_cache
     cmake -DUNIT_TESTING=ON ../
+    
+
     #make simple_test
     #make pgm && make test_pgm
     make camera_handler && make test_camera_handler
