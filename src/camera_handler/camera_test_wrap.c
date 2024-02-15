@@ -61,9 +61,6 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetImage(HANDLE paHandle, unsigned
     if(paHandle != ptr || !is_connected){
         return eProxy1280_12USBHandleError;
     }
-    ///home/ronin/Documents/projects/freelance/nick_lechocinski/crius_1280/src/camera_handler
-    //int r = load_fake_data("/home/ronin/Documents/projects/freelance/nick_lechocinski/crius_1280/src/camera_handler/testdata.bin");
-    //int r = load_fake_data("../src/camera_handler/testdata.bin");
     int r = load_fake_data("/tmp/testdata.bin");
     memcpy(paImage, fake_image, sizeof(fake_image));
     return r;
