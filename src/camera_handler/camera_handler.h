@@ -66,8 +66,6 @@ int th_load_frame_buffer();
 void get_frame_matrix(uint16_t *mat, size_t n, size_t p);
 void print_matrix(uint16_t *v, size_t n, size_t p);
 
-void *thread_1(void *pHandle);
-void *thread_load_frame_buffer(void *vargp);
 
 void stop_capture(void);
 bool is_buffer_ready(void);
