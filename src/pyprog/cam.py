@@ -86,7 +86,7 @@ def print_paimage():
 
 
 def get_frame_matrix():
-    mylib = CDLL(SHARED_LIB)
+    camlib = CDLL(SHARED_LIB)
     # C-type corresponding to numpy array
     ND_POINTER_2 = np.ctypeslib.ndpointer(
             dtype=np.uint16,
@@ -94,11 +94,12 @@ def get_frame_matrix():
             flags="C")
 
     # void get_frame_matrix(uint16_t *mat, size_t n, size_t p);
-    mylib.get_frame_matrix.argtypes = [ND_POINTER_2, ctypes.c_size_t]
-    mylib.get_frame_matrix.restype = None
+    camlib.get_frame_matrix.argtypes = [ND_POINTER_2, ctypes.c_size_t]
+    camlib.get_frame_matrix.restype = None
 
-    M = np.arange(0, NUMPIXELS, 1, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
-    mylib.get_frame_matrix(M, *M.shape)
+    # M = np.arange(0, NUMPIXELS, 1, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
+    M = np.zeros(NUMPIXELS, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
+    camlib.get_frame_matrix(M, *M.shape)
 
 
 def display_menu():
