@@ -100,22 +100,12 @@ static void test_load_frame_buffer(void **state) {
     /*check for data in PA*/
     int res = load_frame_buffer(h);
     assert_true(res == 0);
-
+    
+    get_paimage((int*)paimage);
 
     for(int i = 0; i < 100; i++){
-        //printf("%d", fake_image[i]);
         assert_true(fake_image[i] == paimage[i]);
     }
-
-    //get_paimage((int*)paimage);
-
-    //for(size_t i = 0; i < IRIMAGE_NBPIXELS; i++){
-    //    assert_true(paimage[i] == fake_image[i]);
-   // }
-
-    /*Check that the order is correct*/
-
-    /*Check that it ensures good handle use*/
 
     close_camera(h);
 }

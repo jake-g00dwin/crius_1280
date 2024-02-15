@@ -57,7 +57,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetImage(HANDLE paHandle, unsigned
     if(paHandle != ptr || !is_connected){
         return eProxy1280_12USBHandleError;
     }
-    load_fake_data("src/camera_handler/testdata.bin");
+    load_fake_data("../src/camera_handler/testdata.bin");
     memcpy(paImage, fake_image, sizeof(fake_image));
     return eProxy1280_12USBSuccess;
 }
