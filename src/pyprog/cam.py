@@ -46,7 +46,7 @@ def define_c_funcs(camlib):
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
     camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
-    camlib.init_camera.restype = POINTER(c_void_p)
+    camlib.init_camera.restype = c_void_p
 
     # int load_frame_buffer(HANDLE camera_handle);
     camlib.load_frame_buffer.argtypes = [c_void_p]
@@ -147,7 +147,7 @@ def main():
 
     # tell the shared library to change the 1D array into to big-endian
     # 2D matrix that we can use.
-    camlib.load_matrix_buffer(False)
+    camlib.load_matrix_buffer(True)
 
     # Get the matrix info.
     camlib.get_frame_matrix(mat)
@@ -175,4 +175,35 @@ def main():
     print("camlib.close_camera(): " + str(camlib.close_camera(handle)))
 
 
-main()
+def t():
+    # create a empty 2D array for filling.
+    mat = np.zeros((HEIGHT, WIDTH), dtype=np.uint16)
+
+    print("Loading shared libs...")
+    camlib = CDLL("./shared/libcamera_handler.so")
+
+    print("defining C function params...")
+    define_c_funcs(camlib)
+
+    number_modules = camlib.num_attached()
+    print("camlib.num_attached(): " + str(number_modules))
+    if number_modules == 0:
+        return
+
+    h = c_void_p()
+    print("py->*handle: " + str(hex(id(h))))
+    h = camlib.init_camera(60, True, 1, 2, 1)
+    print("py->*handle: " + str(hex(id(h))))
+    print("py->handle: " + str(hex(h)))
+
+    camlib.load_frame_buffer(h)
+    camlib.load_matrix_buffer(True)
+    camlib.get_frame_matrix(mat)
+
+    cv.imshow('data', mat)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+
+# main()
+t()
