@@ -231,6 +231,17 @@ int load_frame_buffer(HANDLE camera_handle) {
     return (int) err;
 }
 
+void print_matrix(uint16_t *v, size_t n, size_t p)
+{
+    for (size_t i = 0; i < n; i++) {
+        for (size_t j = 0; j < p; j++) {
+            printf("%hu ", v[i * n + j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
 /*Changes the paImage into 2D matrix and swaps endian*/
 void load_matrix_buffer(bool endian_swap) {
     int idx = 0;
@@ -245,8 +256,12 @@ void load_matrix_buffer(bool endian_swap) {
     }
 }
 
-void get_frame_matrix(uint16_t *mat)
+//void get_frame_matrix(uint16_t *mat)
+void get_frame_matrix(uint16_t *mat, size_t n, size_t p)
 {
+    //if (n != frame_matrix.num_rows){return;}
+    //if (n != frame_matrix.num_cols){return;}
+
     int idx = 0;
     /*Iterate through the 2D array and set it from the passed array.*/
     for(int rows = 0; rows < frame_matrix.num_rows; rows++){
