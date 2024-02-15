@@ -9,15 +9,9 @@
 #include <pthread.h>
 #include <unistd.h>
 
-typedef struct {
-    size_t num_cols; //The number of cols
-    size_t num_rows; //The number of rows
-    uint16_t data[MAX_2D_ROWS][MAX_2D_COLS];
-}matrix_t;
-
 
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
-matrix_t frame_matrix = { MAX_2D_COLS, MAX_2D_ROWS};
+matrix_t frame_matrix = { MAX_2D_ROWS, MAX_2D_COLS, {{0}}};
 
 int32_t paMeta[135];
 
@@ -38,6 +32,14 @@ void print_paimage(void)
         printf("%u, ", ((uint16_t*)paImage)[i]);
     }
         
+}
+
+
+void clear_paimage(void)
+{
+    for(int i = 0; i < IRIMAGE_NBPIXELS*2; i++){
+        paImage[i] = 0;
+    }
 }
 
 void stop_capture(void)
@@ -152,6 +154,21 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
  * Matrix Helpers
  * ############################
  */ 
+
+
+matrix_t *get_matrix_buffer(void)
+{
+    return &frame_matrix;
+}
+
+void clear_matrix(void)
+{
+    for (int row = 0; row < frame_matrix.num_rows; row++) {
+        for (int col =0; col  < frame_matrix.num_cols; col++) {
+           frame_matrix.data[row][col] = 0; 
+        }
+    }
+}
 
 void rotate_matrix_90(matrix_t *m)
 {
