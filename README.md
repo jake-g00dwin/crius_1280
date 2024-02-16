@@ -55,7 +55,9 @@ sudo LD_LBIRARY_PATH=/lib/crius/ python3 ./cam.py
 sudo LD_LBIRARY_PATH=../../camera_sdk/ python3 ./cam.py
 ```
 
-**Windows:*
+**Windows:**
+
+
 
 
 
