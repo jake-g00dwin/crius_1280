@@ -119,6 +119,9 @@ class TestCam:
 
         cam.close_camera(h)
 
+    def test_quick_calibration(self):
+        assert(False)
+
 
 class TestC:
     def test_c_interop(self):

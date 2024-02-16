@@ -3,19 +3,29 @@
 # FileName: cam.py
 # Description: Calls C interface functions for camera.
 import ctypes
-from ctypes import CDLL, POINTER
+from ctypes import CDLL
 from ctypes import c_uint8, c_int, c_char, c_bool, c_float
 from ctypes import c_void_p
+from enum import Enum
 
 import cv2 as cv
 import numpy as np
-# import matplotlib.pyplot as plt
 
 WIDTH = 1280
 HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
+
+# This may require a windows specific one later on.
 SHARED_LIB = "./shared/libcamera_handler.so"
+
+# Used as an enum to pass into functions
+class AGC(Enum):
+    no_agc = 0
+    agc_eq_history = 1
+    agc_local = 2
+    agc_linear = 3
+    agc_total = 4
 
 
 def init():
