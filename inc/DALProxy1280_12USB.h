@@ -11,7 +11,8 @@ extern "C" { /* using a C++ compiler */
     typedef void *HANDLE;
 #else
     #include <winsock2.h> // We don't want Windows.h to include winsock.h
-	#include <Windows.h>
+	//#include <Windows.h>  /*I commented this out for use with mingw32*/
+	#include <windows.h>
 #endif
 
 #ifdef __cplusplus
