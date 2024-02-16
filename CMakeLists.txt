@@ -59,16 +59,28 @@ mark_as_advanced(CMOCKA_PATH CMOCKA_INCLUDE_DIR CMOCKA_INCLUDE_DIRS CMOCKA_LIBRA
 message(STATUS "Project source directory: ${PROJECT_SOURCE_DIR}")
 
 #Add in the needed defines for the camera stuff.
-add_definitions(-DLINUX)
 add_definitions(-DIRLUGX1M3)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-# This is an older style of include for *.so files but works for current 
-# project setup.
-LINK_DIRECTORIES(
-    ${PROJECT_SOURCE_DIR}/camera_sdk
-)
+if(MSVC OR MSYS OR MINGW)
+    # for detecting Windows compilers
+    add_definitions(-DWINDOWS)
+    LINK_DIRECTORIES(
+        ${PROJECT_SOURCE_DIR}/camera_sdk/windows_x86/
+    )
+else()
+    add_definitions(-DLINUX)
+
+    LINK_DIRECTORIES(
+        ${PROJECT_SOURCE_DIR}/camera_sdk/linux_armv8hf/
+    )
+endif()
+
+
+include_directories(${PROJECT_SOURCE_DIR}/inc)
+include_directories(${PROJECT_SOURCE_DIR}/camera_sdk)
+
+
 
 add_subdirectory(src)
 
