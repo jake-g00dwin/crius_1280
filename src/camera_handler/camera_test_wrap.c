@@ -147,3 +147,98 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetFloatFeature(HANDLE paHandle, i
 }
 
 
+/*
+ * ############################
+ * CALIBRATION FUNCTIONS 
+ * ############################
+ */ 
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_AbortCalibration(HANDLE paHandle)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+
+/*Shutter 2Pts calibration*/
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutter2PtsCalibration(HANDLE paHandle,unsigned int iStage)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+
+
+/*Shutter calibration*/
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutterCalibration(HANDLE paHandle)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepShutterCalibration(HANDLE paHandle)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutterCalibration(HANDLE paHandle)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+
+/*SL calibration*/
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT0(HANDLE paHandle, unsigned int iStage)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT0(HANDLE paHandle, unsigned int iStage)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHandle, unsigned int iStage)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+
+/*SL T1 Calibration*/
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT1(HANDLE paHandle)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT1(HANDLE paHandle)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT1(HANDLE paHandle)
+{
+	return eProxy1280_12USBSuccess;
+}
+
+
+
