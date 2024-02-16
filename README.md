@@ -2,13 +2,22 @@
 
 ## Project Usage
 
+### Downloading the Pre-compiled Binaries
+
+
+
 ### Building for usage
+
 
 To build the shared library of C code that allows interfacing with python
 follow the below prompts.
 
 This assumes that the required SDK shared libraries are either installed 
-system wide or the repo's included ones are used.
+system wide or the repo's included ones are used. By default the ones in the
+`camera_sdk` directory are used.
+
+The build process handles the OS/toolchains by itself automatiaclly for all
+supported platforms.
 
 ```sh
 git clone https://github.com/jake-g00dwin/crius_1280.git
@@ -18,18 +27,36 @@ cmake ../
 make camera_handler
 ```
 
+
+
 ### Running the Python program
 
 The repo comes included with the needed python script to show the usage of
 the shared C library.
 
+If you have an existing python3 installation ensure you have the required
+dependencies installed.
+
+You can do this through the `src/pyprog/requirements.txt` file and pip using the 
+commands listed below for linux or WSL(Windows subsystem for linux).
+```sh
+cd ./src/pyprog/
+python3 -m pip install -r ./requirements.txt
+```
+
+To run the program using the shared libraries that are required:
+
+**UNIX:**
 ```sh
 # Use the global library path if installed there.
-sudo LD_LBIRARY_PATH=/lib/crius/ python3.8 ./cam.py
+sudo LD_LBIRARY_PATH=/lib/crius/ python3 ./cam.py
 
 # Use the repo's files if needed
-sudo LD_LBIRARY_PATH=../../camera_sdk/ python3.8 ./cam.py
+sudo LD_LBIRARY_PATH=../../camera_sdk/ python3 ./cam.py
 ```
+
+**Windows:*
+
 
 
 ## Project structure:
