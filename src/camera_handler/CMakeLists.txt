@@ -30,11 +30,18 @@ else()
     LINK_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/camera_sdk
     )
-
+    
+    if(MSVC OR MSYS OR MINGW)
+    target_link_libraries(camera_handler  PUBLIC
+        DALProxy1280_12USB_x64
+    )
+    else()
     target_link_libraries(camera_handler  PUBLIC
         DALProxy1280_12USB
         usb-1.0
     )
+    endif()
+
 endif()
 
 

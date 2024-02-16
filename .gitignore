@@ -42,3 +42,4 @@ todo.md
 build/Testing/Temporary
 build/DartConfiguration.tcl
 build/tests
+build/CopyOfCMakeCache.txt
