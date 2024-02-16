@@ -19,8 +19,9 @@ MIRROR_FRAME = True
 # This may require a windows specific one later on.
 SHARED_LIB = "./shared/libcamera_handler.so"
 
+
 # Used as an enum to pass into functions
-class AGC(Enum):
+class eAGC(Enum):
     no_agc = 0
     agc_eq_history = 1
     agc_local = 2
@@ -28,8 +29,13 @@ class AGC(Enum):
     agc_total = 4
 
 
-def init():
+def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
     camlib = CDLL("./shared/libcamera_handler.so")
+    # fps = c_float(fps)
+    # SL = c_bool(SL)
+    # BP = c_char(BP)
+    # AGC = c_uint8(AGC.value)
+    # nuc = c_char(nuc)
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
     camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
