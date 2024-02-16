@@ -43,3 +43,8 @@ build/Testing/Temporary
 build/DartConfiguration.tcl
 build/tests
 build/CopyOfCMakeCache.txt
+build/camera_sdk/CMakeFiles
+build/camera_sdk/windows_x86
+build/camera_sdk/CTestTestfile.cmake
+build/camera_sdk/Makefile
+build/camera_sdk/cmake_install.cmake
