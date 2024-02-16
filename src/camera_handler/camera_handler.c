@@ -24,6 +24,7 @@ void paimage_address(int* p)
     p = (int*)&paImage;
 }
 
+
 void print_paimage(void)
 {
     printf("paImage[]:\n");
@@ -41,10 +42,6 @@ void clear_paimage(void)
     }
 }
 
-void stop_capture(void)
-{
-    stop = true;
-}
 
 int num_attached(void)
 {
@@ -57,6 +54,7 @@ int num_attached(void)
     }
     return num_cams;
 }
+
 
 int close_camera(HANDLE camera_handle)
 {
@@ -160,6 +158,7 @@ matrix_t *get_matrix_buffer(void)
     return &frame_matrix;
 }
 
+
 void clear_matrix(void)
 {
     for (int row = 0; row < frame_matrix.num_rows; row++) {
@@ -168,6 +167,7 @@ void clear_matrix(void)
         }
     }
 }
+
 
 void rotate_matrix_90(matrix_t *m)
 {
@@ -193,6 +193,7 @@ void rotate_matrix_90(matrix_t *m)
     }
 }
 
+
 void rotate_matrix_180(matrix_t *m)
 {
     rotate_matrix_90(m);
@@ -215,6 +216,7 @@ void swap_u16_endian(uint16_t *word)
     *word = (hibyte<<8)|(lobyte);
 }
 
+
 /*Gets a frame and puts it into the matrix*/
 int load_frame_buffer(HANDLE camera_handle) {
     /*Load the image*/
@@ -230,6 +232,7 @@ int load_frame_buffer(HANDLE camera_handle) {
     return (int) err;
 }
 
+
 void print_matrix(uint16_t *v, size_t n, size_t p)
 {
     for (size_t i = 0; i < n; i++) {
@@ -240,6 +243,7 @@ void print_matrix(uint16_t *v, size_t n, size_t p)
     }
     printf("\n");
 }
+
 
 /*Changes the paImage into 2D matrix and swaps endian*/
 void load_matrix_buffer(bool endian_swap) {
@@ -254,6 +258,7 @@ void load_matrix_buffer(bool endian_swap) {
         } 
     }
 }
+
 
 //void get_frame_matrix(uint16_t *mat)
 void get_frame_matrix(uint16_t *mat, size_t n, size_t p)

@@ -27,16 +27,29 @@ if(UNIT_TESTING)
 
 
 else()
-    LINK_DIRECTORIES(
-        ${PROJECT_SOURCE_DIR}/camera_sdk
-    )
+
+    set_target_properties(camera_handler PROPERTIES VERSION 1.0 SOVERSION 1)
     
     if(MSVC OR MSYS OR MINGW)
-    target_link_libraries(camera_handler  PUBLIC
-        DALProxy1280_12USB_x64
-    )
+        add_compile_definitions(DLL_EXPORTS)
+        find_library(DALProxy1280_12USB_x64
+            NAMES DALProxy1280_12USB_x64.dll DALProxy1280_12USB_x64.lib
+            HINTS ${PROJECT_SOURCE_DIR}/camera_sdk/windows_x86/
+            NO_DEFAULT_PATH
+            NO_SYSTEM_ENVIRONMENT_PATH
+        )
+        
+    #target_link_libraries(camera_handler PRIVATE "-L\"${PROJECT_SOURCE_DIR}/camera_sdk/window_x86/DALProxy1280_12USB_x64.lib\" -lDALProxy1280_12USB_x64")
+    #target_link_libraries(camera_handler PRIVATE "-L\"${PROJECT_SOURCE_DIR}/camera_sdk/window_x86/DALProxy1280_12USB_x64.dll\" -lDALProxy1280_12USB_x64")
+        #target_link_libraries(camera_handler PRIVATE 
+        #${PROJECT_SOURCE_DIR}/camera_sdk/windows_x86/DALProxy1280_12USB_x64.lib
+        #${PROJECT_SOURCE_DIR}/camera_sdk/windows_x86/DALProxy1280_12USB_x64.dll
+        #)
     else()
-    target_link_libraries(camera_handler  PUBLIC
+    LINK_DIRECTORIES(
+        ${PROJECT_SOURCE_DIR}/camera_sdk/linux_armv8hf/
+    )
+    target_link_libraries(camera_handler PUBLIC
         DALProxy1280_12USB
         usb-1.0
     )
