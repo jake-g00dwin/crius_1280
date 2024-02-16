@@ -30,12 +30,7 @@ class eAGC(Enum):
 
 
 def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
-    camlib = CDLL("./shared/libcamera_handler.so")
-    # fps = c_float(fps)
-    # SL = c_bool(SL)
-    # BP = c_char(BP)
-    # AGC = c_uint8(AGC.value)
-    # nuc = c_char(nuc)
+    camlib = CDLL(SHARED_LIB)
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
     camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
@@ -46,7 +41,7 @@ def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
 
 
 def num_attached():
-    camlib = CDLL("./shared/libcamera_handler.so")
+    camlib = CDLL(SHARED_LIB)
 
     # int num_attached(void);
     camlib.num_attached.argtypes = []
@@ -56,7 +51,7 @@ def num_attached():
 
 
 def close_camera(h):
-    camlib = CDLL("./shared/libcamera_handler.so")
+    camlib = CDLL(SHARED_LIB)
 
     # int close_camera(void);
     camlib.close_camera.argtypes = [c_void_p]
@@ -66,7 +61,7 @@ def close_camera(h):
 
 
 def load_frame_buffer(h):
-    camlib = CDLL("./shared/libcamera_handler.so")
+    camlib = CDLL(SHARED_LIB)
 
     # int load_frame_buffer(HANDLE camera_handle);
     camlib.load_frame_buffer.argtypes = [c_void_p]
@@ -78,7 +73,7 @@ def load_frame_buffer(h):
 def get_paimage():
     arr = np.zeros(NUMPIXELS, dtype=np.uint16)
     c_arr = arr.astype(np.intc)
-    camlib = CDLL("./shared/libcamera_handler.so")
+    camlib = CDLL(SHARED_LIB)
 
     # void get_paimage(int *arr);
     camlib.get_paimage.argtypes = [ctypes.POINTER(ctypes.c_int)]
@@ -93,7 +88,7 @@ def get_paimage():
 
 # Doesn't do anything unless called from C
 def print_paimage():
-    camlib = CDLL("./shared/libcamera_handler.so")
+    camlib = CDLL(SHARED_LIB)
 
     # void print_paimage(void);
     camlib.print_paimage.argtypes = []
