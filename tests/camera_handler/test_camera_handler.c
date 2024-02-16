@@ -8,8 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 
-//#include "DALProxy1280_12USB.h"
-//#include "camera_test_wrap.h"
+#include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
 #include "camera_test_wrap.h"
 
@@ -190,8 +189,53 @@ static void null_test_success(void **state) {
     (void) state; /* unused */
 }
 
+
+/*
+ * ############################
+ * Calibration tests.
+ * ############################
+ */ 
+
+static void test_2pts_shutter_calibration(void **state) {  
+    expect_function_call(test_mock);
+    test_mock(0); 
+    assert_true(1);
+    return;
+
+    HANDLE h = NULL; 
+    int res = shutter_2pts_calibration(h);
+    printf("test 2Pts: result: %d\n", res);
+
+    /*Should give a Handle error*/
+    assert_true(res == eProxy1280_12USBHandleError);
+
+    h = setup_camera();
+    assert_true(h == (void*)0x12345678); 
+
+    //expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    //expect_function_call(__wrap_Proxy1280_12USB_InitShutter2PtsCalibration);
+    //expect_function_call(__wrap_Proxy1280_12USB_StepShutter2PtsCalibration);
+    //expect_function_call(__wrap_Proxy1280_12USB_FnishShutter2PtsCalibration);
+
+    res = shutter_2pts_calibration(h);
+
+
+   tear_down(h); 
+}
+
+static void test_fast_shutter_calibration(void **state) {
+    assert_true(1);
+}
+
+
+
 int main(void)
 {
+
+    const struct CMUnitTest calibration_tests[] = {
+        cmocka_unit_test(test_fast_shutter_calibration),
+        cmocka_unit_test(test_2pts_shutter_calibration),
+    };
 
     const struct CMUnitTest init_tests[] = {
         cmocka_unit_test(test_camera_init),
@@ -206,6 +250,7 @@ int main(void)
         cmocka_unit_test(test_num_attached),
         cmocka_unit_test(null_test_success),
     };
+    cmocka_run_group_tests(calibration_tests, NULL, NULL);
     cmocka_run_group_tests(init_tests, NULL,NULL);
     return cmocka_run_group_tests(tests, NULL, NULL);
 }

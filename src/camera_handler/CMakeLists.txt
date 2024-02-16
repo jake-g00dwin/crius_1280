@@ -1,20 +1,27 @@
-add_library(camera_test_wrap SHARED
+add_library(camera_test_wrap SHARED 
     camera_test_wrap.c
 )
-
 
 add_library(camera_handler SHARED 
     camera_handler.c
 )
 
-target_include_directories(camera_handler PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMOCKA_PUBLIC_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_LIST_DIR}/inc
-)
-
 
 if(UNIT_TESTING)
+    target_include_directories(camera_test_wrap PUBLIC
+        ${CMOCKA_PUBLIC_INCLUDE_DIRS}
+    )
+
+#target_link_libraries(camera_test_wrap PUBLIC
+#      cmocka::cmocka 
+#   )
+
+    target_include_directories(camera_handler PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+
+
     message("LINKING WITH --wrap")
     target_link_libraries(camera_handler PUBLIC
         camera_test_wrap
@@ -22,11 +29,16 @@ if(UNIT_TESTING)
 
     set_target_properties(camera_handler
             PROPERTIES
-            LINK_FLAGS  "-Wl,--wrap=Proxy1280_12USB_DisconnectFromModule,--wrap=Proxy1280_12USB_DisconnectFromModule,--wrap=Proxy1280_12USB_GetErrorString,--wrap=Proxy1280_12USB_ConnectToModule,--wrap=Proxy1280_12USB_GetModuleCount,--wrap=Proxy1280_12USB_GetModuleName,--wrap=Proxy1280_12USB_GetImage,--wrap=Proxy1280_12USB_IsConnectToModule,--wrap=Proxy1280_12USB_SetNUCProcessing,--wrap=Proxy1280_12USB_SetShutterLessProcessing,--wrap=Proxy1280_12USB_SetAGCProcessing,--wrap=Proxy1280_12USB_SetFloatFeature"
+            LINK_FLAGS  "-Wl,--wrap=Proxy1280_12USB_DisconnectFromModule,--wrap=Proxy1280_12USB_DisconnectFromModule,--wrap=Proxy1280_12USB_GetErrorString,--wrap=Proxy1280_12USB_ConnectToModule,--wrap=Proxy1280_12USB_GetModuleCount,--wrap=Proxy1280_12USB_GetModuleName,--wrap=Proxy1280_12USB_GetImage,--wrap=Proxy1280_12USB_IsConnectToModule,--wrap=Proxy1280_12USB_SetNUCProcessing,--wrap=Proxy1280_12USB_SetShutterLessProcessing,--wrap=Proxy1280_12USB_SetAGCProcessing,--wrap=Proxy1280_12USB_SetFloatFeature,--wrap=Proxy1280_12USB_InitShutter2PtsCalibration,--wrap=Proxy1280_12USB_StepShutter2PtsCalibration,--wrap=Proxy1280_12USB_FinishShutter2PtsCalibration,--wrap=test_mock"
     )
 
 
 else()
+
+    target_include_directories(camera_handler PUBLIC
+        ${PROJECT_SOURCE_DIR}/camera_sdk/
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
     set_target_properties(camera_handler PROPERTIES VERSION 1.0 SOVERSION 1)
     

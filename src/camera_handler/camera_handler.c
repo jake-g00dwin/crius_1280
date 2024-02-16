@@ -1,4 +1,6 @@
 #include "camera_handler.h"
+#include "DALProxy1280_12USB.h"
+#include "camera_test_wrap.h"
 
 #include <fcntl.h>
 #include <stdint.h>
@@ -281,4 +283,43 @@ void get_paimage(int *arr)
 {
     memcpy(arr, paImage, IRIMAGE_NBPIXELS*2);
 }
+
+
+/*
+ * ############################
+ * Calibration functions
+ * ############################
+ */ 
+
+
+int shutter_2pts_calibration(HANDLE h)
+{
+    /*Check if it's connected.*/
+    eDALProxy1280_12USBErr res;
+
+    res = Proxy1280_12USB_IsConnectToModule(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    int iStage = 0;
+    res = Proxy1280_12USB_InitShutter2PtsCalibration(h,  iStage);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_StepShutter2PtsCalibration(h, iStage);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_FinishShutter2PtsCalibration(h, iStage);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    return res;
+}
+
+int test_mock(int a){
+    function_called();
+    return 0;
+}
+
+
+
+
+
 

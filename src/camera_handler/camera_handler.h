@@ -59,4 +59,10 @@ void swap_u16_endian(uint16_t *word);
 
 void paimage_address(int* p);
 
+int shutter_2pts_calibration(HANDLE h);
+
+int test_mock(int a);
+
+
+
 #endif /*CAMHANDLER*/

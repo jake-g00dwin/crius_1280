@@ -279,4 +279,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT1(HANDLE paHandl
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT1(HANDLE paHandle);
 
 
+int test_mock(int a);
+
+
 #endif

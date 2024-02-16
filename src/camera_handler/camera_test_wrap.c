@@ -1,4 +1,12 @@
 #include "camera_test_wrap.h"
+
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <setjmp.h>
+#include <cmocka.h>
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
@@ -184,6 +192,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_AbortCalibration(HANDLE paHandle)
 /*Shutter 2Pts calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
 {
+    function_called();
 	return is_valid_handle(paHandle);
 }
 
@@ -258,6 +267,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT1(HANDLE paHandl
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT1(HANDLE paHandle)
 {
 	return eProxy1280_12USBSuccess;
+}
+
+int __wrap_test_mock(int a){
+    function_called();
+    return 0;
 }
 
 
