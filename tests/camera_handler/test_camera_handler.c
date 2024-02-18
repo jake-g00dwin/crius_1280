@@ -147,8 +147,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_DisconnectFromModule(HANDLE paHand
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_IsConnectToModule(HANDLE paHandle)
 {
+    function_called();
     if(paHandle == ptr && is_connected){
         printf("handle: %p\n", paHandle);
+        printf("saved_handle: %p\n", ptr);
+        printf("is_connected: %d\n", is_connected);
         return eProxy1280_12USBSuccess;
     }
     return eProxy1280_12USBHandleError;
@@ -206,12 +209,14 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutter2PtsCalibration(HANDLE 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
 {
+    function_called();
 	return is_valid_handle(paHandle);
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutter2PtsCalibration(HANDLE paHandle,unsigned int iStage)
 {
+    function_called();
 	return is_valid_handle(paHandle);
 }
 
@@ -457,32 +462,32 @@ static void null_test_success(void **state) {
  */ 
 
 static void test_2pts_shutter_calibration(void **state) {  
-    assert_true(1);
-    return;
+
+    assert_true(eProxy1280_12USBSuccess == 0);
 
     HANDLE h = NULL; 
-    int res = shutter_2pts_calibration(h);
-    printf("test 2Pts: result: %d\n", res);
 
-    /*Should give a Handle error*/
-    assert_true(res == eProxy1280_12USBHandleError);
+    assert_true(is_connected == false);
+    //expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    //h = setup_camera();
+    //assert_true(h == (void*)0x12345678);     
+
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    int res = shutter_2pts_calibration(h);
+    assert_true(res != eProxy1280_12USBSuccess);
 
     h = setup_camera();
-    assert_true(h == (void*)0x12345678); 
 
     //expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    
     //expect_function_call(__wrap_Proxy1280_12USB_InitShutter2PtsCalibration);
-    //expect_function_call(__wrap_Proxy1280_12USB_StepShutter2PtsCalibration);
-    //expect_function_call(__wrap_Proxy1280_12USB_FnishShutter2PtsCalibration);
-
-    res = shutter_2pts_calibration(h);
-
-
-   tear_down(h); 
+   
+   //tear_down(h); 
 }
 
 static void test_fast_shutter_calibration(void **state) {
-    assert_true(1);
+   assert_false(0);
 }
 
 
