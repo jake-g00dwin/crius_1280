@@ -6,13 +6,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifndef UNIT_TESTING
-    #include "DALProxySwitchUSBDef.h"
-    #include "DALProxy1280_12USB.h"
-    #include "DALProxy1280_12USBDef.h"
-#else
-    #include "camera_test_wrap.h"
-#endif
+#include "DALProxySwitchUSBDef.h"
+#include "DALProxy1280_12USB.h"
+#include "DALProxy1280_12USBDef.h"
 
 #define MAX_FPS 120
 #define MIN_FPS 5
@@ -22,6 +18,8 @@
 #define NUM_TEST_FRAMES 5
 #define MAX_2D_ROWS 1024
 #define MAX_2D_COLS 1280
+
+
 
 
 extern HANDLE m_Handle; 
@@ -60,9 +58,5 @@ void swap_u16_endian(uint16_t *word);
 void paimage_address(int* p);
 
 int shutter_2pts_calibration(HANDLE h);
-
-int test_mock(int a);
-
-
 
 #endif /*CAMHANDLER*/

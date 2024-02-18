@@ -1,25 +1,33 @@
-add_library(camera_test_wrap SHARED 
-    camera_test_wrap.c
-)
+# Author: Jake G
+# Filename: CMakeLists.txt
+# Location: '/src/camera_handler/'
+
+#add_library(camera_test_wrap SHARED 
+#    camera_test_wrap.c
+#)
 
 add_library(camera_handler SHARED 
     camera_handler.c
 )
 
+set_target_properties(camera_handler PROPERTIES VERSION 1.0 SOVERSION 1)
+
+target_include_directories(camera_handler PUBLIC
+    ${PROJECT_SOURCE_DIR}/camera_sdk/
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 if(UNIT_TESTING)
     
     # ############################# 
     # Settings for the mocked lib
     # ############################# 
-    include_directories(
-        ${CMAKE_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMOCKA_PUBLIC_INCLUDE_DIRS}
-    )
+    
+    message("\n####\nUNIT_TESTING_CAMERA_HANLDER CMAKE\n####\n")
 
-    set(WRAPPED_FUNCS = "")
-    list(APPEND WRAPPED_FUNCS 
+    set(WRAPPED_FUNCS "")
+    list(APPEND WRAPPED_FUNCS
+    "test_mock"
     "Proxy1280_12USB_DisconnectFromModule"
 	"Proxy1280_12USB_DisconnectFromModule"
 	"Proxy1280_12USB_GetErrorString"
@@ -35,36 +43,21 @@ if(UNIT_TESTING)
 	"Proxy1280_12USB_InitShutter2PtsCalibration"
 	"Proxy1280_12USB_StepShutter2PtsCalibration"
 	"Proxy1280_12USB_FinishShutter2PtsCalibration"
-	"test_mock"
     )
-    set(WRAPPED_STR = "")
-    list(JOIN WRAPPED_FUNCS ", --wrap=" WRAPPED_STR)
-    message("WRAPPED_STR: " ${WRAPPED_STR})
+    set(WRAPPED_STR "")
+    list(JOIN WRAPPED_FUNCS ",--wrap=" WRAPPED_STR)
+    message("WRAPPED_STR:  ${WRAPPED_STR}")
 
-    set_target_properties(cam_test_wrap
+    set_target_properties(camera_handler
             PROPERTIES
-            LINK_FLAGS  "-Wl${WRAPPED_STR}"
-    )
-
-    target_link_libraries(camera_test_wrap PUBLIC
-            cmocka::cmocka
+            LINK_FLAGS  "-Wl,--wrap=${WRAPPED_STR}"
     )
 
 
-    target_link_libraries(camera_handler PUBLIC
-        camera_test_wrap
-    )
-
+    message("\n####\nUNIT_TESTING_CAMERA_HANLDER CMAKE\n####\n")
 
 else()
-
-    target_include_directories(camera_handler PUBLIC
-        ${PROJECT_SOURCE_DIR}/camera_sdk/
-        ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-
-    set_target_properties(camera_handler PROPERTIES VERSION 1.0 SOVERSION 1)
-    
+ 
     if(MSVC OR MSYS OR MINGW)
         add_compile_definitions(DLL_EXPORTS)
         find_library(DALProxy1280_12USB_x64
