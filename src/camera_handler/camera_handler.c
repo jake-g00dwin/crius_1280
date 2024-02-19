@@ -291,7 +291,7 @@ void get_paimage(int *arr)
 
 
 
-int shutter_2pts_calibration(HANDLE h)
+int shutter_2pts_calibration(HANDLE h, int iStage)
 {
     /*Check if it's connected.*/
     eDALProxy1280_12USBErr res;
@@ -301,7 +301,6 @@ int shutter_2pts_calibration(HANDLE h)
 
 
     /*Start the calibration process*/
-    int iStage = 1;
     res = Proxy1280_12USB_InitShutter2PtsCalibration(h,  iStage);
     if(res != eProxy1280_12USBSuccess){return res;}
 

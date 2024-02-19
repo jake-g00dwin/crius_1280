@@ -62,7 +62,7 @@ void swap_u16_endian(uint16_t *word);
 void paimage_address(int* p);
 
 /*Camera calibration functions*/
-int shutter_2pts_calibration(HANDLE h);
+int shutter_2pts_calibration(HANDLE h, int iStage);
 int shutter_calibration(HANDLE h);
 int sl_calibration_t0(HANDLE h, int iStage);
 int sl_calibration_t1(HANDLE h);
