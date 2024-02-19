@@ -294,19 +294,25 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHan
 /*SL T1 Calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT1(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSequencingError;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT1(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSequencingError;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT1(HANDLE paHandle)
 {
-	return eProxy1280_12USBSuccess;
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSequencingError;
 }
 
 
@@ -594,6 +600,29 @@ static void test_sl_t0_cal_low_temp(void **state) {
     tear_down(h);
 }
 
+static void test_sl_t0_cal_high_temp(void **state) {
+
+    HANDLE h = NULL; 
+    is_connected = false;
+    int iStage = 0;
+    int res;
+
+
+    h = setup_camera();
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
+    expect_function_call(__wrap_Proxy1280_12USB_StepSLCalibrationT0);
+    expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
+
+    iStage = 2;
+    res = sl_t0_calibrationT0(h, iStage);
+
+    assert_true(res == eProxy1280_12USBSequencingError);
+
+    tear_down(h);
+}
+
 
 static void test_fast_shutter_calibration(void **state) {
    assert_false(0);
@@ -605,6 +634,7 @@ int main(void)
 {
 
     const struct CMUnitTest calibration_tests[] = {
+        cmocka_unit_test(test_sl_t0_cal_high_temp),
         cmocka_unit_test(test_sl_t0_cal_low_temp),
         cmocka_unit_test(test_sl_t0_calibration),
         cmocka_unit_test(test_shutter_calibration),
