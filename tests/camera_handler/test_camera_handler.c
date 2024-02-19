@@ -540,9 +540,10 @@ static void test_2pts_shutter_calibration(void **state) {
 
     HANDLE h = NULL; 
     is_connected = false;
+    int iStage = 1;
     
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    int res = shutter_2pts_calibration(h);
+    int res = shutter_2pts_calibration(h, iStage);
     assert_true(res != eProxy1280_12USBSuccess);
 
     h = setup_camera();
@@ -555,7 +556,7 @@ static void test_2pts_shutter_calibration(void **state) {
     expect_function_calls(__wrap_Proxy1280_12USB_StepShutter2PtsCalibration, NUM_STEPS);
     expect_function_call(__wrap_Proxy1280_12USB_FinishShutter2PtsCalibration);
 
-    res = shutter_2pts_calibration(h);
+    res = shutter_2pts_calibration(h, iStage);
 
    
    tear_down(h); 
