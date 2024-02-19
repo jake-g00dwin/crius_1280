@@ -49,6 +49,9 @@ if(UNIT_TESTING)
     "Proxy1280_12USB_InitSLCalibrationT0"
     "Proxy1280_12USB_StepSLCalibrationT0"
     "Proxy1280_12USB_FinishSLCalibrationT0"
+    "Proxy1280_12USB_InitSLCalibrationT1"
+    "Proxy1280_12USB_StepSLCalibrationT1"
+    "Proxy1280_12USB_FinishSLCalibrationT1"
     )
     set(WRAPPED_STR "")
     list(JOIN WRAPPED_FUNCS ",--wrap=" WRAPPED_STR)
