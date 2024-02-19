@@ -16,45 +16,53 @@ def test_mytest():
         f()
 
 
+class TestCal:
+    cam_address = c_void_p(0x12345678)
+    num_pixels = 1310720
+
+    def test_self(self):
+        assert True
+
+
 class TestCam:
     cam_address = c_void_p(0x12345678)
     num_pixels = 1310720
 
     def test_init(self):
         handle = cam.init()
-        assert(str(hex(handle)) == "0x12345678")
-        assert(handle == self.cam_address.value)
+        assert (str(hex(handle)) == "0x12345678")
+        assert (handle == self.cam_address.value)
         cam.close_camera(handle)
 
     def test_num_attached(self):
         n = cam.num_attached()
-        assert(n == 1)
+        assert (n == 1)
 
     def test_close_camera(self):
         h = c_void_p(None)
         n = cam.close_camera(h)
-        assert(n == 2)
+        assert (n == 2)
 
         h = self.cam_address
         n = cam.close_camera(h)
-        assert(n == 2)
+        assert (n == 2)
 
         h = cam.init()
         n = cam.close_camera(h)
-        assert(n == 0)
+        assert (n == 0)
 
     def test_load_frame_buffer(self):
         h = c_void_p(None)
         r = cam.load_frame_buffer(h)
-        assert(r == 2)
+        assert (r == 2)
 
         h = self.cam_address
         r = cam.load_frame_buffer(h)
-        assert(r == 2)
+        assert (r == 2)
 
         h = cam.init()
         r = cam.load_frame_buffer(h)
-        assert(r == 0)
+        assert (r == 0)
         cam.close_camera(h)
 
     def test_get_paimage(self):
@@ -67,7 +75,7 @@ class TestCam:
         for i in range(0, self.num_pixels):
             avg += X[i]
         avg = avg / self.num_pixels
-        assert(avg == 0.0)
+        assert (avg == 0.0)
 
         # Load data then check.
         h = cam.init()
@@ -78,7 +86,7 @@ class TestCam:
         for i in range(0, self.num_pixels):
             avg += X[i]
         avg = avg / self.num_pixels
-        assert(avg != 0.0)
+        assert (avg != 0.0)
 
         cam.close_camera(h)
 
@@ -87,7 +95,7 @@ class TestCam:
         cam.load_frame_buffer(h)
         cam.print_paimage()
         cam.close_camera(h)
-        assert(True)
+        assert (True)
 
     def test_load_matrix_bufffer(self):
         h = cam.init()
@@ -96,7 +104,7 @@ class TestCam:
 
         cam.load_matrix_buffer(True)
 
-        assert(True)
+        assert (True)
         cam.close_camera(h)
 
     def test_get_frame_matrix(self):
@@ -120,7 +128,7 @@ class TestCam:
         cam.close_camera(h)
 
     def test_quick_calibration(self):
-        assert(False)
+        assert (False)
 
 
 class TestC:
@@ -141,7 +149,7 @@ class TestC:
         X[4] = 9
         # call function
         mylib.print_array(X, X.size)
-        assert(True)
+        assert (True)
 
     def test_c_interop_u16(self):
         # load the library
@@ -160,7 +168,7 @@ class TestC:
         X[4] = 9
         # call function
         mylib.print_u16(X, X.size)
-        assert(True)
+        assert (True)
 
     def test_c_interop_u16_2D(self):
         # load the library
@@ -178,7 +186,7 @@ class TestC:
         M = np.arange(1, 10, 1, dtype=np.uint16).reshape(3, 3, order="C")
         # call function
         mylib.print_matrix(M, *M.shape)
-        assert(True)
+        assert (True)
 
     def test_c_interop_u16_2D_edit(self):
         # void clear_u16_mat(uint16_t *v, size_t n, size_t p)
@@ -204,8 +212,8 @@ class TestC:
 
         for x in np.nditer(M):
             # print(x, end=' ')
-            assert(x == 0)
-        assert(True)
+            assert (x == 0)
+        assert (True)
 
     def test_numpy_1d_array(self):
         assert True

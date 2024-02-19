@@ -1,5 +1,3 @@
-#include "camera_test_wrap.h"
-
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -11,6 +9,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "camera_test_wrap.h"
 
 void *ptr = (void*)0x12345678;  // Example address
 int camera_index = 0;

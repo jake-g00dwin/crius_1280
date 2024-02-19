@@ -50,14 +50,12 @@ run_tests ()  {
     cp ./src/camera_handler/testdata.bin /tmp/
 
     clear_cmake_cache
-    cmake -DUNIT_TESTING=ON ../
+    cmake -DUNIT_TESTING=ON  -DCMAKE_VERBOSE_MAKEFILE=ON ../
     
 
     #make simple_test
     #make pgm && make test_pgm
-    make camera_handler && make test_camera_handler
-    #ctest 
-    ./tests/camera_handler/test_camera_handler
+    make camera_handler && make test_camera_handler && ./tests/camera_handler/test_camera_handler
 }
 
 
