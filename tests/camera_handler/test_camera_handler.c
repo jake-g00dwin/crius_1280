@@ -194,6 +194,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetFloatFeature(HANDLE paHandle, i
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_AbortCalibration(HANDLE paHandle)
 {
+    function_called();
 	return is_valid_handle(paHandle);
 }
 
@@ -203,21 +204,30 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_AbortCalibration(HANDLE paHandle)
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
 {
     function_called();
-	return is_valid_handle(paHandle);
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
 {
     function_called();
-	return is_valid_handle(paHandle);
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutter2PtsCalibration(HANDLE paHandle,unsigned int iStage)
 {
     function_called();
-	return is_valid_handle(paHandle);
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
 }
 
 
@@ -226,13 +236,16 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutter2PtsCalibration(HANDL
 /*Shutter calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutterCalibration(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepShutterCalibration(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
@@ -349,8 +362,6 @@ void tear_down(HANDLE h){
 
 static void test_load_frame_buffer(void **state) {
     /*These cause a segfault*/
-    //uint16_t fake_image[IRIMAGE_NBPIXELS*2] = {0};
-    //uint16_t paimage[IRIMAGE_NBPIXELS*2] = {0};
     uint16_t fake_image[1310720] = {0};
     uint16_t paimage[1310720] = {0};
     
@@ -363,6 +374,9 @@ static void test_load_frame_buffer(void **state) {
     assert_true(fd >= 0);
     read(fd, fake_image, sizeof(fake_image));
     close(fd);
+
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
 
     /*check for data in PA*/
     int res = load_frame_buffer(h);
@@ -397,6 +411,10 @@ static void test_load_matrix_buffer(void **state)
     assert_true(mat_ptr->data[0][0] == 0);
     assert_true(mat_ptr->data[255][255] == 0);
 
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+
+
     /*Okay now fill it with stuff.*/
     load_frame_buffer(h);
 
@@ -430,9 +448,11 @@ static void test_get_frame_matrix(void **state)
     uint16_t mat[1024][1280] = {0};
 
 
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    
     load_frame_buffer(h);
     load_matrix_buffer(false);
-
+    
     get_paimage((int*)fake_image);
     get_frame_matrix((uint16_t *)mat, 0, 0);
    
@@ -463,25 +483,25 @@ static void null_test_success(void **state) {
 
 static void test_2pts_shutter_calibration(void **state) {  
 
-    assert_true(eProxy1280_12USBSuccess == 0);
-
     HANDLE h = NULL; 
-
-    assert_true(is_connected == false);
-    //expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    //h = setup_camera();
-    //assert_true(h == (void*)0x12345678);     
-
-
+    is_connected = false;
+    
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     int res = shutter_2pts_calibration(h);
     assert_true(res != eProxy1280_12USBSuccess);
 
     h = setup_camera();
 
-    //expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    
-    //expect_function_call(__wrap_Proxy1280_12USB_InitShutter2PtsCalibration);
+    /*Check against the saved handle*/
+    assert_true(h == ptr);
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_InitShutter2PtsCalibration);
+    expect_function_call(__wrap_Proxy1280_12USB_StepShutter2PtsCalibration);
+    expect_function_call(__wrap_Proxy1280_12USB_FinishShutter2PtsCalibration);
+
+    res = shutter_2pts_calibration(h);
+
    
    //tear_down(h); 
 }
@@ -513,7 +533,7 @@ int main(void)
         cmocka_unit_test(test_num_attached),
         cmocka_unit_test(null_test_success),
     };
-    cmocka_run_group_tests(calibration_tests, NULL, NULL);
     cmocka_run_group_tests(init_tests, NULL,NULL);
-    return cmocka_run_group_tests(tests, NULL, NULL);
+    cmocka_run_group_tests(tests, NULL, NULL);
+    return cmocka_run_group_tests(calibration_tests, NULL, NULL);
 }

@@ -297,7 +297,9 @@ int shutter_2pts_calibration(HANDLE h)
     res = Proxy1280_12USB_IsConnectToModule(h);
     if(res != eProxy1280_12USBSuccess){return res;}
 
-    int iStage = 0;
+
+    /*Start the calibration process*/
+    int iStage = 1;
     res = Proxy1280_12USB_InitShutter2PtsCalibration(h,  iStage);
     if(res != eProxy1280_12USBSuccess){return res;}
 
@@ -307,6 +309,8 @@ int shutter_2pts_calibration(HANDLE h)
     res = Proxy1280_12USB_FinishShutter2PtsCalibration(h, iStage);
     if(res != eProxy1280_12USBSuccess){return res;}
 
+
+    /*Return the last returned state.*/
     return res;
 }
 
