@@ -55,9 +55,7 @@ run_tests ()  {
 
     #make simple_test
     #make pgm && make test_pgm
-    make camera_handler && make test_camera_handler
-    #ctest 
-    ./tests/camera_handler/test_camera_handler
+    make camera_handler && make test_camera_handler && ./tests/camera_handler/test_camera_handler
 }
 
 
