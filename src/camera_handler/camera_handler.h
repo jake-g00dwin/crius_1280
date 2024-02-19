@@ -16,9 +16,13 @@
 #define WIDTH 1280
 #define HEIGHT 1024
 #define NUM_TEST_FRAMES 5
+
+/*These are seprate, as differing cameras with various resolutions*/
 #define MAX_2D_ROWS 1024
 #define MAX_2D_COLS 1280
 
+/*Used ad default number of steps in calibration(images taken)*/
+#define NUM_STEPS   10
 
 
 
@@ -57,9 +61,12 @@ void swap_u16_endian(uint16_t *word);
 
 void paimage_address(int* p);
 
+/*Camera calibration functions*/
 int shutter_2pts_calibration(HANDLE h);
 int shutter_calibration(HANDLE h);
-int sl_t0_calibrationT0(HANDLE h, int iStage);
+int sl_calibration_t0(HANDLE h, int iStage);
+int sl_calibration_t1(HANDLE h);
+
 
 
 

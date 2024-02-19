@@ -337,7 +337,7 @@ int shutter_calibration(HANDLE h)
 }
 
 
-int sl_t0_calibrationT0(HANDLE h, int iStage)
+int sl_calibration_t0(HANDLE h, int iStage)
 {
     eDALProxy1280_12USBErr res;
     
@@ -352,6 +352,26 @@ int sl_t0_calibrationT0(HANDLE h, int iStage)
     if(res != eProxy1280_12USBSuccess){return res;}
 
     res = Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
+
+    return res;
+}
+
+
+int sl_calibration_t1(HANDLE h)
+{
+    eDALProxy1280_12USBErr res;
+    
+    /*Check if it's a valid connectionT1 handle*/
+    res = Proxy1280_12USB_IsConnectToModule(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_InitSLCalibrationT1(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_StepSLCalibrationT1(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_FinishSLCalibrationT1(h);
 
     return res;
 }
