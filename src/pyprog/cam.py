@@ -128,7 +128,7 @@ def clear_paimage():
 
     # void clear_paimage(void);
     camlib.clear_paimage.argtypes = []
-    camlib.clear_paimage.argtypes = None
+    camlib.clear_paimage.restype = None
     camlib.clear_paimage()
 
 
@@ -137,8 +137,30 @@ def clear_matrix():
 
     # void clear_matrix(void);
     camlib.clear_matrix.argtypes = []
-    camlib.clear_matrix.argtypes = None
+    camlib.clear_matrix.restype = None
     camlib.clear_matrix()
+
+
+def shutter_cal(h):
+    camlib = CDLL(SHARED_LIB)
+
+    # int shutter_calibration(HANDLE h);
+    camlib.shutter_calibration.argtypes = [c_void_p]
+    camlib.shutter_calibration.restype = c_int
+    return camlib.shutter_calibration(h)
+
+
+def two_poin_shutter_cal(h, iStage):
+    camlib = CDLL(SHARED_LIB)
+
+    # int shutter_2pts_calibration(HANDLE h, int iStage);
+    camlib.shutter_2pts_calibration.argtypes = [c_void_p, c_int]
+    camlib.shutter_2pts_calibration.restype = c_int
+    return camlib.shutter_2pts_calibration(h)
+
+
+def calibrate_camera():
+    return True
 
 
 def demo_video(set_8bit):
