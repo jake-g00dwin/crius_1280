@@ -43,6 +43,12 @@ if(UNIT_TESTING)
 	"Proxy1280_12USB_InitShutter2PtsCalibration"
 	"Proxy1280_12USB_StepShutter2PtsCalibration"
 	"Proxy1280_12USB_FinishShutter2PtsCalibration"
+    "Proxy1280_12USB_InitShutterCalibration"
+    "Proxy1280_12USB_StepShutterCalibration"
+    "Proxy1280_12USB_FinishShutterCalibration"
+    "Proxy1280_12USB_InitSLCalibrationT0"
+    "Proxy1280_12USB_StepSLCalibrationT0"
+    "Proxy1280_12USB_FinishSLCalibrationT0"
     )
     set(WRAPPED_STR "")
     list(JOIN WRAPPED_FUNCS ",--wrap=" WRAPPED_STR)

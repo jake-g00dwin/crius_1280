@@ -58,5 +58,9 @@ void swap_u16_endian(uint16_t *word);
 void paimage_address(int* p);
 
 int shutter_2pts_calibration(HANDLE h);
+int shutter_calibration(HANDLE h);
+int sl_t0_calibrationT0(HANDLE h, int iStage);
+
+
 
 #endif /*CAMHANDLER*/

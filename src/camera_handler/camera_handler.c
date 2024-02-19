@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "camera_handler.h"
+#include "camera_test_wrap.h"
 
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
 matrix_t frame_matrix = { MAX_2D_ROWS, MAX_2D_COLS, {{0}}};
@@ -289,6 +290,7 @@ void get_paimage(int *arr)
  */ 
 
 
+
 int shutter_2pts_calibration(HANDLE h)
 {
     /*Check if it's connected.*/
@@ -315,7 +317,41 @@ int shutter_2pts_calibration(HANDLE h)
 }
 
 
+int shutter_calibration(HANDLE h)
+{
+    eDALProxy1280_12USBErr res;
+    
+    /*Check if it's a valid connection handle*/
+    res = Proxy1280_12USB_IsConnectToModule(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_InitShutterCalibration(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_StepShutterCalibration(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_FinishShutterCalibration(h);
+
+    return res;
+}
 
 
+int sl_t0_calibrationT0(HANDLE h, int iStage)
+{
+    eDALProxy1280_12USBErr res;
+    
+    /*Check if it's a valid connectionT0 handle*/
+    res = Proxy1280_12USB_IsConnectToModule(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
 
+    res = Proxy1280_12USB_InitSLCalibrationT0(h, iStage);
+    if(res != eProxy1280_12USBSuccess){return res;}
 
+    res = Proxy1280_12USB_StepSLCalibrationT0(h, iStage);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
+
+    return res;
+}
