@@ -305,8 +305,11 @@ int shutter_2pts_calibration(HANDLE h)
     res = Proxy1280_12USB_InitShutter2PtsCalibration(h,  iStage);
     if(res != eProxy1280_12USBSuccess){return res;}
 
-    res = Proxy1280_12USB_StepShutter2PtsCalibration(h, iStage);
-    if(res != eProxy1280_12USBSuccess){return res;}
+    for(int i = 0; i < NUM_STEPS; i++){
+        res = Proxy1280_12USB_StepShutter2PtsCalibration(h, iStage);
+        if(res != eProxy1280_12USBSuccess){return res;} 
+    }
+        
 
     res = Proxy1280_12USB_FinishShutter2PtsCalibration(h, iStage);
     if(res != eProxy1280_12USBSuccess){return res;}
@@ -327,9 +330,11 @@ int shutter_calibration(HANDLE h)
 
     res = Proxy1280_12USB_InitShutterCalibration(h);
     if(res != eProxy1280_12USBSuccess){return res;}
-
-    res = Proxy1280_12USB_StepShutterCalibration(h);
-    if(res != eProxy1280_12USBSuccess){return res;}
+    
+    for(int i = 0; i < NUM_STEPS; i++){
+        res = Proxy1280_12USB_StepShutterCalibration(h);
+        if(res != eProxy1280_12USBSuccess){return res;}
+    }
 
     res = Proxy1280_12USB_FinishShutterCalibration(h);
 
@@ -348,8 +353,11 @@ int sl_calibration_t0(HANDLE h, int iStage)
     res = Proxy1280_12USB_InitSLCalibrationT0(h, iStage);
     if(res != eProxy1280_12USBSuccess){return res;}
 
-    res = Proxy1280_12USB_StepSLCalibrationT0(h, iStage);
-    if(res != eProxy1280_12USBSuccess){return res;}
+    for(int i = 0; i < NUM_STEPS; i++){
+        res = Proxy1280_12USB_StepSLCalibrationT0(h, iStage);
+        if(res != eProxy1280_12USBSuccess){return res;} 
+    }
+      
 
     res = Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
 
@@ -368,8 +376,11 @@ int sl_calibration_t1(HANDLE h)
     res = Proxy1280_12USB_InitSLCalibrationT1(h);
     if(res != eProxy1280_12USBSuccess){return res;}
 
-    res = Proxy1280_12USB_StepSLCalibrationT1(h);
-    if(res != eProxy1280_12USBSuccess){return res;}
+
+    for(int i = 0; i < NUM_STEPS; i++){
+        res = Proxy1280_12USB_StepSLCalibrationT1(h);
+        if(res != eProxy1280_12USBSuccess){return res;}
+    }
 
     res = Proxy1280_12USB_FinishSLCalibrationT1(h);
 

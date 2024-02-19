@@ -296,7 +296,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT1(HANDLE paHandl
 {
     function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
-    return eProxy1280_12USBSequencingError;
+    return eProxy1280_12USBSuccess;
 }
 
 
@@ -304,7 +304,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT1(HANDLE paHandl
 {
     function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
-    return eProxy1280_12USBSequencingError;
+    return eProxy1280_12USBSuccess;
 }
 
 
@@ -552,7 +552,7 @@ static void test_2pts_shutter_calibration(void **state) {
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     expect_function_call(__wrap_Proxy1280_12USB_InitShutter2PtsCalibration);
-    expect_function_call(__wrap_Proxy1280_12USB_StepShutter2PtsCalibration);
+    expect_function_calls(__wrap_Proxy1280_12USB_StepShutter2PtsCalibration, NUM_STEPS);
     expect_function_call(__wrap_Proxy1280_12USB_FinishShutter2PtsCalibration);
 
     res = shutter_2pts_calibration(h);
@@ -587,7 +587,7 @@ static void test_sl_t0_cal_low_temp(void **state) {
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
-    expect_function_call(__wrap_Proxy1280_12USB_StepSLCalibrationT0);
+    expect_function_calls(__wrap_Proxy1280_12USB_StepSLCalibrationT0, NUM_STEPS);
     expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
 
     iStage = 1;
@@ -611,7 +611,7 @@ static void test_sl_t0_cal_high_temp(void **state) {
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
-    expect_function_call(__wrap_Proxy1280_12USB_StepSLCalibrationT0);
+    expect_function_calls(__wrap_Proxy1280_12USB_StepSLCalibrationT0, NUM_STEPS);
     expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
 
     iStage = 2;
@@ -643,7 +643,7 @@ static void test_sl_t1_cal(void **state) {
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT1);
-    expect_function_call(__wrap_Proxy1280_12USB_StepSLCalibrationT1);
+    expect_function_calls(__wrap_Proxy1280_12USB_StepSLCalibrationT1, NUM_STEPS);
     expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT1);
 
     res = sl_calibration_t1(h);
