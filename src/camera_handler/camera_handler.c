@@ -8,7 +8,6 @@
 
 #include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
-#include "camera_test_wrap.h"
 
 uint16_t paImage[IRIMAGE_NBPIXELS*2];
 matrix_t frame_matrix = { MAX_2D_ROWS, MAX_2D_COLS, {{0}}};

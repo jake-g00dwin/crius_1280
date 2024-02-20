@@ -2,13 +2,25 @@
 # Filename: CMakeLists.txt
 # Location: '/src/camera_handler/'
 
-#add_library(camera_test_wrap SHARED 
-#    camera_test_wrap.c
-#)
+# We need to build this as a shared library so the wrapped functions 
+# are defined for our mocked implimentation that python with pytest
+# will require during testing.
+if(PYTEST)
+    add_library(camera_test_wrap SHARED 
+        camera_test_wrap.c
+    )
+    add_library(camera_handler SHARED 
+        camera_handler.c
+    )
+    target_link_libraries(camera_handler PRIVATE
+        camera_test_wrap    
+    )
+else()
+    add_library(camera_handler SHARED 
+        camera_handler.c
+    )
+endif()
 
-add_library(camera_handler SHARED 
-    camera_handler.c
-)
 
 set_target_properties(camera_handler PROPERTIES VERSION 1.0 SOVERSION 1)
 
