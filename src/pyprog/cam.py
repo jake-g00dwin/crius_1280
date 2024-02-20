@@ -275,6 +275,7 @@ def demo_image(set_8bit):
 
     close_camera(h)
 
+    im1 = img
     cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
     cv.imshow(window, im1)
     cv.waitKey(0)
