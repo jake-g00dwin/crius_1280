@@ -39,7 +39,7 @@ class eAGC(Enum):
 DEF_FPS = 60.0
 DEF_AGC = eAGC.agc_eq_history.value
 DEF_SL = 1
-DEF_BP = 0
+DEF_BP = 1
 DEF_NUC = 1
 
 
