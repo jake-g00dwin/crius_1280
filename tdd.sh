@@ -26,7 +26,7 @@ build_example_smart_ir () {
 }
 
 
-build_camer_handler () {
+build_camera_handler () {
     clear_cmake_cache
     
     cmake -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE}  -DCMAKE_TOOLCHAIN_FILE=${CROSS_TC} ../
@@ -42,33 +42,74 @@ build_main () {
     make main
 }
 
+build_release() {
+    clear_cmake_cache 
+    cmake -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE} ../ 
+    make camera_handler
+}
+
 build_pytest () {
     # Builds the project so that pytest can run.
     cp ./src/camera_handler/testdata.bin /tmp/
-    
     clear_cmake_cache
     cmake -DUNIT_TESTING=ON  -DCMAKE_VERBOSE_MAKEFILE=ON -DPYTEST=ON ../
-
     make camera_test_wrap && make camera_handler 
 }
 
-
-run_tests ()  {
-    #copy the needed data file for the tests to the /tmp dir.
-    #This is required for the tests of the shared libs to work correctly.
+run_c_tests () {
     cp ./src/camera_handler/testdata.bin /tmp/
-
     clear_cmake_cache
     cmake -DUNIT_TESTING=ON  -DCMAKE_VERBOSE_MAKEFILE=ON ../
-    
-
-    #make simple_test
-    #make pgm && make test_pgm
     make camera_handler && make test_camera_handler && ./tests/camera_handler/test_camera_handler
 }
 
 
+menu () {
+    valid_choice=false
 
+    while [ "$valid_choice" != true ]; do
+        echo "BUILD MENU:"
+        echo "1. C Tests for camera_handler"
+        echo "2. Pytest for camera_handler"
+        echo "3. build for release"
+        echo "4. Reserved"
+        echo "5. Exit"
+
+        read -p "Enter your choice: " choice
+
+        case $choice in
+            1)
+                echo "You selected Option 1"
+                valid_choice=true
+                run_c_tests
+                ;;
+            2)
+                echo "You selected Option 2"
+                valid_choice=true
+                build_pytest
+                ;;
+            3)
+                echo "You selected Option 3"
+                valid_choice=true
+                build_release
+                ;;
+            4)
+                echo "You selected Option 4"
+                valid_choice=true
+                echo "EMPTY FOR NOW!"
+                ;;
+            5)
+                echo "Exiting..."
+                exit 0
+                ;;
+            *)
+                echo "Invalid choice. Please select a valid option."
+                ;;
+        esac
+    done
+}
+
+menu
 #run_tests
 #build_calibration_example 
-build_pytest
+#build_pytest
