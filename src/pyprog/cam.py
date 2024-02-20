@@ -228,7 +228,9 @@ def demo_video(set_8bit):
                     cv.NORM_MINMAX).astype(np.uint8)
 
         mat = (mat/256).astype('uint8')
-        cv.imshow('data', mat)
+        newmat = np.ones(NUMPIXELS, dtype=np.uint8).reshape(HEIGHT, WIDTH, order="C")
+        cv.equalizeHist(mat, newmat)
+        cv.imshow('data', newmat)
         key = cv.waitKey(16)
 
         if key == ord('q'):
@@ -258,7 +260,8 @@ def demo_image(set_8bit):
                 cv.NORM_MINMAX).astype(np.uint8)
 
     mat = (mat/256).astype('uint8')
+    newmat = np.ones(NUMPIXELS, dtype=np.uint8).reshape(HEIGHT, WIDTH, order="C")
+    cv.equalizeHist(mat, newmat)
     cv.imshow('data', mat)
     cv.waitKey(0)
     cv.destroyAllWindows()
-
