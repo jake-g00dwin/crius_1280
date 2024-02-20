@@ -212,7 +212,7 @@ def calibrate_camera(h):
 def demo_video(set_8bit):
     clear_matrix()
     clear_paimage()
-    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_AGC)
+    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
 
     while(True):
         load_frame_buffer(h)
@@ -240,7 +240,7 @@ def demo_video(set_8bit):
 def demo_image(set_8bit):
     clear_matrix()
     clear_paimage()
-    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_AGC)
+    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
 
     load_frame_buffer(h)
     load_matrix_buffer(False)
