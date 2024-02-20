@@ -28,8 +28,42 @@ def get_choice():
             print("Invalid input. Please enter a number.")
 
 
+def display_cal_menu():
+    help = "INFO: Place the black body(radiative/hot) source front of lens.\n"
+    help += "This calibration is a single point process to generate new \n"
+    help += "offset values\n"
+    print(help)
+    print("Calibration Menu:")
+    print("1. Yes I want to run fast calibration.")
+    print("2. No I don't want to run fast calibration.")
+
+
+def get_cal_choice():
+    while True:
+        try:
+            choice = int(input("Enter your choice (1-2): "))
+            if choice in [1, 2]:
+                return choice
+            else:
+                print("Invalid choice. Please enter a value from 1 to 2")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+
+def calibration_process():
+    display_cal_menu()
+    choice = get_cal_choice()
+
+    if choice == 2:
+        return
+
+    h = cam.init(fps=30.0, SL=True, BP=1, AGC=0, nuc=1)
+    cam.calibrate_camera(h)
+    cam.close_camera(h)
+
+
 def main():
-    # Change this to false to attempt displaying 16bit grayscale
+    # Change this to false to attempt displaying 16bit greyscale
     # Most monitors can't actually display 65,536 shades of gray however.
     set_8bit = False
 
@@ -51,9 +85,7 @@ def main():
             # Run the Image demo
             cam.demo_image(set_8bit)
         elif choice == 3:
-            h = cam.init(fps=30.0, SL=True, BP=1, AGC=0, nuc=1)
-            cam.calibrate_camera(h)
-            cam.close_camera(h)
+            calibration_process()
 
 
 def test():
