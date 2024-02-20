@@ -22,7 +22,7 @@
 #define MAX_2D_COLS 1280
 
 /*Used ad default number of steps in calibration(images taken)*/
-#define NUM_STEPS   10
+#define NUM_STEPS   60
 
 
 /*This is all for Windows systems compat*/
