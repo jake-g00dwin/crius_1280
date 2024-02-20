@@ -227,7 +227,7 @@ def demo_video(set_8bit):
                     255,
                     cv.NORM_RELATIVE).astype(np.uint8)
         else:
-            mat = (mat/256).astype('uint8')
+            # mat = (mat/256).astype('uint8')
             newmat = np.ones(NUMPIXELS, dtype=np.uint8).reshape(HEIGHT, WIDTH, order="C")
             cv.equalizeHist(mat, newmat)
             mat = newmat
