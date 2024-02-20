@@ -59,6 +59,15 @@ class TestCal:
 
         cam.close_camera(handle)
 
+    def test_fast_cal_save(self):
+        cam.close_camera(self.cam_address)
+        handle = cam.init()
+
+        res = cam.fast_cal_save(handle)
+        assert(res == 0)
+
+        cam.close_camera(handle)
+
 
 class TestCam:
     cam_address = c_void_p(0x12345678)
