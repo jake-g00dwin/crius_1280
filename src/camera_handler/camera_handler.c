@@ -14,8 +14,7 @@ matrix_t frame_matrix = { MAX_2D_ROWS, MAX_2D_COLS, {{0}}};
 
 int32_t paMeta[135];
 
-CAM_HANDLER_API bool stop = false;
-CAM_HANDLER_API bool buffer_filled = false;
+bool buffer_filled = false;
 
 
 
@@ -153,7 +152,7 @@ CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, cha
  */ 
 
 
-matrix_t *get_matrix_buffer(void)
+CAM_HANDLER_API matrix_t *get_matrix_buffer(void)
 {
     return &frame_matrix;
 }

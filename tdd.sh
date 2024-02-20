@@ -51,7 +51,7 @@ build_release() {
 
 build_windows_release() {
     clear_cmake_cache
-    cmake  -DCAM_HANDLER_LIB=ON -DCMAKE_TOOLCHAIN_FILE=${CROSS_TC_WIN} -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE} ../ 
+    cmake  -DCMAKE_TOOLCHAIN_FILE=${CROSS_TC_WIN} -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE} ../ 
     make camera_handler
 }
 
