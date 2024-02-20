@@ -27,9 +27,9 @@ void paimage_address(int* p)
 
 void print_paimage(void)
 {
-    //printf("paImage[]:\n");
+    printf("paImage[]:\n");
     for(int i = 0; i < (IRIMAGE_NBPIXELS*2); i++){
-        //printf("%u, ", ((uint16_t*)paImage)[i]);
+        printf("%u, ", ((uint16_t*)paImage)[i]);
     }
         
 }
@@ -78,11 +78,11 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
-    //printf("name: '%s'\n", name);
+    printf("name: '%s'\n", name);
     fflush(stdout);
 
     if(fps > MAX_FPS || fps < MIN_FPS) {
-        //printf("Invalid fps parameter: %f, defaulting to 30\n", fps);
+        printf("Invalid fps parameter: %f, defaulting to 30\n", fps);
         fps = 30;
     }
     
@@ -103,7 +103,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
                 agc_val = eAGCTotal;
                 break;
         default:
-                //printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
+                printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
                 agc_val = eNoAGC;
                 break;
     }
@@ -111,24 +111,24 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     /*See how many devices are attached.*/
     int num_devices = num_attached();
     if(num_devices < 1){
-        //printf("No devices found!\n");
+        printf("No devices found!\n");
         return NULL;
     }
-    //printf("Found # device: %d\n", num_devices);
+    printf("Found # device: %d\n", num_devices);
     fflush(stdout);
 
     /*connect to module(camera)*/
     eDALProxy1280_12USBErr connect_result = Proxy1280_12USB_ConnectToModule(0, &camera_handle);
     if(connect_result != eProxy1280_12USBSuccess)
     {
-        //printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
+        printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
         return NULL;
     }
 
-    //printf("Camera handle ptr: %p\n", camera_handle);
+    printf("Camera handle ptr: %p\n", camera_handle);
 
     /*Set the configuration*/
-    //printf("Setting the camera parameters...\n");
+    printf("Setting the camera parameters...\n");
     Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
     Proxy1280_12USB_SetShutterLessProcessing(camera_handle, SL);
     Proxy1280_12USB_SetFloatFeature(camera_handle, efFrameRate, fps);
@@ -139,7 +139,7 @@ HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
         if(res != 0){
             return NULL;
         }
-        ////printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
+        //printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
     }
 
     return camera_handle;
@@ -223,7 +223,7 @@ int load_frame_buffer(HANDLE camera_handle) {
     eDALProxy1280_12USBErr err;
     err = Proxy1280_12USB_IsConnectToModule(camera_handle); 
     if(err != eProxy1280_12USBSuccess){
-        //printf("Error: %s\n", Proxy1280_12USB_GetErrorString(err)); 
+        printf("Error: %s\n", Proxy1280_12USB_GetErrorString(err)); 
         return (int) err;
     }
 
@@ -237,11 +237,11 @@ void print_matrix(uint16_t *v, size_t n, size_t p)
 {
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < p; j++) {
-            //printf("%hu ", v[i * n + j]);
+            printf("%hu ", v[i * n + j]);
         }
-        //printf("\n");
+        printf("\n");
     }
-    //printf("\n");
+    printf("\n");
 }
 
 
