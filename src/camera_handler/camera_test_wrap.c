@@ -168,26 +168,40 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_IsConnectToModule(HANDLE paHandle)
  * SETTING FEATURES 
  * ############################
  */ 
-
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetNUCProcessing(HANDLE paHandle, unsigned char paBadPixels, unsigned char paNUC)
 {
-    return is_valid_handle(paHandle);
+    if(!is_valid_handle(paHandle)){
+        return eProxy1280_12USBHandleError;
+    }
+    return eProxy1280_12USBSuccess;
 }
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetShutterLessProcessing(HANDLE paHandle, bool bActivate)
 {
-    return is_valid_handle(paHandle);
+    if(!is_valid_handle(paHandle)){
+        return eProxy1280_12USBHandleError;
+    }
+    return eProxy1280_12USBSuccess;
 }
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetAGCProcessing(HANDLE paHandle, unsigned char paeAGCProcessing)
 {
-    return is_valid_handle(paHandle);
+    if(!is_valid_handle(paHandle)){
+        return eProxy1280_12USBHandleError;
+    }
+    return eProxy1280_12USBSuccess;
 }
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetFloatFeature(HANDLE paHandle, int paeFeature, float paFloat)
 {
-    return is_valid_handle(paHandle);
+    if(!is_valid_handle(paHandle)){
+        return eProxy1280_12USBHandleError;
+    }
+    return eProxy1280_12USBSuccess;
 }
+
+
+
 
 
 /*
