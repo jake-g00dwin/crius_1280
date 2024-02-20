@@ -225,6 +225,7 @@ def demo_video(set_8bit):
             break
 
     cv.destroyAllWindows()
+    close_camera(h)
 
 
 def demo_image(set_8bit):
