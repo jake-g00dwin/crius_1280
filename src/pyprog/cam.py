@@ -227,6 +227,7 @@ def demo_video(set_8bit):
                     255,
                     cv.NORM_MINMAX).astype(np.uint8)
 
+        mat = (mat/256).astype('uint8')
         cv.imshow('data', mat)
         key = cv.waitKey(16)
 
@@ -256,6 +257,8 @@ def demo_image(set_8bit):
                 255,
                 cv.NORM_MINMAX).astype(np.uint8)
 
+    mat = (mat/256).astype('uint8')
     cv.imshow('data', mat)
     cv.waitKey(0)
     cv.destroyAllWindows()
+

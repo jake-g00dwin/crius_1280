@@ -31,7 +31,7 @@ def get_choice():
 def main():
     # Change this to false to attempt displaying 16bit grayscale
     # Most monitors can't actually display 65,536 shades of gray however.
-    set_8bit = True
+    set_8bit = False
 
     num = cam.num_attached()
     if(num < 1):
