@@ -17,6 +17,9 @@ HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
 
+
+img = np.ones(NUMPIXELS, dtype=np.uint8).reshape(HEIGHT, WIDTH, order="C")
+
 # Handle the OS specific shared library.
 if(platform.system() == "Linux"):
     print("UNIX PLATFORM FOUND!")
@@ -210,6 +213,7 @@ def calibrate_camera(h):
 
 
 def demo_video(set_8bit):
+    global img
     clear_matrix()
     clear_paimage()
     h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
@@ -217,21 +221,21 @@ def demo_video(set_8bit):
     while(True):
         load_frame_buffer(h)
         load_matrix_buffer(False)
-        mat = get_frame_matrix()
+        img = get_frame_matrix()
 
         if(set_8bit):
-            mat = cv.normalize(
-                    mat,
+            img = cv.normalize(
+                    img,
                     None,
                     0,
                     255,
-                    cv.NORM_RELATIVE).astype(np.uint8)
+                    cv.NORM_MINMAX).astype(np.uint8)
         else:
-            # mat = (mat/256).astype('uint8')
+            img = (img/256).astype('uint8')
             newmat = np.ones(NUMPIXELS, dtype=np.uint8).reshape(HEIGHT, WIDTH, order="C")
-            cv.equalizeHist(mat, newmat)
-            mat = newmat
-        cv.imshow('data', newmat)
+            cv.equalizeHist(img, newmat)
+            img = newmat
+        cv.imshow('data', img)
         key = cv.waitKey(16)
 
         if key == ord('q'):
@@ -239,6 +243,31 @@ def demo_video(set_8bit):
 
     cv.destroyAllWindows()
     close_camera(h)
+
+# Callbacks for the adjustments.
+
+
+contrast = 10
+max_contrast = 100
+brightness = 0
+max_brightness = 100
+
+
+def change_contrast(val):
+    global contrast
+    contrast = val / 10
+    preform_operation()
+
+
+def change_brightness(val):
+    global brightness
+    brightness = val / 100
+    preform_operation()
+
+
+def preform_operation():
+    img1 = (img/255) * contrast + brightness
+    cv.imshow('data', img1)
 
 
 def demo_image(set_8bit):
@@ -249,6 +278,8 @@ def demo_image(set_8bit):
     load_frame_buffer(h)
     load_matrix_buffer(False)
     mat = get_frame_matrix()
+    global img
+    img = get_frame_matrix()
 
     close_camera(h)
 
@@ -260,9 +291,14 @@ def demo_image(set_8bit):
                 255,
                 cv.NORM_MINMAX).astype(np.uint8)
 
-    mat = (mat/256).astype('uint8')
-    newmat = np.ones(NUMPIXELS, dtype=np.uint8).reshape(HEIGHT, WIDTH, order="C")
-    cv.equalizeHist(mat, newmat)
-    cv.imshow('data', newmat)
+    # mat = (mat/256).astype('uint8')
+    # newmat = np.ones(NUMPIXELS, dtype=np.uint8).reshape(HEIGHT, WIDTH, order="C")
+    # cv.equalizeHist(mat, newmat)
+    # cv.imshow('data', newmat)
+    # mat = mat.astype(np.float32)
+    preform_operation()
+    cv.createTrackbar("Contrast", 'data', contrast, max_contrast, change_contrast)
+    cv.createTrackbar("Brightness", 'data', brightness, max_brightness, change_brightness)
+
     cv.waitKey(0)
     cv.destroyAllWindows()
