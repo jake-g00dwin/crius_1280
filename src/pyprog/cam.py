@@ -274,10 +274,9 @@ def demo_image(set_8bit):
     close_camera(h)
 
     cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
-    while(True):
-        cv.imshow(window, img)
-        cv.waitKey(0)
-        cv.destroyAllWindows()
+    cv.imshow(window, im1)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 
 def load_image():
