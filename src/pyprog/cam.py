@@ -154,13 +154,13 @@ def shutter_cal(h):
     return camlib.shutter_calibration(h)
 
 
-def two_poin_shutter_cal(h, iStage):
+def two_point_shutter_cal(h, iStage):
     camlib = CDLL(SHARED_LIB)
 
     # int shutter_2pts_calibration(HANDLE h, int iStage);
     camlib.shutter_2pts_calibration.argtypes = [c_void_p, c_int]
     camlib.shutter_2pts_calibration.restype = c_int
-    return camlib.shutter_2pts_calibration(h)
+    return camlib.shutter_2pts_calibration(h, iStage)
 
 
 def shutterless_cal_T0(h, iStage):

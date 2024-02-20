@@ -23,6 +23,42 @@ class TestCal:
     def test_self(self):
         assert True
 
+    def test_shutter_cal_handle(self):
+        handle = c_void_p(None)
+
+        res = cam.shutter_cal(handle)
+        assert (res == 2)
+
+    def test_shutter_cal_valid(self):
+        handle = cam.init()
+
+        res = cam.shutter_cal(handle)
+        assert (res == 0)
+
+        cam.close_camera(handle)
+
+    def test_two_point_shutter_cal_handle(self):
+        handle = self.cam_address
+
+        res = cam.two_point_shutter_cal(handle, 0)
+        assert(res == 2)
+
+        handle = cam.init()
+        res = cam.two_point_shutter_cal(handle, 0)
+        assert(res == 1)
+
+    def test_two_point_shutter_cal(self):
+        cam.close_camera(self.cam_address)
+        handle = cam.init()
+
+        res = cam.two_point_shutter_cal(handle, 1)
+        assert(res == 0)
+
+        res = cam.two_point_shutter_cal(handle, 2)
+        assert(res == 0)
+
+        cam.close_camera(handle)
+
 
 class TestCam:
     cam_address = c_void_p(0x12345678)
@@ -126,9 +162,6 @@ class TestCam:
         assert average > 3000.0
 
         cam.close_camera(h)
-
-    def test_quick_calibration(self):
-        assert (False)
 
 
 class TestC:
