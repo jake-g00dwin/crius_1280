@@ -26,6 +26,20 @@
 
 
 
+#if (defined (LINUX) || defined (__linux__))
+    #ifdef DALProxy1280_12USB_LIBRARY
+        #define CAM_HANDER_API __attribute__((visibility("default")))
+    #else
+        #define CAM_HANDER_API 
+    #endif
+#else
+    #ifdef DALProxy1280_12USB_LIBRARY
+        #define CAM_HANDER_API __declspec(dllexport)
+    #else
+        #define CAM_HANDER_API __declspec(dllimport)
+    #endif
+#endif
+
 extern HANDLE m_Handle; 
 
 /*AGC: Auto gain control*/
