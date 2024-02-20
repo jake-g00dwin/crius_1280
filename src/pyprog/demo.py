@@ -33,6 +33,11 @@ def main():
     # Most monitors can't actually display 65,536 shades of gray however.
     set_8bit = True
 
+    num = cam.num_attached()
+    if(num < 1):
+        print("ERROR: Please check the camera's connection")
+        exit(-1)
+
     while True:
         display_menu()
         choice = get_choice()
