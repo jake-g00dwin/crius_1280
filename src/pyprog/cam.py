@@ -10,14 +10,18 @@ from enum import Enum
 
 import cv2 as cv
 import numpy as np
+import platform
 
 WIDTH = 1280
 HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
 
-# This may require a windows specific one later on.
-SHARED_LIB = "./shared/libcamera_handler.so"
+# Handle the OS specific shared library.
+if(platform.system() == "Linux"):
+    SHARED_LIB = "./shared/libcamera_handler.so"
+else:
+    SHARED_LIB = "./shared/libcamera_handler.dll"
 
 
 # Used as an enum to pass into functions
