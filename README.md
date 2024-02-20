@@ -91,3 +91,32 @@ directory.
 To change the settings when the project is being built the `CMakeLists.txt`
 file in the project root would need to be edited.
 
+
+## Testing
+
+The testing for the project now features a interactive menu inside the 
+`tdd.sh` script for all posix/unix systems with `sh` shells availble.
+
+To actually run the tests simply follow the prompts.
+
+```sh
+~: ./tdd.sh
+BUILD MENU:
+1. C Tests for camera_handler
+2. Pytest for camera_handler
+3. build for release
+4. Reserved
+5. Exit
+Enter your choice: 5 
+Exiting...
+```
+
+### Pytest
+
+The python code tests depend on the shared library of the camera_handler 
+being built. The code accesses the shared library via a pointer in the 
+`src/pyprog/shared/` sub-directory.
+
+Before attempting to run pytest you should first select the option for pytest
+while running the `tdd.sh` file in the projects root directory.
+
