@@ -337,7 +337,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentBadPixels(HANDLE paHand
 }
 
 
-eDALProxy1280_12USBErr Proxy1280_12USB_SaveCurrentTableOffset(HANDLE paHandle,
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableOffset(HANDLE paHandle,
         unsigned char paiIndex,
         const void *paData)
 {
@@ -693,17 +693,17 @@ static void test_save_calibration(void **state) {
     int res;
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    res = save_calibration(h, camera_index);
+    res = save_calibration(h);
     assert_true(res == eProxy1280_12USBHandleError);
 
     h = setup_camera();
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     expect_function_call(__wrap_Proxy1280_12USB_SaveCurrentBadPixels);
-    expect_function_call(__wrap_Proxy1280_12USB_SaveTableOffset);
-    expect_function_call(__wrap_Proxy1280_12USB_SaveTableGain);
+    expect_function_call(__wrap_Proxy1280_12USB_SaveCurrentTableOffset);
+    expect_function_call(__wrap_Proxy1280_12USB_SaveCurrentTableGain);
     
-    res = save_calibration(h, camera_index);
+    res = save_calibration(h);
 
     tear_down(h);
 }
@@ -718,6 +718,7 @@ int main(void)
 {
 
     const struct CMUnitTest calibration_tests[] = {
+        cmocka_unit_test(test_save_calibration),
         cmocka_unit_test(test_sl_t1_cal),
         cmocka_unit_test(test_sl_t1_cal_null_handle),
         cmocka_unit_test(test_sl_t0_cal_high_temp),
