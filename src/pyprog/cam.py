@@ -25,8 +25,7 @@ max_brightness = 100
 
 
 img = np.ones(NUMPIXELS, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
-im1 = None
-# img = np.float32(img/255)
+im1 = np.ones(NUMPIXELS, dtype=np.float32).reshape(HEIGHT, WIDTH, order="C")
 
 # Handle the OS specific shared library.
 if(platform.system() == "Linux"):
@@ -230,6 +229,7 @@ def demo_video(set_8bit):
         load_frame_buffer(h)
         load_matrix_buffer(False)
         img = get_frame_matrix()
+        im1 = img
         cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
 
         cv.imshow(window, im1)
