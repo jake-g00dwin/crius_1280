@@ -159,8 +159,41 @@ def two_poin_shutter_cal(h, iStage):
     return camlib.shutter_2pts_calibration(h)
 
 
-def calibrate_camera():
-    return True
+def shutterless_cal_T0(h, iStage):
+    camlib = CDLL(SHARED_LIB)
+
+    # int sl_calibration_t0(HANDLE h, int iStage);
+    camlib.sl_calibration_t0.argtypes = [c_void_p, c_int]
+    camlib.sl_calibration_t0.restype = c_int
+    return camlib.sl_calibration_t0(h, iStage)
+
+
+def shutterless_cal_T1(h):
+    camlib = CDLL(SHARED_LIB)
+
+    # int sl_calibration_t1(HANDLE h);
+    camlib.sl_calibration_t1.argtypes = [c_void_p]
+    camlib.sl_calibration_t1.restype = c_int
+    return camlib.sl_calibration_t1(h)
+
+
+def fast_cal_save(h):
+    camlib = CDLL(SHARED_LIB)
+
+    # int save_calibration(HANDLE h);
+    camlib.save_calibration.argtypes = [c_void_p]
+    camlib.save_calibration.restype = c_int
+    return camlib.save_calibration(h)
+
+
+def calibrate_camera(h):
+    print("CALIBRATION:\nFast calibration --> `shutter_cal()`")
+    print("The camera's lense should be covered at this point!")
+    shutter_cal(h)
+    print("Calibration done...saving...\n")
+    res = fast_cal_save(h)
+    print("save_calibration() --> " + str(res))
+    return res
 
 
 def demo_video(set_8bit):

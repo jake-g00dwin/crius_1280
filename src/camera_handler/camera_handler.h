@@ -66,6 +66,7 @@ int shutter_2pts_calibration(HANDLE h, int iStage);
 int shutter_calibration(HANDLE h);
 int sl_calibration_t0(HANDLE h, int iStage);
 int sl_calibration_t1(HANDLE h);
+int save_calibration(HANDLE h);
 
 
 

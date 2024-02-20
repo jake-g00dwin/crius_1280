@@ -10,6 +10,7 @@
 
 //#include "DALProxy1280_12USB.h"
 //#include "camera_test_wrap.h"
+#include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
 
 /*
@@ -314,6 +315,38 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT1(HANDLE paHan
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     return eProxy1280_12USBSequencingError;
 }
+
+/*The functions needed to do the simple calibration/save*/
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableGain(
+        HANDLE paHandle,
+        unsigned char paiIndex,
+        const void *paData)
+{
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentBadPixels(HANDLE paHandle)
+{
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr Proxy1280_12USB_SaveCurrentTableOffset(HANDLE paHandle,
+        unsigned char paiIndex,
+        const void *paData)
+{
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
+}
+
+
 
 
 /*
@@ -653,6 +686,27 @@ static void test_sl_t1_cal(void **state) {
     tear_down(h);
 }
 
+
+static void test_save_calibration(void **state) {
+    HANDLE h = NULL; 
+    is_connected = false;
+    int res;
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    res = save_calibration(h, camera_index);
+    assert_true(res == eProxy1280_12USBHandleError);
+
+    h = setup_camera();
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_SaveCurrentBadPixels);
+    expect_function_call(__wrap_Proxy1280_12USB_SaveTableOffset);
+    expect_function_call(__wrap_Proxy1280_12USB_SaveTableGain);
+    
+    res = save_calibration(h, camera_index);
+
+    tear_down(h);
+}
 
 
 static void test_fast_shutter_calibration(void **state) {

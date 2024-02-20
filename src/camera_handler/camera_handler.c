@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
 #include "camera_test_wrap.h"
 
@@ -384,4 +385,23 @@ int sl_calibration_t1(HANDLE h)
     res = Proxy1280_12USB_FinishSLCalibrationT1(h);
 
     return res;
+}
+
+
+int save_calibration(HANDLE h)
+{
+    eDALProxy1280_12USBErr res;
+    
+    /*Check if it's a valid connectionT1 handle*/
+    res = Proxy1280_12USB_IsConnectToModule(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_SaveCurrentBadPixels(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_SaveCurrentTableOffset(h, 1, NULL);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_SaveCurrentTableGain(h, 0, NULL);    
+    return res; 
 }
