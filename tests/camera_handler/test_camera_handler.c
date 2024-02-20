@@ -8,8 +8,6 @@
 #include <string.h>
 #include <unistd.h>
 
-//#include "DALProxy1280_12USB.h"
-//#include "camera_test_wrap.h"
 #include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
 
