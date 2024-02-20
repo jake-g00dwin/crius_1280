@@ -278,6 +278,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT1(HANDLE paHandl
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT1(HANDLE paHandle);
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT1(HANDLE paHandle);
 
+/*Function Prototypes for saving stuff*/
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableGain(HANDLE paHandle, unsigned char paiIndex, const void *paData);
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentBadPixels(HANDLE paHandle);
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableOffset(HANDLE paHandle, unsigned char paiIndex, const void *paData);
+
 
 int test_mock(int a);
 
