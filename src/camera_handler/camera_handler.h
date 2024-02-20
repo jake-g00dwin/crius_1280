@@ -42,6 +42,8 @@
 
 extern HANDLE m_Handle; 
 
+
+
 /*AGC: Auto gain control*/
 /*SL shutterless processing*/
 /*BP Bad pixels corrections*/

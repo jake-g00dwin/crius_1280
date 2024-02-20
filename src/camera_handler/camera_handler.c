@@ -14,8 +14,7 @@ matrix_t frame_matrix = { MAX_2D_ROWS, MAX_2D_COLS, {{0}}};
 
 int32_t paMeta[135];
 
-CAM_HANDLER_API bool stop = false;
-CAM_HANDLER_API bool buffer_filled = false;
+bool buffer_filled = false;
 
 
 
@@ -73,7 +72,8 @@ CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, cha
     HANDLE camera_handle = NULL;
     enum eAGCProcessingValue agc_val = eNoAGC;
     eDALProxy1280_12USBErr res;
-   
+    
+    printf("Passed fps %f, SL: %d, BP: %d, AGC: %d, nuc: %d\n", fps, SL, BP, agc, nuc);  
  
 
     char name[310] = {'\0'}; 
@@ -129,10 +129,28 @@ CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, cha
 
     /*Set the configuration*/
     printf("Setting the camera parameters...\n");
-    Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
-    Proxy1280_12USB_SetShutterLessProcessing(camera_handle, SL);
-    Proxy1280_12USB_SetFloatFeature(camera_handle, efFrameRate, fps);
-    Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
+    res = Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
+    if(res != eProxy1280_12USBSuccess){
+        printf("Failed to set NUC Processing! --> %d\n", res);
+    }
+
+    res = Proxy1280_12USB_SetShutterLessProcessing(camera_handle, SL);
+    if(res != eProxy1280_12USBSuccess){
+        printf("Failed to set ShutterLess Processing! --> %d\n", res);
+    }
+
+    res = Proxy1280_12USB_SetFloatFeature(camera_handle, efFrameRate, fps);
+     if(res != eProxy1280_12USBSuccess){
+        printf("Failed to set FloatFeature! --> %d\n", res);
+        return NULL;
+     }
+
+    res = Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
+    if(res != eProxy1280_12USBSuccess){
+        printf("Failed to set AGC Processing! --> %d\n", res);
+        return NULL;
+    }
+
 
     for(int i = 0; i < NUM_TEST_FRAMES; i++){
         res  = Proxy1280_12USB_GetImage(camera_handle, paImage, paMeta, GETIMAGE_TIMEOUT);
@@ -153,7 +171,7 @@ CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, cha
  */ 
 
 
-matrix_t *get_matrix_buffer(void)
+CAM_HANDLER_API matrix_t *get_matrix_buffer(void)
 {
     return &frame_matrix;
 }

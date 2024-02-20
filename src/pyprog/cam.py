@@ -35,13 +35,20 @@ class eAGC(Enum):
     agc_total = 4
 
 
+# Moved defaults into global scope for use in demo functions
+DEF_FPS = 60.0
+DEF_AGC = eAGC.agc_eq_history.value
+DEF_SL = 1
+DEF_BP = 0
+DEF_NUC = 1
+
+
 def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
     camlib = CDLL(SHARED_LIB)
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
     camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
     camlib.init_camera.restype = c_void_p
-    fps = c_float(60.0)
     handle = camlib.init_camera(fps, SL, BP, AGC, nuc)
     return handle
 
@@ -205,7 +212,7 @@ def calibrate_camera(h):
 def demo_video(set_8bit):
     clear_matrix()
     clear_paimage()
-    h = init()
+    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_AGC)
 
     while(True):
         load_frame_buffer(h)
@@ -233,7 +240,7 @@ def demo_video(set_8bit):
 def demo_image(set_8bit):
     clear_matrix()
     clear_paimage()
-    h = init()
+    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_AGC)
 
     load_frame_buffer(h)
     load_matrix_buffer(False)
