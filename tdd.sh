@@ -1,6 +1,7 @@
 #!/bin/sh
 
 CROSS_TC="$(pwd)/aarch64_toolchain.cmake"
+CROSS_TC_WIN="$(pwd)/i686-w64-mingw32_toolchain.cmake"
 CMAKE_VERBOSE="ON"
 CROSS_COMPILE=1
 
@@ -44,7 +45,13 @@ build_main () {
 
 build_release() {
     clear_cmake_cache 
-    cmake -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE} ../ 
+    cmake -DCAM_HANDLER_LIB=ON -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE} ../ 
+    make camera_handler
+}
+
+build_windows_release() {
+    clear_cmake_cache
+    cmake  -DCAM_HANDLER_LIB=ON -DCMAKE_TOOLCHAIN_FILE=${CROSS_TC_WIN} -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE} ../ 
     make camera_handler
 }
 
@@ -72,7 +79,7 @@ menu () {
         echo "1. C Tests for camera_handler"
         echo "2. Pytest for camera_handler"
         echo "3. build for release"
-        echo "4. Reserved"
+        echo "4. cross compile for windows"
         echo "5. Exit"
 
         read -p "Enter your choice: " choice
@@ -96,7 +103,7 @@ menu () {
             4)
                 echo "You selected Option 4"
                 valid_choice=true
-                echo "EMPTY FOR NOW!"
+                build_windows_release
                 ;;
             5)
                 echo "Exiting..."
@@ -110,6 +117,3 @@ menu () {
 }
 
 menu
-#run_tests
-#build_calibration_example 
-#build_pytest
