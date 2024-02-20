@@ -51,7 +51,7 @@ def main():
             # Run the Image demo
             cam.demo_image(set_8bit)
         elif choice == 3:
-            h = cam.init()
+            h = cam.init(fps=30.0, SL=True, BP=1, AGC=0, nuc=1)
             cam.calibrate_camera(h)
             cam.close_camera(h)
 
