@@ -267,9 +267,11 @@ def demo_image(set_8bit):
     clear_paimage()
     h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
 
-    load_frame_buffer(h)
-    load_matrix_buffer(False)
-    img = get_frame_matrix()
+    # We load a bunch of frames after init of the camera to get some history.
+    for i in range(0, 120):
+        load_frame_buffer(h)
+        load_matrix_buffer(False)
+        img = get_frame_matrix()
 
     close_camera(h)
 
