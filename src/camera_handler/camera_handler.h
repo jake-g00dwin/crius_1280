@@ -25,18 +25,18 @@
 #define NUM_STEPS   10
 
 
-
+/*This is all for Windows systems compat*/
 #if (defined (LINUX) || defined (__linux__))
-    #ifdef DALProxy1280_12USB_LIBRARY
-        #define CAM_HANDER_API __attribute__((visibility("default")))
+    #ifdef CAM_HANDLER_LIB 
+        #define CAM_HANDLER_API __attribute__((visibility("default")))
     #else
-        #define CAM_HANDER_API 
+        #define CAM_HANDLER_API 
     #endif
 #else
-    #ifdef DALProxy1280_12USB_LIBRARY
-        #define CAM_HANDER_API __declspec(dllexport)
+    #ifdef CAM_HANDLER_LIB  
+        #define CAM_HANDLER_API __declspec(dllexport)
     #else
-        #define CAM_HANDER_API __declspec(dllimport)
+        #define CAM_HANDLER_API __declspec(dllimport)
     #endif
 #endif
 
@@ -55,32 +55,32 @@ typedef struct {
     uint16_t data[MAX_2D_ROWS][MAX_2D_COLS];
 }matrix_t;
 
-HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
-int close_camera(HANDLE camera_handle);
-int num_attached(void);
+CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
+CAM_HANDLER_API int close_camera(HANDLE camera_handle);
+CAM_HANDLER_API int num_attached(void);
 
-int load_frame_buffer(HANDLE camera_handle);
+CAM_HANDLER_API int load_frame_buffer(HANDLE camera_handle);
 
 
-void get_paimage(int *arr);
-void print_paimage(void);
-void clear_paimage(void);
+CAM_HANDLER_API void get_paimage(int *arr);
+CAM_HANDLER_API void print_paimage(void);
+CAM_HANDLER_API void clear_paimage(void);
 
-void clear_matrix(void);
-matrix_t *get_matrix_buffer(void);
-void get_frame_matrix(uint16_t *mat, size_t n, size_t p);
-void print_matrix(uint16_t *v, size_t n, size_t p);
-void load_matrix_buffer(bool endian_swap);
-void swap_u16_endian(uint16_t *word);
+CAM_HANDLER_API void clear_matrix(void);
+CAM_HANDLER_API matrix_t *get_matrix_buffer(void);
+CAM_HANDLER_API void get_frame_matrix(uint16_t *mat, size_t n, size_t p);
+CAM_HANDLER_API void print_matrix(uint16_t *v, size_t n, size_t p);
+CAM_HANDLER_API void load_matrix_buffer(bool endian_swap);
+CAM_HANDLER_API void swap_u16_endian(uint16_t *word);
 
-void paimage_address(int* p);
+CAM_HANDLER_API void paimage_address(int* p);
 
 /*Camera calibration functions*/
-int shutter_2pts_calibration(HANDLE h, int iStage);
-int shutter_calibration(HANDLE h);
-int sl_calibration_t0(HANDLE h, int iStage);
-int sl_calibration_t1(HANDLE h);
-int save_calibration(HANDLE h);
+CAM_HANDLER_API int shutter_2pts_calibration(HANDLE h, int iStage);
+CAM_HANDLER_API int shutter_calibration(HANDLE h);
+CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage);
+CAM_HANDLER_API int sl_calibration_t1(HANDLE h);
+CAM_HANDLER_API int save_calibration(HANDLE h);
 
 
 

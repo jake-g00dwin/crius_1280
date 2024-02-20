@@ -42,7 +42,7 @@ def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
     camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
     camlib.init_camera.restype = c_void_p
     fps = c_float(60.0)
-    handle = camlib.init_camera(fps, True, 1, 2, 1)
+    handle = camlib.init_camera(fps, SL, BP, AGC, nuc)
     return handle
 
 

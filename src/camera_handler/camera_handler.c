@@ -14,18 +14,18 @@ matrix_t frame_matrix = { MAX_2D_ROWS, MAX_2D_COLS, {{0}}};
 
 int32_t paMeta[135];
 
-bool stop = false;
-bool buffer_filled = false;
+CAM_HANDLER_API bool stop = false;
+CAM_HANDLER_API bool buffer_filled = false;
 
 
 
-void paimage_address(int* p)
+CAM_HANDLER_API void paimage_address(int* p)
 {
     p = (int*)&paImage;
 }
 
 
-void print_paimage(void)
+CAM_HANDLER_API void print_paimage(void)
 {
     printf("paImage[]:\n");
     for(int i = 0; i < (IRIMAGE_NBPIXELS*2); i++){
@@ -35,7 +35,7 @@ void print_paimage(void)
 }
 
 
-void clear_paimage(void)
+CAM_HANDLER_API void clear_paimage(void)
 {
     for(int i = 0; i < IRIMAGE_NBPIXELS*2; i++){
         paImage[i] = 0;
@@ -43,7 +43,7 @@ void clear_paimage(void)
 }
 
 
-int num_attached(void)
+CAM_HANDLER_API int num_attached(void)
 {
     eDALProxy1280_12USBErr result_code;
     int num_cams = 0;
@@ -56,19 +56,19 @@ int num_attached(void)
 }
 
 
-int close_camera(HANDLE camera_handle)
+CAM_HANDLER_API int close_camera(HANDLE camera_handle)
 {
     eDALProxy1280_12USBErr err = Proxy1280_12USB_DisconnectFromModule(camera_handle);
     return err;
 }
 
 
-bool is_buffer_ready(void)
+CAM_HANDLER_API bool is_buffer_ready(void)
 {
     return buffer_filled;
 }
 
-HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
+CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
 {
     HANDLE camera_handle = NULL;
     enum eAGCProcessingValue agc_val = eNoAGC;
@@ -159,7 +159,7 @@ matrix_t *get_matrix_buffer(void)
 }
 
 
-void clear_matrix(void)
+CAM_HANDLER_API void clear_matrix(void)
 {
     for (int row = 0; row < frame_matrix.num_rows; row++) {
         for (int col =0; col  < frame_matrix.num_cols; col++) {
@@ -169,7 +169,7 @@ void clear_matrix(void)
 }
 
 
-void rotate_matrix_90(matrix_t *m)
+CAM_HANDLER_API void rotate_matrix_90(matrix_t *m)
 {
     int temp;
 
@@ -194,7 +194,7 @@ void rotate_matrix_90(matrix_t *m)
 }
 
 
-void rotate_matrix_180(matrix_t *m)
+CAM_HANDLER_API void rotate_matrix_180(matrix_t *m)
 {
     rotate_matrix_90(m);
     rotate_matrix_90(m);
@@ -208,7 +208,7 @@ void rotate_matrix_180(matrix_t *m)
 
 
 /*Swaps the order of bytes, needed for the camera*/
-void swap_u16_endian(uint16_t *word)
+CAM_HANDLER_API void swap_u16_endian(uint16_t *word)
 {
     uint8_t hibyte = (uint8_t)((*word) & 0x00FF);
     uint8_t lobyte = (uint8_t)( ((*word) & 0xFF00)>>8 );
@@ -218,7 +218,7 @@ void swap_u16_endian(uint16_t *word)
 
 
 /*Gets a frame and puts it into the matrix*/
-int load_frame_buffer(HANDLE camera_handle) {
+CAM_HANDLER_API int load_frame_buffer(HANDLE camera_handle) {
     /*Load the image*/
     eDALProxy1280_12USBErr err;
     err = Proxy1280_12USB_IsConnectToModule(camera_handle); 
@@ -233,7 +233,7 @@ int load_frame_buffer(HANDLE camera_handle) {
 }
 
 
-void print_matrix(uint16_t *v, size_t n, size_t p)
+CAM_HANDLER_API void print_matrix(uint16_t *v, size_t n, size_t p)
 {
     for (size_t i = 0; i < n; i++) {
         for (size_t j = 0; j < p; j++) {
@@ -246,7 +246,7 @@ void print_matrix(uint16_t *v, size_t n, size_t p)
 
 
 /*Changes the paImage into 2D matrix and swaps endian*/
-void load_matrix_buffer(bool endian_swap) {
+CAM_HANDLER_API void load_matrix_buffer(bool endian_swap) {
     int idx = 0;
     for(int rows = 0; rows < frame_matrix.num_rows; rows++){
         for(int cols = 0; cols < frame_matrix.num_cols; cols++){
@@ -261,7 +261,7 @@ void load_matrix_buffer(bool endian_swap) {
 
 
 //void get_frame_matrix(uint16_t *mat)
-void get_frame_matrix(uint16_t *mat, size_t n, size_t p)
+CAM_HANDLER_API void get_frame_matrix(uint16_t *mat, size_t n, size_t p)
 {
     //if (n != frame_matrix.num_rows){return;}
     //if (n != frame_matrix.num_cols){return;}
@@ -277,7 +277,7 @@ void get_frame_matrix(uint16_t *mat, size_t n, size_t p)
 }
 
 
-void get_paimage(int *arr)
+CAM_HANDLER_API void get_paimage(int *arr)
 {
     memcpy(arr, paImage, IRIMAGE_NBPIXELS*2);
 }
@@ -291,7 +291,7 @@ void get_paimage(int *arr)
 
 
 
-int shutter_2pts_calibration(HANDLE h, int iStage)
+CAM_HANDLER_API int shutter_2pts_calibration(HANDLE h, int iStage)
 {
     /*Check if it's connected.*/
     eDALProxy1280_12USBErr res;
@@ -319,7 +319,7 @@ int shutter_2pts_calibration(HANDLE h, int iStage)
 }
 
 
-int shutter_calibration(HANDLE h)
+CAM_HANDLER_API int shutter_calibration(HANDLE h)
 {
     eDALProxy1280_12USBErr res;
     
@@ -341,7 +341,7 @@ int shutter_calibration(HANDLE h)
 }
 
 
-int sl_calibration_t0(HANDLE h, int iStage)
+CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage)
 {
     eDALProxy1280_12USBErr res;
     
@@ -364,7 +364,7 @@ int sl_calibration_t0(HANDLE h, int iStage)
 }
 
 
-int sl_calibration_t1(HANDLE h)
+CAM_HANDLER_API int sl_calibration_t1(HANDLE h)
 {
     eDALProxy1280_12USBErr res;
     
@@ -387,7 +387,7 @@ int sl_calibration_t1(HANDLE h)
 }
 
 
-int save_calibration(HANDLE h)
+CAM_HANDLER_API int save_calibration(HANDLE h)
 {
     eDALProxy1280_12USBErr res;
     
