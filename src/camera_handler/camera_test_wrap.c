@@ -12,6 +12,18 @@
 
 #include "camera_test_wrap.h"
 
+/*All the code here is copied from the unit tests*/
+/*It's just here for being able to link it in as a fake shared lib.*/
+/*This allows testing of the python code that requires a shared lib.*/
+
+
+/*
+ * ###################################
+ * MOCKS
+ * ##################################
+ */
+
+/*Mocked globals*/
 void *ptr = (void*)0x12345678;  // Example address
 int camera_index = 0;
 static const char name[] = "IrLugX1M3  sn:FR382312-01-001";
@@ -140,8 +152,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_DisconnectFromModule(HANDLE paHand
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_IsConnectToModule(HANDLE paHandle)
 {
+    //function_called();
     if(paHandle == ptr && is_connected){
-        printf("handle: %p\n", paHandle);
+        //printf("handle: %p\n", paHandle);
+        //printf("saved_handle: %p\n", ptr);
+        //printf("is_connected: %d\n", is_connected);
         return eProxy1280_12USBSuccess;
     }
     return eProxy1280_12USBHandleError;
@@ -184,6 +199,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetFloatFeature(HANDLE paHandle, i
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_AbortCalibration(HANDLE paHandle)
 {
+    //function_called();
 	return is_valid_handle(paHandle);
 }
 
@@ -192,20 +208,31 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_AbortCalibration(HANDLE paHandle)
 /*Shutter 2Pts calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
 {
-    function_called();
-	return is_valid_handle(paHandle);
+    //function_called();
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepShutter2PtsCalibration(HANDLE paHandle, unsigned int iStage)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutter2PtsCalibration(HANDLE paHandle,unsigned int iStage)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
 }
 
 
@@ -214,19 +241,27 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutter2PtsCalibration(HANDL
 /*Shutter calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitShutterCalibration(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    //check_expected_ptr(paHandle);
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepShutterCalibration(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutterCalibration(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
@@ -234,19 +269,29 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutterCalibration(HANDLE pa
 /*SL calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT0(HANDLE paHandle, unsigned int iStage)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT0(HANDLE paHandle, unsigned int iStage)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHandle, unsigned int iStage)
 {
-	return is_valid_handle(paHandle);
+
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+    return eProxy1280_12USBSequencingError;
 }
 
 
@@ -254,25 +299,65 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHan
 /*SL T1 Calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT1(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT1(HANDLE paHandle)
 {
-	return is_valid_handle(paHandle);
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
 
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT1(HANDLE paHandle)
 {
-	return eProxy1280_12USBSuccess;
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSequencingError;
 }
 
-int __wrap_test_mock(int a){
-    function_called();
-    return 0;
+/*The functions needed to do the simple calibration/save*/
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableGain(
+        HANDLE paHandle,
+        unsigned char paiIndex,
+        const void *paData)
+{
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
 }
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentBadPixels(HANDLE paHandle)
+{
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableOffset(HANDLE paHandle,
+        unsigned char paiIndex,
+        const void *paData)
+{
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    return eProxy1280_12USBSuccess;
+}
+
+
+
+
+/*
+ * ###################################
+ * END OF MOCKS
+ * ##################################
+ */
 
 
 
