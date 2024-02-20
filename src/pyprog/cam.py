@@ -19,7 +19,7 @@ MIRROR_FRAME = True
 
 # Handle the OS specific shared library.
 if(platform.system() == "Linux"):
-    print("UINUX PLATFORM FOUND!")
+    print("UNIX PLATFORM FOUND!")
     SHARED_LIB = "./shared/libcamera_handler.so"
 else:
     print("WIN32 PLATFORM FOUND!")
