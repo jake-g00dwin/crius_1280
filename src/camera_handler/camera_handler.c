@@ -281,9 +281,6 @@ CAM_HANDLER_API void load_matrix_buffer(bool endian_swap) {
 //void get_frame_matrix(uint16_t *mat)
 CAM_HANDLER_API void get_frame_matrix(uint16_t *mat, size_t n, size_t p)
 {
-    //if (n != frame_matrix.num_rows){return;}
-    //if (n != frame_matrix.num_cols){return;}
-
     int idx = 0;
     /*Iterate through the 2D array and set it from the passed array.*/
     for(int rows = 0; rows < frame_matrix.num_rows; rows++){
