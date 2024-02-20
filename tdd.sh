@@ -42,6 +42,15 @@ build_main () {
     make main
 }
 
+build_pytest () {
+    # Builds the project so that pytest can run.
+    cp ./src/camera_handler/testdata.bin /tmp/
+    
+    clear_cmake_cache
+    cmake -DUNIT_TESTING=ON  -DCMAKE_VERBOSE_MAKEFILE=ON -DPYTEST=ON ../
+
+    make camera_test_wrap && make camera_handler 
+}
 
 
 run_tests ()  {
@@ -60,6 +69,6 @@ run_tests ()  {
 
 
 
-run_tests
+#run_tests
 #build_calibration_example 
-
+build_pytest
