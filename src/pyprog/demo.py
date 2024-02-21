@@ -66,7 +66,12 @@ def calibration_process():
     if choice == 2:
         return
 
-    h = cam.init(fps=30.0, SL=True, BP=1, AGC=0, nuc=1)
+    h = cam.init(fps=cam.DEF_FPS,
+                 SL=cam.DEF_SL,
+                 BP=cam.DEF_BP,
+                 AGC=cam.DEF_AGC,
+                 nuc=cam.DEF_NUC)
+
     cam.calibrate_camera(h)
     cam.close_camera(h)
 

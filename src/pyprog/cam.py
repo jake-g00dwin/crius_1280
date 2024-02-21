@@ -11,6 +11,9 @@ from enum import Enum
 import cv2 as cv
 import numpy as np
 import platform
+import os
+import os.path
+
 
 WIDTH = 1280
 HEIGHT = 1024
@@ -26,7 +29,11 @@ if platform.system() == "Linux":
     SHARED_LIB = "./shared/libcamera_handler.so"
 else:
     print("WIN32 PLATFORM FOUND!")
-    SHARED_LIB = "../../build/src/camera_handler/Debug/camera_handler.dll"
+    SHARED_DIR = "./shared/"
+    dll_path = os.path.abspath(SHARED_DIR)
+    os.add_dll_directory(dll_path)
+    DALPROXY_LIB = SHARED_DIR + "DALProxy1280_12USB_x64.dll"
+    SHARED_LIB = SHARED_DIR + "camera_handler.dll"
 
 
 # Used as an enum to pass into functions
