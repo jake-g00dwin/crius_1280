@@ -16,6 +16,9 @@ WIDTH = 1280
 HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
+ALPHA = 1
+BETA = 1
+
 
 window = 'data'
 contrast = 1
@@ -250,12 +253,25 @@ def adjust_image(mat):
     print("max: " + str(np.max(img)))
     print("mean: " + str(mean))
     mat -= mean
-    mat *= 400
+    mat += 400
     return mat
+
+
+def adjust_normilize(mat):
+    global ALPHA
+    global BETA
+    f_img = np.float32(mat / 255)
+    # mat = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
+    # alpha: 0 --> 2
+    # beta: -128 --> 128
+    gray = cv.convertScaleAbs(f_img, alpha=ALPHA, beta=BETA)
+    return gray
 
 
 def demo_image(set_8bit):
     global img
+    global ALPHA
+    global BETA
     clear_matrix()
     clear_paimage()
     h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
@@ -268,9 +284,14 @@ def demo_image(set_8bit):
 
     close_camera(h)
 
-    img = adjust_image(img)
-    im1 = img
-    cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
-    cv.imshow(window, im1)
+    # img = adjust_image(img)
+    img = adjust_normilize(img)
+    # im1 = img
+    # cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
+    cv.imshow(window, img)
+    # cv.imshow("alpha: " + str(ALPHA), img)
+    # cv.imshow("beta: " + str(BETA), img)
     cv.waitKey(0)
     cv.destroyAllWindows()
+    # ALPHA += 1
+    # BETA += 1
