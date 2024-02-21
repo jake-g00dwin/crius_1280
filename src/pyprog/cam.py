@@ -44,7 +44,7 @@ DEF_AGC = eAGC.agc_linear.value
 DEF_SL = 1
 DEF_BP = 1
 DEF_NUC = 1
-DEF_COLORMAP = "jet"
+DEF_COLORMAP = "inferno"
 
 
 def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
