@@ -376,9 +376,9 @@ int main(int argc, char* argv[])
         std::cout << *paMeta_ushort << " // Epoch : " << *paMeta_uint64_t << std::endl;
         imAvg = 0;
 
-        //char file_name[128] = {'\0'};
-        //sprintf(file_name, "/tmp/imgRaw%d.bin", iNb);
-        char file_name[128] = "/tmp/imgRaw.bin";
+        char file_name[128] = {'\0'};
+        sprintf(file_name, "/tmp/imgRaw%d.bin", iNb);
+        //char file_name[128] = "/tmp/imgRaw.bin";
 
         std::ifstream file(file_name);
         if(!file.good()){
