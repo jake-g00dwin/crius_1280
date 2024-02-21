@@ -260,7 +260,7 @@ def adjust_image(mat):
 def adjust_normilize(mat):
     global ALPHA
     global BETA
-    f_img = np.float32(mat / 255)
+    f_img = np.float32(mat.astype(np.float32) / 255)
     cv.imshow("img/255(float32)", f_img)
     # mat = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
     # alpha: 0 --> 2
