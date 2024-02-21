@@ -243,22 +243,14 @@ def demo_video(set_8bit):
     close_camera(h)
 
 
-# Callbacks for the adjustments.
-def change_contrast(val):
-    global contrast
-    contrast = val/10
-    perform_operation()
-
-
-def change_brightness(val):
-    global brightness
-    brightness = val/100
-    perform_operation()
-
-
-def perform_operation():
-    im2 = im1 * contrast + brightness
-    cv.imshow(window, im2)
+def adjust_image(mat):
+    # compress the 0-65,536
+    # adjusted = img.astype(np.float32) / pow(2, 16)
+    # Get the mean of dataset.
+    mean = np.mean(mat)
+    mat -= mean
+    mat *= 400
+    return mat
 
 
 def demo_image(set_8bit):
@@ -275,29 +267,11 @@ def demo_image(set_8bit):
 
     close_camera(h)
 
+    img = adjust_image(img)
+    print("min: " + str(np.min(img)))
+    print("max: " + str(np.max(img)))
     im1 = img
     cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
     cv.imshow(window, im1)
     cv.waitKey(0)
     cv.destroyAllWindows()
-
-
-def load_image():
-    global img
-    clear_matrix()
-    clear_paimage()
-    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
-
-    load_frame_buffer(h)
-    load_matrix_buffer(False)
-    img = get_frame_matrix()
-    close_camera(h)
-    img = np.float32(img/4096)
-
-
-def test_image():
-    cv.namedWindow(window)
-    cv.imshow(window, img)
-    cv.createTrackbar("Contrast", window, contrast, max_contrast, change_contrast)
-    cv.createTrackbar("Brightness", window, brightness, max_brightness, change_brightness)
-    cv.waitKey(0)
