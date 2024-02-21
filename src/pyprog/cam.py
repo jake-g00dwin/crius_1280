@@ -264,20 +264,19 @@ def adjust_img(mat, color_map=DEF_COLORMAP):
     adj2 = BrightnessContrast(img8.copy())
     adj2 = cv.cvtColor(adj2, cv.COLOR_GRAY2BGR)
 
-    match color_map:
-        case "none":
-            pass
-        case "inferno":
-            adj = cv.applyColorMap(adj, cv.COLORMAP_INFERNO)
-            adj2 = cv.applyColorMap(adj2, cv.COLORMAP_INFERNO)
-        case "jet":
-            adj = cv.applyColorMap(adj, cv.COLORMAP_JET)
-            adj2 = cv.applyColorMap(adj2, cv.COLORMAP_JET)
-        case "viridis":
-            adj = cv.applyColorMap(adj, cv.COLORMAP_VIRIDIS)
-            adj2 = cv.applyColorMap(adj2, cv.COLORMAP_VIRIDIS)
-        case _:
-            pass
+    if color_map == "none":
+        pass
+    elif color_map == "inferno":
+        adj = cv.applyColorMap(adj, cv.COLORMAP_INFERNO)
+        adj2 = cv.applyColorMap(adj2, cv.COLORMAP_INFERNO)
+    elif color_map == "jet":
+        adj = cv.applyColorMap(adj, cv.COLORMAP_JET)
+        adj2 = cv.applyColorMap(adj2, cv.COLORMAP_JET)
+    elif color_map == "viridis":
+        adj = cv.applyColorMap(adj, cv.COLORMAP_VIRIDIS)
+        adj2 = cv.applyColorMap(adj2, cv.COLORMAP_VIRIDIS)
+    else:
+        pass
 
     return (adj, adj2)
 
