@@ -254,7 +254,7 @@ def BrightnessContrast(img, brightness=0):
     return effect
 
 
-def adjust_img(mat, color_map=DEF_COLORMAP):
+def adjust_img(mat, color_map):
     img8 = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
     img8 = np.uint8(img8)
 
@@ -309,7 +309,7 @@ def demo_image():
     )
 
     while True:
-        (adj, adj2) = adjust_img(img)
+        (adj, adj2) = adjust_img(img, DEF_COLORMAP)
         cv.imshow("CLAHE filter", adj)
         cv.imshow("Brightness/Contrast", adj2)
 
@@ -343,7 +343,7 @@ def demo_video():
         load_matrix_buffer(False)
         img = get_frame_matrix()
 
-        (adj, adj2) = adjust_img(img)
+        (adj, adj2) = adjust_img(img, DEF_COLORMAP)
 
         cv.imshow("CLAHE filter", adj)
         cv.imshow("Brightness/Contrast", adj2)

@@ -13,19 +13,28 @@ def display_menu():
     print("1. Show Video")
     print("2. Show Image")
     print("3. Fast Calibration")
+    print("4. Change Color Map")
     print("0. Quit")
 
 
 def get_choice():
     while True:
         try:
-            choice = int(input("Enter your choice (0-3): "))
-            if choice in [0, 1, 2, 3]:
+            choice = int(input("Enter your choice (0-4): "))
+            if choice in [0, 1, 2, 3, 4]:
                 return choice
             else:
-                print("Invalid choice. Please enter a value from 0 to 3")
+                print("Invalid choice. Please enter a value from 0 to 4")
         except ValueError:
             print("Invalid input. Please enter a number.")
+
+
+def display_colormap_menu():
+    info = "Default Color Map: " + str(cam.DEF_COLORMAP)
+    info += "\n Available: none, jet, inferno, viridis\n"
+    print(info)
+    cam.DEF_COLORMAP = input("Enter Color Map name:")
+    print("cam.DEF_COLORMAP " + str(cam.DEF_COLORMAP))
 
 
 def display_cal_menu():
@@ -83,6 +92,8 @@ def main():
             cam.demo_image()
         elif choice == 3:
             calibration_process()
+        elif choice == 4:
+            display_colormap_menu()
 
 
 def test():
