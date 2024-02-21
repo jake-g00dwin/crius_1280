@@ -245,7 +245,7 @@ def demo_video(set_8bit):
 
 def adjust_image(mat):
     # Get the mean of dataset.
-    mean = np.mean(mat)
+    mean = np.mean(mat).astype(np.uint16)
     print("min: " + str(np.min(img)))
     print("max: " + str(np.max(img)))
     print("mean: " + str(mean))
