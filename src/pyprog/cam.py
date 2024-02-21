@@ -16,8 +16,8 @@ WIDTH = 1280
 HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
-ALPHA = 0.125
-BETA = -120
+ALPHA = 1
+BETA = -32
 
 
 window = 'data'
@@ -261,6 +261,7 @@ def adjust_normilize(mat):
     global ALPHA
     global BETA
     f_img = np.float32(mat.astype(np.float32) / 255)
+    np.savetxt("float_data.csv", f_img, delimiter=",")
     cv.imshow("img/255(float32)", f_img)
     # mat = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
     # alpha: 0 --> 2
