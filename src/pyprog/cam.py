@@ -17,7 +17,7 @@ HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
 ALPHA = 0.125
-BETA = 1
+BETA = 120
 
 
 window = 'data'
@@ -261,6 +261,7 @@ def adjust_normilize(mat):
     global ALPHA
     global BETA
     f_img = np.float32(mat / 255)
+    cv.imshow(f_img, "img/255(float32)")
     # mat = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
     # alpha: 0 --> 2
     # beta: -128 --> 128
