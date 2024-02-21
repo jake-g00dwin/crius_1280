@@ -4,7 +4,8 @@
 
 ### Downloading the Pre-compiled Binaries
 
-
+To download the source code in an compressed format or pre-compiled binary
+files for windows please navigate to the releases page [here](https://github.com/jake-g00dwin/crius_1280/releases).
 
 ### Building for usage
 
@@ -16,8 +17,6 @@ This assumes that the required SDK shared libraries are either installed
 system wide or the repo's included ones are used. By default the ones in the
 `camera_sdk` directory are used.
 
-The build process handles the OS/toolchains by itself automatiaclly for all
-supported platforms.
 
 ```sh
 git clone https://github.com/jake-g00dwin/crius_1280.git
@@ -26,8 +25,6 @@ cd build
 cmake ../
 make camera_handler
 ```
-
-
 
 ### Running the Python program
 
@@ -120,3 +117,5 @@ being built. The code accesses the shared library via a pointer in the
 Before attempting to run pytest you should first select the option for pytest
 while running the `tdd.sh` file in the projects root directory.
 
+when trying to test the python code using pytest, you should ensure you first
+have built the python shared libs using the `tdd.sh` script's menu.
