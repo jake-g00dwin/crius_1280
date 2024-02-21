@@ -63,12 +63,9 @@ def calibration_process():
 
 
 def main():
-    # Change this to false to attempt displaying 16bit greyscale
-    # Most monitors can't actually display 65,536 shades of gray however.
-    set_8bit = False
 
     num = cam.num_attached()
-    if(num < 1):
+    if num < 1:
         print("ERROR: Please check the camera's connection")
         exit(-1)
 
@@ -80,10 +77,10 @@ def main():
             break
         elif choice == 1:
             # Run the camera demo
-            cam.demo_video(set_8bit)
+            cam.demo_video()
         elif choice == 2:
             # Run the Image demo
-            cam.demo_image(set_8bit)
+            cam.demo_image()
         elif choice == 3:
             calibration_process()
 

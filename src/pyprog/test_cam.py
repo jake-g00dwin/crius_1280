@@ -3,6 +3,7 @@ import cam
 from ctypes import CDLL  # , POINTER
 from ctypes import c_size_t, c_void_p
 import numpy as np
+
 # import cv2 as cv
 # import matplotlib.pyplot as plt
 
@@ -27,13 +28,13 @@ class TestCal:
         handle = c_void_p(None)
 
         res = cam.shutter_cal(handle)
-        assert (res == 2)
+        assert res == 2
 
     def test_shutter_cal_valid(self):
         handle = cam.init()
 
         res = cam.shutter_cal(handle)
-        assert (res == 0)
+        assert res == 0
 
         cam.close_camera(handle)
 
@@ -41,21 +42,21 @@ class TestCal:
         handle = self.cam_address
 
         res = cam.two_point_shutter_cal(handle, 0)
-        assert(res == 2)
+        assert res == 2
 
         handle = cam.init()
         res = cam.two_point_shutter_cal(handle, 0)
-        assert(res == 1)
+        assert res == 1
 
     def test_two_point_shutter_cal(self):
         cam.close_camera(self.cam_address)
         handle = cam.init()
 
         res = cam.two_point_shutter_cal(handle, 1)
-        assert(res == 0)
+        assert res == 0
 
         res = cam.two_point_shutter_cal(handle, 2)
-        assert(res == 0)
+        assert res == 0
 
         cam.close_camera(handle)
 
@@ -64,7 +65,7 @@ class TestCal:
         handle = cam.init()
 
         res = cam.fast_cal_save(handle)
-        assert(res == 0)
+        assert res == 0
 
         cam.close_camera(handle)
 
@@ -75,39 +76,39 @@ class TestCam:
 
     def test_init(self):
         handle = cam.init()
-        assert (str(hex(handle)) == "0x12345678")
-        assert (handle == self.cam_address.value)
+        assert str(hex(handle)) == "0x12345678"
+        assert handle == self.cam_address.value
         cam.close_camera(handle)
 
     def test_num_attached(self):
         n = cam.num_attached()
-        assert (n == 1)
+        assert n == 1
 
     def test_close_camera(self):
         h = c_void_p(None)
         n = cam.close_camera(h)
-        assert (n == 2)
+        assert n == 2
 
         h = self.cam_address
         n = cam.close_camera(h)
-        assert (n == 2)
+        assert n == 2
 
         h = cam.init()
         n = cam.close_camera(h)
-        assert (n == 0)
+        assert n == 0
 
     def test_load_frame_buffer(self):
         h = c_void_p(None)
         r = cam.load_frame_buffer(h)
-        assert (r == 2)
+        assert r == 2
 
         h = self.cam_address
         r = cam.load_frame_buffer(h)
-        assert (r == 2)
+        assert r == 2
 
         h = cam.init()
         r = cam.load_frame_buffer(h)
-        assert (r == 0)
+        assert r == 0
         cam.close_camera(h)
 
     def test_get_paimage(self):
@@ -120,7 +121,7 @@ class TestCam:
         for i in range(0, self.num_pixels):
             avg += X[i]
         avg = avg / self.num_pixels
-        assert (avg == 0.0)
+        assert avg == 0.0
 
         # Load data then check.
         h = cam.init()
@@ -131,7 +132,7 @@ class TestCam:
         for i in range(0, self.num_pixels):
             avg += X[i]
         avg = avg / self.num_pixels
-        assert (avg != 0.0)
+        assert avg != 0.0
 
         cam.close_camera(h)
 
@@ -140,7 +141,7 @@ class TestCam:
         cam.load_frame_buffer(h)
         cam.print_paimage()
         cam.close_camera(h)
-        assert (True)
+        assert True
 
     def test_load_matrix_bufffer(self):
         h = cam.init()
@@ -149,7 +150,7 @@ class TestCam:
 
         cam.load_matrix_buffer(True)
 
-        assert (True)
+        assert True
         cam.close_camera(h)
 
     def test_get_frame_matrix(self):

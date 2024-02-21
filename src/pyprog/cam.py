@@ -16,22 +16,12 @@ WIDTH = 1280
 HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
-ALPHA = 1
-BETA = -32
 
-
-window = 'data'
-contrast = 1
-max_contrast = 100
-brightness = 0
-max_brightness = 100
-
-
+clahe = cv.createCLAHE(5, (5, 5))
 img = np.ones(NUMPIXELS, dtype=np.uint16).reshape(HEIGHT, WIDTH, order="C")
-im1 = np.ones(NUMPIXELS, dtype=np.float32).reshape(HEIGHT, WIDTH, order="C")
 
 # Handle the OS specific shared library.
-if(platform.system() == "Linux"):
+if platform.system() == "Linux":
     print("UNIX PLATFORM FOUND!")
     SHARED_LIB = "./shared/libcamera_handler.so"
 else:
@@ -54,6 +44,7 @@ DEF_AGC = eAGC.agc_linear.value
 DEF_SL = 1
 DEF_BP = 1
 DEF_NUC = 1
+DEF_COLORMAP = "jet"
 
 
 def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
@@ -135,10 +126,7 @@ def load_matrix_buffer(swap_endian):
 def get_frame_matrix():
     camlib = CDLL(SHARED_LIB)
     # C-type corresponding to numpy array
-    ND_POINTER_2 = np.ctypeslib.ndpointer(
-            dtype=np.uint16,
-            ndim=2,
-            flags="C")
+    ND_POINTER_2 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
 
     # void get_frame_matrix(uint16_t *mat, size_t n, size_t p);
     camlib.get_frame_matrix.argtypes = [ND_POINTER_2, ctypes.c_size_t]
@@ -222,103 +210,81 @@ def calibrate_camera(h):
     return res
 
 
-def demo_video(set_8bit):
+def controller(img, brightness=255, contrast=127):
+    brightness = int((brightness - 0) * (255 - (-255)) / (510 - 0) + (-255))
+    contrast = int((contrast - 0) * (127 - (-127)) / (254 - 0) + (-127))
+
+    if brightness != 0:
+        if brightness > 0:
+            shadow = brightness
+            max = 255
+        else:
+            shadow = 0
+            max = 255 + brightness
+
+        al_pha = (max - shadow) / 255
+        ga_mma = shadow
+
+        # The function addWeighted calculates
+        # the weighted sum of two arrays
+        cal = cv.addWeighted(img, al_pha, img, 0, ga_mma)
+
+    else:
+        cal = img
+    if contrast != 0:
+        Alpha = float(131 * (contrast + 127)) / (127 * (131 - contrast))
+        Gamma = 127 * (1 - Alpha)
+
+        # The function addWeighted calculates
+        # the weighted sum of two arrays
+        cal = cv.addWeighted(cal, Alpha, cal, 0, Gamma)
+
+    return cal
+
+
+def BrightnessContrast(img, brightness=0):
+    # getTrackbarPos returns the current
+    # position of the specified trackbar.
+    brightness = cv.getTrackbarPos("Brightness", "Brightness/Contrast")
+
+    contrast = cv.getTrackbarPos("Contrast", "Brightness/Contrast")
+
+    effect = controller(img, brightness, contrast)
+
+    return effect
+
+
+def adjust_img(mat, color_map=DEF_COLORMAP):
+    img8 = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
+    img8 = np.uint8(img8)
+
+    adj = clahe.apply(img8)
+    adj = cv.cvtColor(adj, cv.COLOR_GRAY2BGR)
+
+    adj2 = BrightnessContrast(img8.copy())
+    adj2 = cv.cvtColor(adj2, cv.COLOR_GRAY2BGR)
+
+    match color_map:
+        case "none":
+            pass
+        case "inferno":
+            adj = cv.applyColorMap(adj, cv.COLORMAP_INFERNO)
+            adj2 = cv.applyColorMap(adj2, cv.COLORMAP_INFERNO)
+        case "jet":
+            adj = cv.applyColorMap(adj, cv.COLORMAP_JET)
+            adj2 = cv.applyColorMap(adj2, cv.COLORMAP_JET)
+        case "viridis":
+            adj = cv.applyColorMap(adj, cv.COLORMAP_VIRIDIS)
+            adj2 = cv.applyColorMap(adj2, cv.COLORMAP_VIRIDIS)
+        case _:
+            pass
+
+    return (adj, adj2)
+
+
+def demo_image():
     global img
-    clear_matrix()
-    clear_paimage()
-    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
 
-    while(True):
-        load_frame_buffer(h)
-        load_matrix_buffer(False)
-        img = get_frame_matrix()
-        im1 = img
-        cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
-
-        cv.imshow(window, im1)
-
-        key = cv.waitKey(16)
-
-        if key == ord('q'):
-            break
-
-    cv.destroyAllWindows()
-    close_camera(h)
-
-
-def adjust_image(mat):
-    # Get the mean of dataset.
-    mean, std = cv.meanStdDev(mat)
-    print("min: " + str(np.min(mat)))
-    print("max: " + str(np.max(mat)))
-    print("mean: " + str(mean))
-    print("std: " + str(std))
-
-    clahe = cv.createCLAHE(8, [2, 8])
-    mat = clahe.apply(mat) + 30
-
-    gray8_image = np.zeros((1280, 1024), dtype=np.uint8)
-    gray8_image = cv.normalize(mat, gray8_image, 0, 255, cv.NORM_MINMAX)
-    gray8_image = np.uint8(gray8_image)
-    # inferno_palette = cv.applyColorMap(gray8_image, cv.COLORMAP_INFERNO)
-    # jet_palette = cv.applyColorMap(gray8_image, cv.COLORMAP_JET)
-    # cv.imshow("jet", jet_palette)
-    # cv.imshow("inferno", inferno_palette)
-
-    # contrast = 1.25
-    # brightness = 2
-
-    # final_img = cv.addWeighted(mat, contrast, np.zeros(mat.shape, mat.dtype), 0, brightness)
-
-    # Equalize the histogram
-    # final_img = cv.equalizeHist(wimg)
-
-    #  _, ordinary_img = cv.threshold(mat, 155, 255, cv.THRESH_BINARY)
-
-    # cv.imshow('threshold', ordinary_img)
-    # offset = 0.1
-    # clipped = np.clip(final_img, mean - offset * std, mean + offset * std).astype(np.uint8)
-
-    # centers the image data.
-    # adjustment = 65536/2 - mean
-    # print("Adjustment: " + str(adjustment))
-    # mat = mat + adjustment
-
-    # mat = cv.normalize(clipped, clipped, 0, 255, norm_type=cv.NORM_MINMAX)
-
-    mean = np.mean(mat).astype(np.uint16)
-    std = np.std(mat)
-    print("min: " + str(np.min(mat)))
-    print("max: " + str(np.max(mat)))
-    print("mean: " + str(mean))
-    print("std: " + str(std))
-    return mat
-
-
-def adjust_normilize(mat):
-    global ALPHA
-    global BETA
-    # f_img = np.float32(mat.astype(np.float32) / 255)
-    # img8 = cv.cvtColor(img, cv.COLOR_GRAY2RGB)
-    # cv.imshow('img', mat)
-    # img8 = mat.astype(np.uint8)
-    # img8 = mat
-    # cv.imshow('img8', img8)
-    # imgeq = cv.equalizeHist(img8)
-    # np.savetxt("float_data.csv", imgeq, delimiter=",")
-    # cv.imshow("img equalized hst", img8)
-    # mat = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
-    # alpha: 0 --> 2
-    # beta: -128 --> 128
-    # gray = cv.convertScaleAbs(img8, alpha=1, beta=-100)
-    # return img8
-    # return gray
-
-
-def demo_image(set_8bit):
-    global img
-    global ALPHA
-    global BETA
     clear_matrix()
     clear_paimage()
     h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
@@ -331,14 +297,61 @@ def demo_image(set_8bit):
 
     close_camera(h)
 
-    img = adjust_image(img)
-    # img = adjust_normilize(img)
-    # im1 = img
-    # cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
-    cv.imshow(window, img)
-    # cv.imshow("alpha: " + str(ALPHA), img)
-    # cv.imshow("beta: " + str(BETA), img)
-    cv.waitKey(0)
+    cv.namedWindow("CLAHE filter", cv.WINDOW_GUI_EXPANDED)
+    cv.namedWindow("Brightness/Contrast", cv.WINDOW_GUI_EXPANDED)
+
+    cv.createTrackbar(
+        "Brightness", "Brightness/Contrast", 255, 2 * 255, BrightnessContrast
+    )
+
+    # Contrast range -127 to 127
+    cv.createTrackbar(
+        "Contrast", "Brightness/Contrast", 127, 2 * 127, BrightnessContrast
+    )
+
+    while True:
+        (adj, adj2) = adjust_img(img)
+        cv.imshow("CLAHE filter", adj)
+        cv.imshow("Brightness/Contrast", adj2)
+
+        key = cv.waitKey(16)
+        if key == ord("q"):
+            break
+
     cv.destroyAllWindows()
-    # ALPHA += 1
-    # BETA += 1
+
+
+def demo_video():
+    global img
+    clear_matrix()
+    clear_paimage()
+    h = init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC)
+
+    cv.namedWindow("CLAHE filter", cv.WINDOW_GUI_EXPANDED)
+    cv.namedWindow("Brightness/Contrast", cv.WINDOW_GUI_EXPANDED)
+
+    cv.createTrackbar(
+        "Brightness", "Brightness/Contrast", 255, 2 * 255, BrightnessContrast
+    )
+
+    # Contrast range -127 to 127
+    cv.createTrackbar(
+        "Contrast", "Brightness/Contrast", 127, 2 * 127, BrightnessContrast
+    )
+
+    while True:
+        load_frame_buffer(h)
+        load_matrix_buffer(False)
+        img = get_frame_matrix()
+
+        (adj, adj2) = adjust_img(img)
+
+        cv.imshow("CLAHE filter", adj)
+        cv.imshow("Brightness/Contrast", adj2)
+
+        key = cv.waitKey(16)
+        if key == ord("q"):
+            break
+
+    cv.destroyAllWindows()
+    close_camera(h)
