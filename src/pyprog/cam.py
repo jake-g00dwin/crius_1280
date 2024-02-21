@@ -244,10 +244,11 @@ def demo_video(set_8bit):
 
 
 def adjust_image(mat):
-    # compress the 0-65,536
-    # adjusted = img.astype(np.float32) / pow(2, 16)
     # Get the mean of dataset.
     mean = np.mean(mat)
+    print("min: " + str(np.min(img)))
+    print("max: " + str(np.max(img)))
+    print("mean: " + str(mean))
     mat -= mean
     mat *= 400
     return mat
@@ -268,8 +269,6 @@ def demo_image(set_8bit):
     close_camera(h)
 
     img = adjust_image(img)
-    print("min: " + str(np.min(img)))
-    print("max: " + str(np.max(img)))
     im1 = img
     cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
     cv.imshow(window, im1)
