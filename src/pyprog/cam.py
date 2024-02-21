@@ -248,26 +248,71 @@ def demo_video(set_8bit):
 
 def adjust_image(mat):
     # Get the mean of dataset.
-    mean = np.mean(mat).astype(np.uint16)
-    print("min: " + str(np.min(img)))
-    print("max: " + str(np.max(img)))
+    mean, std = cv.meanStdDev(mat)
+    print("min: " + str(np.min(mat)))
+    print("max: " + str(np.max(mat)))
     print("mean: " + str(mean))
-    mat -= mean
-    mat += 400
+    print("std: " + str(std))
+
+    clahe = cv.createCLAHE(8, [2, 8])
+    mat = clahe.apply(mat) + 30
+
+    gray8_image = np.zeros((1280, 1024), dtype=np.uint8)
+    gray8_image = cv.normalize(mat, gray8_image, 0, 255, cv.NORM_MINMAX)
+    gray8_image = np.uint8(gray8_image)
+    # inferno_palette = cv.applyColorMap(gray8_image, cv.COLORMAP_INFERNO)
+    # jet_palette = cv.applyColorMap(gray8_image, cv.COLORMAP_JET)
+    # cv.imshow("jet", jet_palette)
+    # cv.imshow("inferno", inferno_palette)
+
+    # contrast = 1.25
+    # brightness = 2
+
+    # final_img = cv.addWeighted(mat, contrast, np.zeros(mat.shape, mat.dtype), 0, brightness)
+
+    # Equalize the histogram
+    # final_img = cv.equalizeHist(wimg)
+
+    #  _, ordinary_img = cv.threshold(mat, 155, 255, cv.THRESH_BINARY)
+
+    # cv.imshow('threshold', ordinary_img)
+    # offset = 0.1
+    # clipped = np.clip(final_img, mean - offset * std, mean + offset * std).astype(np.uint8)
+
+    # centers the image data.
+    # adjustment = 65536/2 - mean
+    # print("Adjustment: " + str(adjustment))
+    # mat = mat + adjustment
+
+    # mat = cv.normalize(clipped, clipped, 0, 255, norm_type=cv.NORM_MINMAX)
+
+    mean = np.mean(mat).astype(np.uint16)
+    std = np.std(mat)
+    print("min: " + str(np.min(mat)))
+    print("max: " + str(np.max(mat)))
+    print("mean: " + str(mean))
+    print("std: " + str(std))
     return mat
 
 
 def adjust_normilize(mat):
     global ALPHA
     global BETA
-    f_img = np.float32(mat.astype(np.float32) / 255)
-    np.savetxt("float_data.csv", f_img, delimiter=",")
-    cv.imshow("img/255(float32)", f_img)
+    # f_img = np.float32(mat.astype(np.float32) / 255)
+    # img8 = cv.cvtColor(img, cv.COLOR_GRAY2RGB)
+    # cv.imshow('img', mat)
+    # img8 = mat.astype(np.uint8)
+    # img8 = mat
+    # cv.imshow('img8', img8)
+    # imgeq = cv.equalizeHist(img8)
+    # np.savetxt("float_data.csv", imgeq, delimiter=",")
+    # cv.imshow("img equalized hst", img8)
     # mat = cv.normalize(mat, None, 0, 255, cv.NORM_MINMAX).astype(np.uint8)
     # alpha: 0 --> 2
     # beta: -128 --> 128
-    gray = cv.convertScaleAbs(f_img, alpha=ALPHA, beta=BETA)
-    return gray
+    # gray = cv.convertScaleAbs(img8, alpha=1, beta=-100)
+    # return img8
+    # return gray
 
 
 def demo_image(set_8bit):
@@ -286,8 +331,8 @@ def demo_image(set_8bit):
 
     close_camera(h)
 
-    # img = adjust_image(img)
-    img = adjust_normilize(img)
+    img = adjust_image(img)
+    # img = adjust_normilize(img)
     # im1 = img
     # cv.cvtColor(img, cv.COLOR_GRAY2RGB, im1)
     cv.imshow(window, img)
