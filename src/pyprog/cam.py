@@ -26,7 +26,7 @@ if platform.system() == "Linux":
     SHARED_LIB = "./shared/libcamera_handler.so"
 else:
     print("WIN32 PLATFORM FOUND!")
-    SHARED_LIB = "./shared/libcamera_handler.dll"
+    SHARED_LIB = "../../build/src/camera_handler/Debug/camera_handler.dll"
 
 
 # Used as an enum to pass into functions
