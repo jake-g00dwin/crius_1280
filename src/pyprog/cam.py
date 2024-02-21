@@ -17,7 +17,7 @@ HEIGHT = 1024
 NUMPIXELS = 1310720
 MIRROR_FRAME = True
 ALPHA = 0.125
-BETA = 120
+BETA = -120
 
 
 window = 'data'
