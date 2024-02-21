@@ -17,12 +17,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Request C 11 standard features
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED True)
-set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic")
+#set(CMAKE_C_FLAGS "-Wall -Werror -Wpedantic")
 
 # SETUP THE CXX flags for .cpp
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_FLAGS "-Wall -Werror -Wpedantic")
+#set(CMAKE_CXX_FLAGS "-Wall -Werror -Wpedantic")
 
 # Add CMocka CMake modules
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmocka)
@@ -64,13 +64,14 @@ add_definitions(-DIRLUGX1M3)
 
 if(MSVC OR MSYS OR MINGW)
     # for detecting Windows compilers
+    message("\n### Adding windows dll ###")
     add_definitions(-DWINDOWS)
     LINK_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/camera_sdk/windows_x86/
     )
 else()
+    message("\n### Adding linux shared libs ###")
     add_definitions(-DLINUX)
-
     LINK_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/camera_sdk/linux_armv8hf/
     )

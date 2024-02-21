@@ -1,12 +1,13 @@
 #include <fcntl.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
 
-#include "DALProxy1280_12USB.h"
+/*Needed to work on VS*/
+#ifdef LINUX
+    #include <unistd.h>
+#endif
+
 #include "camera_handler.h"
 
 uint16_t paImage[IRIMAGE_NBPIXELS*2];

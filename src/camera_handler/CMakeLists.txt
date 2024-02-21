@@ -90,8 +90,9 @@ else()
             NO_DEFAULT_PATH
             NO_SYSTEM_ENVIRONMENT_PATH
         )
-        
-
+        target_link_libraries(camera_handler PUBLIC
+            DALProxy1280_12USB_x64
+        )
     else()
     LINK_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/camera_sdk/linux_armv8hf/

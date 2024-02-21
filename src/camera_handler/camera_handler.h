@@ -24,7 +24,7 @@
 /*Used ad default number of steps in calibration(images taken)*/
 #define NUM_STEPS   60
 
-
+#define CAM_HANDLER_LIB 1
 /*This is all for Windows systems compat*/
 #if (defined (LINUX) || defined (__linux__))
     #ifdef CAM_HANDLER_LIB 
