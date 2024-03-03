@@ -23,6 +23,8 @@ int camera_index = 0;
 static const char name[] = "IrLugX1M3  sn:FR382312-01-001";
 uint16_t fake_image[IRIMAGE_NBPIXELS*2];
 bool is_connected = false;
+bool pa_nuc_enabled = true;
+bool pa_bad_pixels_enabled = true;
 
 
 /*
@@ -165,9 +167,59 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_IsConnectToModule(HANDLE paHandle)
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetNUCProcessing(HANDLE paHandle, unsigned char paBadPixels, unsigned char paNUC)
 {
+    function_called();
+
     if(!is_valid_handle(paHandle)){
         return eProxy1280_12USBHandleError;
     }
+
+    /*Check if the passed parameters are valid*/ 
+    if(paBadPixels > 1 || paBadPixels < 0) {
+        return eProxy1280_12USBParameterError;
+    }
+    if(paNUC > 1 || paNUC < 0) {
+        return eProxy1280_12USBParameterError;
+    }
+  
+
+    /*Overly explicit but readable*/
+    if(paNUC == 1){
+        pa_nuc_enabled = true;
+    }
+    else {
+        pa_nuc_enabled = false;
+    }
+    
+    if(paBadPixels == 1){
+        pa_bad_pixels_enabled = true;
+    }
+    else {
+        pa_bad_pixels_enabled = false;
+    }
+
+    return eProxy1280_12USBSuccess;
+}
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetNUCProcessing(HANDLE paHandle, unsigned char *paBadPixels, unsigned char *paNUC)
+{
+    function_called();
+
+    if(!is_valid_handle(paHandle)){
+        return eProxy1280_12USBHandleError;
+    }
+    
+    /*Check if the passed parameters are valid*/ 
+    if(*paBadPixels > 1 || *paBadPixels < 0) {
+        return eProxy1280_12USBParameterError;
+    }
+    if(*paNUC > 1 || *paNUC < 0) {
+        return eProxy1280_12USBParameterError;
+    }
+
+    //get NUC proccessing "global val"
+    *paNUC = pa_nuc_enabled;
+    *paBadPixels = pa_bad_pixels_enabled;        
+
     return eProxy1280_12USBSuccess;
 }
 
@@ -613,10 +665,16 @@ static void test_sl_t0_calibration(void **state) {
     is_connected = false;
     int iStage = 0;
     int res;
+    pa_nuc_enabled = true;
+    pa_bad_pixels_enabled = true;
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_GetNUC_Processing);
+    expect_function_call(__wrap_Proxy1280_12USB_SetNUC_Processing);
+
     res = sl_calibration_t0(h, iStage);
     assert_true(res != eProxy1280_12USBSuccess);
+    
 }
 
 
