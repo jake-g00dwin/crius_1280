@@ -49,6 +49,7 @@ if(UNIT_TESTING)
 	"Proxy1280_12USB_GetImage"
 	"Proxy1280_12USB_IsConnectToModule"
 	"Proxy1280_12USB_SetNUCProcessing"
+	"Proxy1280_12USB_GetNUCProcessing"
 	"Proxy1280_12USB_SetShutterLessProcessing"
 	"Proxy1280_12USB_SetAGCProcessing"
 	"Proxy1280_12USB_SetFloatFeature"
