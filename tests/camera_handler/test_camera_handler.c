@@ -8,7 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "DALProxy1280_12USB.h"
+//#include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
 
 /*
@@ -672,13 +672,15 @@ static void test_sl_t0_calibration(void **state) {
     pa_nuc_enabled = true;
     pa_bad_pixels_enabled = true;
 
+    h = setup_camera();
+
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     expect_function_call(__wrap_Proxy1280_12USB_GetNUCProcessing);
     expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
+    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
 
     res = sl_calibration_t0(h, iStage);
-    assert_true(res != eProxy1280_12USBSuccess);
-    
+    assert_true(res != eProxy1280_12USBSuccess);    
 }
 
 static void test_sl_t1_cal_null_handle(void **state) {
