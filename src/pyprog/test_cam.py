@@ -23,7 +23,8 @@ class ShutterlessCalibration:
     num_pixels = 1310720
 
     def setup(self):
-        self.handle = cam.init()
+        #self.handle = cam.init()
+        pass
 
     def teardown(self):
         cam.close_camera(self.handle)
