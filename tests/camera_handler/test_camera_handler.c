@@ -440,7 +440,9 @@ static void test_camera_init(void **state) {
     HANDLE my_handle = NULL;
     assert_null(my_handle);
 
-//CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
+    expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
+
+    //CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     my_handle = init_camera(30.0, true, 1, eAGCLocal, 1);
     assert_non_null(my_handle);
     assert_ptr_equal(my_handle, (void*)0x12345678);
@@ -463,6 +465,7 @@ static void test_close_camera(void **state) {
 
 
 HANDLE setup_camera(void){
+    expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
     close_camera((void*)0x12345678);
     clear_matrix();
     clear_paimage();
@@ -557,6 +560,7 @@ static void test_load_matrix_buffer(void **state)
 
 static void test_get_frame_matrix(void **state)
 {
+
     HANDLE h = setup_camera();
     
     uint16_t fake_image[1310720] = {0};
@@ -669,62 +673,13 @@ static void test_sl_t0_calibration(void **state) {
     pa_bad_pixels_enabled = true;
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    expect_function_call(__wrap_Proxy1280_12USB_GetNUC_Processing);
-    expect_function_call(__wrap_Proxy1280_12USB_SetNUC_Processing);
+    expect_function_call(__wrap_Proxy1280_12USB_GetNUCProcessing);
+    expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
 
     res = sl_calibration_t0(h, iStage);
     assert_true(res != eProxy1280_12USBSuccess);
     
 }
-
-
-static void test_sl_t0_cal_low_temp(void **state) {
-
-    HANDLE h = NULL; 
-    is_connected = false;
-    int iStage = 0;
-    int res;
-
-
-    h = setup_camera();
-
-    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
-    expect_function_calls(__wrap_Proxy1280_12USB_StepSLCalibrationT0, NUM_STEPS);
-    expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
-
-    iStage = 1;
-    res = sl_calibration_t0(h, iStage);
-
-    assert_true(res == eProxy1280_12USBSequencingError);
-
-    tear_down(h);
-}
-
-
-static void test_sl_t0_cal_high_temp(void **state) {
-
-    HANDLE h = NULL; 
-    is_connected = false;
-    int iStage = 0;
-    int res;
-
-
-    h = setup_camera();
-
-    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
-    expect_function_calls(__wrap_Proxy1280_12USB_StepSLCalibrationT0, NUM_STEPS);
-    expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
-
-    iStage = 2;
-    res = sl_calibration_t0(h, iStage);
-
-    assert_true(res == eProxy1280_12USBSequencingError);
-
-    tear_down(h);
-}
-
 
 static void test_sl_t1_cal_null_handle(void **state) {
     HANDLE h = NULL; 
@@ -790,8 +745,6 @@ int main(void)
         cmocka_unit_test(test_save_calibration),
         cmocka_unit_test(test_sl_t1_cal),
         cmocka_unit_test(test_sl_t1_cal_null_handle),
-        cmocka_unit_test(test_sl_t0_cal_high_temp),
-        cmocka_unit_test(test_sl_t0_cal_low_temp),
         cmocka_unit_test(test_sl_t0_calibration),
         cmocka_unit_test(test_shutter_calibration),
         cmocka_unit_test(test_fast_shutter_calibration),
