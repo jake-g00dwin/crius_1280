@@ -17,6 +17,27 @@ def test_mytest():
         f()
 
 
+class ShutterlessCalibration:
+    handle = None
+    cam_address = c_void_p(0x12345678)
+    num_pixels = 1310720
+
+    def setup(self):
+        self.handle = cam.init()
+
+    def teardown(self):
+        cam.close_camera(self.handle)
+
+    def test_self(self):
+        assert True
+
+    def test_t0(self):
+        self.setup()
+        result = cam.shutterless_cal_T0(self.handle)
+        assert(result == )
+        self.teardown()
+
+
 class TestCal:
     cam_address = c_void_p(0x12345678)
     num_pixels = 1310720
