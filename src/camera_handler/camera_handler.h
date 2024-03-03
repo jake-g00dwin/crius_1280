@@ -1,3 +1,14 @@
+/**
+ * @file
+ * @author Jake G <jakegoodwin@gorge.works>
+ * @version 0.1.0
+ *
+ * @sectionn DESCRIPTION
+ * The camera handler is a simplified wrapper interface for the crius SDK
+ * that automates and abstracts many of the details needed to use it 
+ * behind the scenes.
+ */
+
 #ifndef CAM_HANDLER
 #define CAM_HANDLER
 
@@ -80,6 +91,26 @@ CAM_HANDLER_API void paimage_address(int* p);
 /*Camera calibration functions*/
 CAM_HANDLER_API int shutter_2pts_calibration(HANDLE h, int iStage);
 CAM_HANDLER_API int shutter_calibration(HANDLE h);
+
+
+/**
+ * The T0 Shutterless Calibration function.
+ *
+ *  **Usage:**
+ *
+ *  First place a low temperture source in front of the camera.
+ *
+ *  Call the funciton first with `iStage` set to zero. During this time the
+ *  the camera will step the camera using the `NUM_STEPS` defined at the top
+ *  of the header file.
+ *
+ *  Once it has completed repeat the proscesss except pass `1` into the `iStage`
+ *  parameter and use a hot temperature source.
+ * 
+ *
+ * @param h, The camera's handle(is a void* with typdef).
+ * @param iStage, The stage of calibration, 0 for cold 1 for hot sources.
+ */
 CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage);
 CAM_HANDLER_API int sl_calibration_t1(HANDLE h);
 CAM_HANDLER_API int save_calibration(HANDLE h);
