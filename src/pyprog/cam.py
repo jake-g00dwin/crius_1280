@@ -2,6 +2,7 @@
 # Date: 2024
 # FileName: cam.py
 # Description: Calls C interface functions for camera.
+
 import ctypes
 from ctypes import CDLL
 from ctypes import c_uint8, c_int, c_char, c_bool, c_float
