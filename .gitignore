@@ -34,3 +34,5 @@
 build/*
 todo.md
 src/pyprog/env
+docs/html
+docs/latex
