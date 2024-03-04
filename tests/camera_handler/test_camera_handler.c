@@ -900,9 +900,42 @@ static void test_get_agc(void **state) {
     tear_down(h);
 }
 
+/*
+ * ############################
+ * Save Tests 
+ * ############################
+ */ 
+
+
+static void test_save_self(void **state) {
+    assert_true(true);
+}
+
+
+
+/*
+ * ############################
+ * Load Tests 
+ * ############################
+ */ 
+
+static void test_load_self(void **state) {
+    assert_true(true);
+}
+
+
+
 
 int main(void)
 {
+
+    const struct CMUnitTest save_tests[] = {
+        cmocka_unit_test(test_save_self), 
+    };
+
+    const struct CMUnitTest load_tests[] = {
+        cmocka_unit_test(test_load_self),
+   };
 
     const struct CMUnitTest setters_getters_tests[] = {
         cmocka_unit_test(test_set_agc),
@@ -935,6 +968,8 @@ int main(void)
         cmocka_unit_test(test_num_attached),
         cmocka_unit_test(null_test_success),
     };
+    cmocka_run_group_tests(save_tests, NULL, NULL);
+    cmocka_run_group_tests(load_tests, NULL, NULL);
     cmocka_run_group_tests(init_tests, NULL,NULL);
     cmocka_run_group_tests(tests, NULL, NULL);
     cmocka_run_group_tests(setters_getters_tests, NULL, NULL);
