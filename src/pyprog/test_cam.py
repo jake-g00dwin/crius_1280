@@ -86,7 +86,6 @@ class TestShutterlessCalibration:
         result = cam.shutterless_cal_T0(self.handle, i_stage)
         assert result == 0
 
-
     def test_t1(self, camera_connection):
         result = cam.shutterless_cal_T1(self.handle)
         assert result == 0
