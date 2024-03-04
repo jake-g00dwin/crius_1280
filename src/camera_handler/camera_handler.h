@@ -123,8 +123,8 @@ CAM_HANDLER_API int save_calibration(HANDLE h);
 
 
 /*RE-EXPORTED FUNCTIONS*/
-CAM_HANDLER_API int set_agc(HANDLE h, unsigned int agc);
-CAM_HANDLER_API int get_agc(HANDLE h, unsigned int *agc);
+CAM_HANDLER_API int set_agc(HANDLE h, unsigned char agc);
+CAM_HANDLER_API int get_agc(HANDLE h, unsigned char *agc);
 
 
 
