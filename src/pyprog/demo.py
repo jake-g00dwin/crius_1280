@@ -76,7 +76,7 @@ def calibration_process():
 
     elif choice == 2:
         h = cam.init(fps=cam.DEF_FPS,
-                     SL=cam.DEF_SL,
+                     SL=1,
                      BP=0,
                      AGC=0,
                      nuc=0)
@@ -101,7 +101,7 @@ def calibration_process():
         if res == 0:
             print("Sucess!")
         else:
-            print("Error!")
+            print("Error: " + str(res))
         cam.close_camera(h)
 
 

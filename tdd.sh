@@ -61,8 +61,11 @@ package_release() {
     mkdir $PTH/$F 
     mkdir $PTH/$F/shared
 
-    cp ./src/cam.py $PTH/$F
-    cp ./src/demo.py $PTH/$F
+    cp ./src/pyprog/cam.py $PTH/$F
+    cp ./src/pyprog/demo.py $PTH/$F
+    cp ./camera_sdk/windows_x86/* $PTH/$F
+
+    read -p "Please copy your binaries then hit enter:" VAL
 
     zip "${PTH}/${F}.zip" "${PTH}/${F}"
 }
@@ -115,7 +118,8 @@ menu () {
             4)
                 echo "You selected Option 4"
                 valid_choice=true
-                build_windows_release
+                # build_windows_release
+                package_release
                 ;;
             5)
                 echo "Exiting..."

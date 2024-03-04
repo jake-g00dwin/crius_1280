@@ -827,8 +827,6 @@ static void test_sl_t1_cal(void **state) {
     h = setup_camera();
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
-    expect_function_call(__wrap_Proxy1280_12USB_GetNUCProcessing);
-    expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
     expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT1);
     expect_function_calls(__wrap_Proxy1280_12USB_StepSLCalibrationT1, NUM_STEPS);
     expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT1);

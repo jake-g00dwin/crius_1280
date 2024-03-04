@@ -85,7 +85,6 @@ DALProxy1280_12USB_API typedef enum
     eProxy1280_12USBCommFailed,  /**< Exchange with Crius1280 failed. */
     eProxy1280_12USBTimeout, /**< Operation on Crius1280 timeout before completed. */
     eProxy1280_12USBSyncBroken, /**< GetImage(), Sync with Crius1280 broken. */
-    //
     eProxy1280_12USBSequencingError, /**< Function call outside correct sequencing */
     eProxy1280_12USBFeatureNotAvailable, /**< Feature not available on this module or can't be use due to present configuration. */
     eProxy1280_12USBBistInitFailure, /**< Built-In Self Test initialisation failed. */
