@@ -1,12 +1,16 @@
 /**
  * @file
  * @author Jake G <jakegoodwin@gorge.works>
- * @version 0.1.0
+ * @version 0.1.3.0
  *
- * @sectionn DESCRIPTION
+ * @section DESCRIPTION
  * The camera handler is a simplified wrapper interface for the crius SDK
  * that automates and abstracts many of the details needed to use it 
  * behind the scenes.
+ *
+ * Most of the heavy lifting is abstracted to be done in C along with all the
+ * interfacing with the camera's SDK. The camera_handler gives a safer interface
+ * that can be used with python via the `cam.py` library file.
  */
 
 #ifndef CAM_HANDLER
@@ -100,7 +104,7 @@ CAM_HANDLER_API int shutter_calibration(HANDLE h);
 
 
 /**
- * The T0 Shutterless Calibration function.
+ * # The T0 Shutterless Calibration function.
  *
  *  **Usage:**
  *
@@ -118,12 +122,59 @@ CAM_HANDLER_API int shutter_calibration(HANDLE h);
  * @param iStage, The stage of calibration, 0 for cold 1 for hot sources.
  */
 CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage);
+
+
+
+/**
+ * # The T1 Shutterless Calibration function.
+ *  **DESC:**
+ *  After running this function, it will generate shutter-less data for 
+ *  FPA(Focal Plane Array) temperature T1. 
+ *
+ *  **Usage:**
+ *  
+ *  1. First place a temperture source in front of the camera.
+ *  2. Call the `sl_calibration_t1(camera_handler_here)` function.
+ *  3. Re-enable the needed processing options.
+ *  
+ *
+ * @param h The camera's handle(is a void* with typdef).
+ */
 CAM_HANDLER_API int sl_calibration_t1(HANDLE h);
+
+
+/**
+ * **DESC:**
+ *
+ * **Usage:**
+ *
+ * @param h The camera's handle
+ */
 CAM_HANDLER_API int save_calibration(HANDLE h);
 
 
 /*RE-EXPORTED FUNCTIONS*/
+
+/**
+ * **DESC:**
+ * Set's the AGC value of the camera.
+ *
+ * **Usage:**
+ *
+ * @param h Camera Handle
+ * @param agc Automatic gain control. Can take the values 0-4  
+ */
 CAM_HANDLER_API int set_agc(HANDLE h, unsigned char agc);
+
+/**
+ * **DESC:**
+ * Get's the current AGC value set in the camera. 
+ *
+ * **Usage:**
+ *
+ * @param h Camera Handle
+ * @param agc Automatic gain control. Can take the values 0-4  
+ */
 CAM_HANDLER_API int get_agc(HANDLE h, unsigned char *agc);
 
 
