@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 # Use the fancy version substitution
 project(camera
-    VERSION 1.0
+    VERSION 1.3.0
     DESCRIPTION "Camera cmake file"
     LANGUAGES   C CXX
 )
