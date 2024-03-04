@@ -71,13 +71,21 @@ class TestShutterlessCalibration:
     def test_self(self):
         assert True
 
-    def test_t0(self, camera_connection):
+    def test_t0_bad_param(self, camera_connection):
         i_stage = 0
+        result = cam.shutterless_cal_T0(self.handle, i_stage)
+        assert result == 1
+
+    def test_t0_good_stage1(self, camera_connection):
+        i_stage = 1
         result = cam.shutterless_cal_T0(self.handle, i_stage)
         assert result == 0
 
+    def test_t0_good_stage2(self, camera_connection):
+        i_stage = 2
         result = cam.shutterless_cal_T0(self.handle, i_stage)
         assert result == 0
+
 
     def test_t1(self, camera_connection):
         result = cam.shutterless_cal_T1(self.handle)
