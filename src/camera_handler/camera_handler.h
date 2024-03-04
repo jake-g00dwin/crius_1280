@@ -17,9 +17,15 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "DALProxySwitchUSBDef.h"
-#include "DALProxy1280_12USB.h"
-#include "DALProxy1280_12USBDef.h"
+/*Used for conditionally compiling with wrapped functs for pytest*/
+#ifndef PYTEST
+    #include "DALProxySwitchUSBDef.h"
+    #include "DALProxy1280_12USB.h"
+    #include "DALProxy1280_12USBDef.h"
+#else
+    #include "camera_test_wrap.h"
+#endif
+
 
 #define MAX_FPS 120
 #define MIN_FPS 5
@@ -115,6 +121,10 @@ CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage);
 CAM_HANDLER_API int sl_calibration_t1(HANDLE h);
 CAM_HANDLER_API int save_calibration(HANDLE h);
 
+
+/*RE-EXPORTED FUNCTIONS*/
+CAM_HANDLER_API int set_agc(HANDLE h, unsigned int agc);
+CAM_HANDLER_API int get_agc(HANDLE h, unsigned int *agc);
 
 
 
