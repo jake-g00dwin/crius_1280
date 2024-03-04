@@ -85,6 +85,19 @@ def close_camera(h):
     return r
 
 
+def set_agc(h, agc_value):
+    camlib = CDLL(SHARED_LIB)
+ 
+    camlib.set_agc()
+    camlib.set_agc()
+
+    return r
+
+
+def get_agc(h, agc_value):
+    return 0
+
+
 def load_frame_buffer(h):
     camlib = CDLL(SHARED_LIB)
 
