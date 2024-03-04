@@ -335,6 +335,13 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT0(HANDLE paHandl
     //function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+
+    if(sl_t0_calibration_in_progress) {
+        return eProxy1280_12USBSequencingError;
+    }
+
+    sl_t0_calibration_in_progress = true;
+
     return eProxy1280_12USBSuccess;
 }
 
@@ -344,6 +351,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT0(HANDLE paHandl
     //function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+
+    if(!sl_t0_calibration_in_progress) {
+        return eProxy1280_12USBSequencingError;
+    }
+
     return eProxy1280_12USBSuccess;
 }
 
@@ -354,6 +366,12 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHan
     //function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+
+    if(!sl_t0_calibration_in_progress) {
+        return eProxy1280_12USBSequencingError;
+    }
+    
+    sl_t0_calibration_in_progress = false;
     return eProxy1280_12USBSequencingError;
 }
 

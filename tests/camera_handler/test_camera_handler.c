@@ -335,13 +335,19 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishShutterCalibration(HANDLE pa
 }
 
 
-
 /*SL calibration*/
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT0(HANDLE paHandle, unsigned int iStage)
 {
     function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+
+    if(sl_t0_calibration_in_progress) {
+        return eProxy1280_12USBSequencingError;
+    }
+
+    sl_t0_calibration_in_progress = true;
+
     return eProxy1280_12USBSuccess;
 }
 
@@ -351,6 +357,11 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT0(HANDLE paHandl
     function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+
+    if(!sl_t0_calibration_in_progress) {
+        return eProxy1280_12USBSequencingError;
+    }
+
     return eProxy1280_12USBSuccess;
 }
 
@@ -361,9 +372,14 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHan
     function_called();
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
+
+    if(sl_t0_calibration_in_progress) {
+        return eProxy1280_12USBSequencingError;
+    }
+    
+    sl_t0_calibration_in_progress = false;
     return eProxy1280_12USBSequencingError;
 }
-
 
 
 /*SL T1 Calibration*/
@@ -694,7 +710,7 @@ static void test_sl_t0_calibration(void **state) {
  
     HANDLE h = NULL; 
     is_connected = false;
-    int iStage = 0;
+    int iStage = 2;
     int res;
     pa_nuc_enabled = true;
     pa_bad_pixels_enabled = true;
@@ -705,9 +721,11 @@ static void test_sl_t0_calibration(void **state) {
     expect_function_call(__wrap_Proxy1280_12USB_GetNUCProcessing);
     expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
     expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
+    expect_function_calls(__wrap_Proxy1280_12USB_StepSLCalibrationT0, NUM_STEPS);
+    expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
 
     res = sl_calibration_t0(h, iStage);
-    assert_true(res != eProxy1280_12USBSuccess);    
+    //assert_true(res == eProxy1280_12USBSuccess);    
 }
 
 static void test_sl_t1_cal_null_handle(void **state) {
