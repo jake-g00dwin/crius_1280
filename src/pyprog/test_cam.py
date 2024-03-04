@@ -17,13 +17,47 @@ def test_mytest():
         f()
 
 
+class TestAGC:
+    handle = None
+    cam_address = c_void_p(0x12345678)
+    num_pixels = 1310720
+    last_set_AGC = None
+
+    def test_self(self):
+        assert True
+
+    @pytest.fixture
+    def camera_connection(self):
+        cam.close_camera(self.cam_address)
+        self.handle = None
+        self.handle = cam.init()
+        self.last_set_AGC = 2
+        assert self.handle == self.cam_address.value
+        yield
+        cam.close_camera(self.handle)
+
+    def test_get_AGC(self, camera_connection):
+        agc_value = 0
+        result = cam.get_agc(self.handle, agc_value)
+        assert result == 0
+        assert agc_value == cam.DEF_AGC
+
+    def test_set_AGC(self, camera_connection):
+        agc_value = 0
+        result = cam.set_agc(self.handle, agc_value)
+        assert result == 0
+
+        result == cam.get_agc(self.handle, agc_value)
+        assert result == 0
+        assert agc_value == 0
+
+
 class ShutterlessCalibration:
     handle = None
     cam_address = c_void_p(0x12345678)
     num_pixels = 1310720
 
     def setup(self):
-        #self.handle = cam.init()
         pass
 
     def teardown(self):
@@ -35,7 +69,7 @@ class ShutterlessCalibration:
     def test_t0(self):
         self.setup()
         result = cam.shutterless_cal_T0(self.handle)
-        assert(result == )
+        assert result == 0
         self.teardown()
 
 
@@ -53,8 +87,9 @@ class TestCal:
         assert res == 2
 
     def test_shutter_cal_valid(self):
+        cam.close_camera(self.cam_address)
         handle = cam.init()
-
+        assert handle == self.cam_address.value
         res = cam.shutter_cal(handle)
         assert res == 0
 
