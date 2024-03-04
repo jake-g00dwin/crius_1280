@@ -38,23 +38,19 @@ def display_colormap_menu():
 
 
 def display_cal_menu():
-    help = "INFO: Place the black body(radiative/hot) source front of lens.\n"
-    help += "This calibration is a single point process to generate new \n"
-    help += "offset values\n"
-    print(help)
-    print("Calibration Menu:")
-    print("1. Yes I want to run fast calibration.")
-    print("2. No I don't want to run fast calibration.")
+    print("1. Quick Calibration.")
+    print("2. SL(shutterless) T0 Calibration.")
+    print("0. EXIT")
 
 
 def get_cal_choice():
     while True:
         try:
             choice = int(input("Enter your choice (1-2): "))
-            if choice in [1, 2]:
+            if choice in [0, 1, 2, 3, 4]:
                 return choice
             else:
-                print("Invalid choice. Please enter a value from 1 to 2")
+                print("Invalid choice. Please enter a value from 0 to 2")
         except ValueError:
             print("Invalid input. Please enter a number.")
 
@@ -63,17 +59,35 @@ def calibration_process():
     display_cal_menu()
     choice = get_cal_choice()
 
-    if choice == 2:
+    if choice == 0:
         return
 
-    h = cam.init(fps=cam.DEF_FPS,
-                 SL=cam.DEF_SL,
-                 BP=cam.DEF_BP,
-                 AGC=cam.DEF_AGC,
-                 nuc=cam.DEF_NUC)
+    elif choice == 1:
+        h = cam.init(fps=cam.DEF_FPS,
+                     SL=cam.DEF_SL,
+                     BP=0,
+                     AGC=0,
+                     nuc=0)
+        print("Please place cold source in front of lens.")
+        input("Hit enter to start:")
+        cam.calibrate_camera(h)
+        cam.close_camera(h)
 
-    cam.calibrate_camera(h)
-    cam.close_camera(h)
+    elif choice == 2:
+        h = cam.init(fps=cam.DEF_FPS,
+                     SL=cam.DEF_SL,
+                     BP=0,
+                     AGC=0,
+                     nuc=0)
+        print("Please place cold source in front of lens.")
+        input("Hit enter to start:")
+        cam.shutterless_cal_T0(h, 0)
+
+        print("Please place hot source in front of lens.")
+        input("Hit enter to start:")
+        cam.shutterless_cal_T0(h, 1)
+
+        cam.close(h)
 
 
 def main():
