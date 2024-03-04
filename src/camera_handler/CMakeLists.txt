@@ -69,6 +69,8 @@ if(UNIT_TESTING)
     "Proxy1280_12USB_SaveCurrentBadPixels"
     "Proxy1280_12USB_SaveCurrentTableOffset"
     "Proxy1280_12USB_SaveCurrentTableGain"
+    "Proxy1280_12USB_SaveCurrentShutterlessTables"
+    "Proxy1280_12USB_LoadCurrentShutterlessTables"
     )
     set(WRAPPED_STR "")
     list(JOIN WRAPPED_FUNCS ",--wrap=" WRAPPED_STR)
