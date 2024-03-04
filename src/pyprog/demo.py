@@ -47,11 +47,11 @@ def display_cal_menu():
 def get_cal_choice():
     while True:
         try:
-            choice = int(input("Enter your choice (1-2): "))
+            choice = int(input("Enter your choice (1-3): "))
             if choice in [0, 1, 2, 3, 4]:
                 return choice
             else:
-                print("Invalid choice. Please enter a value from 0 to 2")
+                print("Invalid choice. Please enter a value from 0 to 3")
         except ValueError:
             print("Invalid input. Please enter a number.")
 
@@ -89,8 +89,20 @@ def calibration_process():
         cam.shutterless_cal_T0(h, 1)
 
         cam.close_camera(h)
+
     elif choice == 3:
-        print("T1 calibration not yet implimented.")
+        h = cam.init(fps=cam.DEF_FPS,
+                     SL=cam.DEF_SL,
+                     BP=0,
+                     AGC=0,
+                     nuc=0)
+        res = cam.shutterless_cal_T1(h)
+        print("Shutterless Calibration results:")
+        if res == 0:
+            print("Sucess!")
+        else:
+            print("Error!")
+        cam.close_camera(h)
 
 
 def main():
