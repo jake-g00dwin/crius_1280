@@ -10,6 +10,7 @@
 
 //#include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
+#include "camera_test_wrap.h"
 
 /*
  * ###################################
@@ -233,6 +234,16 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetShutterLessProcessing(HANDLE pa
 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetAGCProcessing(HANDLE paHandle, unsigned char paeAGCProcessing)
 {
+    function_called();
+    if(!is_valid_handle(paHandle)){
+        return eProxy1280_12USBHandleError;
+    }
+    return eProxy1280_12USBSuccess;
+}
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetAGCProcessing(HANDLE paHandle, unsigned char *paeAGCProcessing)
+{
+    function_called();
     if(!is_valid_handle(paHandle)){
         return eProxy1280_12USBHandleError;
     }
@@ -441,6 +452,7 @@ static void test_camera_init(void **state) {
     assert_null(my_handle);
 
     expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
+    expect_function_call(__wrap_Proxy1280_12USB_SetAGCProcessing);
 
     //CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc)
     my_handle = init_camera(30.0, true, 1, eAGCLocal, 1);
@@ -466,6 +478,7 @@ static void test_close_camera(void **state) {
 
 HANDLE setup_camera(void){
     expect_function_call(__wrap_Proxy1280_12USB_SetNUCProcessing);
+    expect_function_call(__wrap_Proxy1280_12USB_SetAGCProcessing);
     close_camera((void*)0x12345678);
     clear_matrix();
     clear_paimage();
@@ -747,7 +760,12 @@ static void test_set_agc(void **state) {
     is_connected = false;
     int res;
     h = setup_camera();
-    assert_true(0);
+    
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_SetAGCProcessing);
+    res = set_agc(h, eAGCLocal);
+    assert_true(res == eProxy1280_12USBSuccess);
+
     tear_down(h);
 }
 
@@ -757,7 +775,12 @@ static void test_get_agc(void **state) {
     int res;
 
     h = setup_camera();
-    assert_true(0);
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_GetAGCProcessing);
+    int agc_value = 0;
+    res = get_agc(h, &agc_value);
+    
     tear_down(h);
 }
 
