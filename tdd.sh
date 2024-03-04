@@ -1,5 +1,6 @@
 #!/bin/sh
 
+PROJECT_DIR=$(pwd)
 CROSS_TC="$(pwd)/aarch64_toolchain.cmake"
 CROSS_TC_WIN="$(pwd)/i686-w64-mingw32_toolchain.cmake"
 CMAKE_VERBOSE="ON"
@@ -56,18 +57,31 @@ build_windows_release() {
 }
 
 package_release() {
+    read -p "Enter version(example: 1-4-1): " VER
+    
+    echo "version:(${VER})"
+
     PTH="../windows_builds"
-    F="crius_1280_vx-x-x"
+    F="crius_1280_v${VER}"
+    rm -r ${PTH}/${F} 
     mkdir $PTH/$F 
     mkdir $PTH/$F/shared
 
     cp ./src/pyprog/cam.py $PTH/$F
     cp ./src/pyprog/demo.py $PTH/$F
-    cp ./camera_sdk/windows_x86/* $PTH/$F
+    cp ./camera_sdk/windows_x86/* $PTH/$F/shared
 
-    read -p "Please copy your binaries then hit enter:" VAL
+    build_camera_handler
+    cd $PROJECT_DIR
 
-    zip "${PTH}/${F}.zip" "${PTH}/${F}"
+    cp ./build/src/camera_handler/libcamera_handler.* ${PTH}/${F}/shared/
+
+    read -p "Please copy your Windows libs then hit enter:" VAL
+
+    ZFILE="${PTH}/${F}.zip"
+    echo "ZFILE: ${ZFILE}"
+
+    zip -r $ZFILE  ${PTH}/${F}/
 }
 
 build_pytest () {
@@ -94,7 +108,7 @@ menu () {
         echo "1. C Tests for camera_handler"
         echo "2. Pytest for camera_handler"
         echo "3. build for release"
-        echo "4. cross compile for windows"
+        echo "4. Package realese"
         echo "5. Exit"
 
         read -p "Enter your choice: " choice
