@@ -55,6 +55,18 @@ build_windows_release() {
     make camera_handler
 }
 
+package_release() {
+    PTH="../windows_builds"
+    F="crius_1280_vx-x-x"
+    mkdir $PTH/$F 
+    mkdir $PTH/$F/shared
+
+    cp ./src/cam.py $PTH/$F
+    cp ./src/demo.py $PTH/$F
+
+    zip "${PTH}/${F}.zip" "${PTH}/${F}"
+}
+
 build_pytest () {
     # Builds the project so that pytest can run.
     cp ./src/camera_handler/testdata.bin /tmp/
