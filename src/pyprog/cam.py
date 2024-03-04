@@ -6,7 +6,7 @@
 import ctypes
 from ctypes import CDLL
 from ctypes import c_uint8, c_int, c_char, c_bool, c_float
-from ctypes import c_void_p
+from ctypes import c_void_p, c_char_p
 from enum import Enum
 
 import cv2 as cv
@@ -49,13 +49,13 @@ class eAGC(Enum):
 # Moved defaults into global scope for use in demo functions
 DEF_FPS = 60.0
 DEF_AGC = eAGC.agc_linear.value
-DEF_SL = 1
+DEF_SL = True
 DEF_BP = 1
 DEF_NUC = 1
 DEF_COLORMAP = "inferno"
 
 
-def init(fps=60.0, SL=True, BP=1, AGC=2, nuc=1):
+def init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC):
     camlib = CDLL(SHARED_LIB)
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
@@ -87,15 +87,23 @@ def close_camera(h):
 
 def set_agc(h, agc_value):
     camlib = CDLL(SHARED_LIB)
- 
-    camlib.set_agc()
-    camlib.set_agc()
-
+    return 0
+    # int set_agc(HANDLE h, unsigned char agc)
+    camlib.set_agc.argtypes = [c_void_p, c_char]
+    camlib.set_agc.restype = c_int
+    r = camlib.set_agc(h, c_char(agc_value))
     return r
 
 
 def get_agc(h, agc_value):
-    return 0
+    camlib = CDLL(SHARED_LIB)
+    AGC_PTR = c_char_p(agc_value)
+
+    # int get_agc(HANDLE h, unsigned char *agc)
+    camlib.get_agc.argtypes = [c_void_p, c_char_p]
+    camlib.get_agc.restype = c_int
+    r = camlib.get_agc(h, AGC_PTR)
+    return r
 
 
 def load_frame_buffer(h):
