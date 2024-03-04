@@ -40,6 +40,7 @@ def display_colormap_menu():
 def display_cal_menu():
     print("1. Quick Calibration.")
     print("2. SL(shutterless) T0 Calibration.")
+    print("3. SL(shutterless) T1 Calibration.")
     print("0. <-- Go Back to Main Menu")
 
 
@@ -88,6 +89,8 @@ def calibration_process():
         cam.shutterless_cal_T0(h, 1)
 
         cam.close_camera(h)
+    elif choice == 3:
+        print("T1 calibration not yet implimented.")
 
 
 def main():
