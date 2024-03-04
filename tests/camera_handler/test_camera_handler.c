@@ -26,8 +26,8 @@ uint16_t fake_image[IRIMAGE_NBPIXELS*2];
 bool is_connected = false;
 bool pa_nuc_enabled = true;
 bool pa_bad_pixels_enabled = true;
-bool sl_t0_calibration_in_progress = 0;
-bool sl_t1_calibration_in_progress = 0;
+bool sl_t0_calibration_in_progress = false;
+bool sl_t1_calibration_in_progress = false;
 
 /*
  * ############################
@@ -342,7 +342,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_InitSLCalibrationT0(HANDLE paHandl
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
 
-    if(sl_t0_calibration_in_progress) {
+    if(sl_t0_calibration_in_progress == true) {
         return eProxy1280_12USBSequencingError;
     }
 
@@ -358,7 +358,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_StepSLCalibrationT0(HANDLE paHandl
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
 
-    if(!sl_t0_calibration_in_progress) {
+    if(sl_t0_calibration_in_progress == false) {
         return eProxy1280_12USBSequencingError;
     }
 
@@ -373,12 +373,12 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHan
     if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
     if(iStage != 1 && iStage != 2) {return eProxy1280_12USBParameterError;}
 
-    if(sl_t0_calibration_in_progress) {
+    if(sl_t0_calibration_in_progress == false) {
         return eProxy1280_12USBSequencingError;
     }
     
     sl_t0_calibration_in_progress = false;
-    return eProxy1280_12USBSequencingError;
+    return eProxy1280_12USBSuccess;
 }
 
 
@@ -518,6 +518,8 @@ HANDLE setup_camera(void){
     clear_paimage();
     HANDLE my_handle = NULL;
     my_handle = init_camera(30, true, 1, eAGCLocal, 1);
+    sl_t0_calibration_in_progress = false;
+    sl_t1_calibration_in_progress = false;
     return my_handle;
 }
 
@@ -706,14 +708,86 @@ static void test_2pts_shutter_calibration(void **state) {
 }
 
 
+static void test_sl_t0_init(void **state) {
+    HANDLE h = NULL; 
+    is_connected = false;
+    int iStage = 1;
+    int res;
+
+    h = setup_camera();
+    
+    /*Testlist */
+    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_InitSLCalibrationT0(h, 0);
+    assert_true(res == eProxy1280_12USBParameterError);
+
+    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_InitSLCalibrationT0(h, 3);
+    assert_true(res == eProxy1280_12USBParameterError);
+
+    sl_t0_calibration_in_progress = true;
+    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_InitSLCalibrationT0(h, 2);
+    assert_true(res == eProxy1280_12USBSequencingError);
+
+    sl_t0_calibration_in_progress = false;
+    expect_function_call(__wrap_Proxy1280_12USB_InitSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_InitSLCalibrationT0(h, 1);
+    assert_true(res == eProxy1280_12USBSuccess);
+
+    assert_true(sl_t0_calibration_in_progress == true);
+
+    tear_down(h);
+}
+
+static void test_sl_t0_step(void **state) {
+    HANDLE h = NULL; 
+    is_connected = false;
+    int iStage = 1;
+    int res;
+
+    h = setup_camera();
+
+    expect_function_call(__wrap_Proxy1280_12USB_StepSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_StepSLCalibrationT0(h, iStage);
+    assert_true(res == eProxy1280_12USBSequencingError);
+
+    sl_t0_calibration_in_progress = true;
+    expect_function_call(__wrap_Proxy1280_12USB_StepSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_StepSLCalibrationT0(h, iStage);
+    assert_true(res == eProxy1280_12USBSuccess);
+
+    tear_down(h); 
+}
+
+
+static void test_sl_t0_finish(void **state) {
+    HANDLE h = NULL; 
+    is_connected = false;
+    int iStage = 1;
+    int res;
+
+    h = setup_camera();
+
+    expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
+    assert_true(res == eProxy1280_12USBSequencingError);
+
+    sl_t0_calibration_in_progress = true;
+    expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
+    res = __wrap_Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
+    assert_true(res == eProxy1280_12USBSuccess);
+
+
+    tear_down(h);
+}
+
 static void test_sl_t0_calibration(void **state) {
  
     HANDLE h = NULL; 
     is_connected = false;
-    int iStage = 2;
+    int iStage = 1;
     int res;
-    pa_nuc_enabled = true;
-    pa_bad_pixels_enabled = true;
 
     h = setup_camera();
 
@@ -725,7 +799,9 @@ static void test_sl_t0_calibration(void **state) {
     expect_function_call(__wrap_Proxy1280_12USB_FinishSLCalibrationT0);
 
     res = sl_calibration_t0(h, iStage);
-    //assert_true(res == eProxy1280_12USBSuccess);    
+    assert_true(res == eProxy1280_12USBSuccess);    
+
+    tear_down(h);
 }
 
 static void test_sl_t1_cal_null_handle(void **state) {
@@ -737,13 +813,16 @@ static void test_sl_t1_cal_null_handle(void **state) {
 
     res = sl_calibration_t1(h);
     assert_true(res != eProxy1280_12USBSuccess);
+
+    tear_down(h);
 }
 
 
 static void test_sl_t1_cal(void **state) {
     HANDLE h = NULL; 
-    is_connected = false;
     int res;
+
+    assert_true(sl_t1_calibration_in_progress == false);
 
     h = setup_camera();
 
@@ -837,6 +916,9 @@ int main(void)
         cmocka_unit_test(test_sl_t1_cal),
         cmocka_unit_test(test_sl_t1_cal_null_handle),
         cmocka_unit_test(test_sl_t0_calibration),
+        cmocka_unit_test(test_sl_t0_init),
+        cmocka_unit_test(test_sl_t0_step),
+        cmocka_unit_test(test_sl_t0_finish),
         cmocka_unit_test(test_shutter_calibration),
         cmocka_unit_test(test_fast_shutter_calibration),
         cmocka_unit_test(test_2pts_shutter_calibration),

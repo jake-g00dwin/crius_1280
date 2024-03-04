@@ -386,9 +386,8 @@ CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage)
         res = Proxy1280_12USB_StepSLCalibrationT0(h, iStage);
         if(res != eProxy1280_12USBSuccess){return res;} 
     }
-    
-    res = Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
 
+    res = Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
     return res;
 }
 

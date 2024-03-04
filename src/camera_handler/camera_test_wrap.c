@@ -32,8 +32,8 @@ bool is_connected = false;
 bool pa_nuc_enabled = true;
 bool pa_bad_pixels_enabled = true;
 unsigned char last_agc_value = 0;
-bool sl_t0_calibration_in_progress = 0;
-bool sl_t1_calibration_in_progress = 0;
+bool sl_t0_calibration_in_progress = false;
+bool sl_t1_calibration_in_progress = false;
 
 
 
@@ -372,7 +372,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_FinishSLCalibrationT0(HANDLE paHan
     }
     
     sl_t0_calibration_in_progress = false;
-    return eProxy1280_12USBSequencingError;
+    return eProxy1280_12USBSuccess;
 }
 
 
