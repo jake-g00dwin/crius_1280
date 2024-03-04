@@ -374,7 +374,9 @@ CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage)
 
     if(is_nuc_enabled) {
         /*Disable both*/
-        res = Proxy1280_12USB_SetNUCProcessing(h, 0, 0);
+        is_nuc_enabled = 0;
+        is_badpixels_enabled = 0;
+        res = Proxy1280_12USB_SetNUCProcessing(h, is_badpixels_enabled, is_nuc_enabled);
     }
 
     res = Proxy1280_12USB_InitSLCalibrationT0(h, iStage);
@@ -384,8 +386,7 @@ CAM_HANDLER_API int sl_calibration_t0(HANDLE h, int iStage)
         res = Proxy1280_12USB_StepSLCalibrationT0(h, iStage);
         if(res != eProxy1280_12USBSuccess){return res;} 
     }
-      
-
+    
     res = Proxy1280_12USB_FinishSLCalibrationT0(h, iStage);
 
     return res;
