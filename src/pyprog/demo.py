@@ -12,7 +12,7 @@ def display_menu():
     print("Menu:")
     print("1. Show Video")
     print("2. Show Image")
-    print("3. Fast Calibration")
+    print("3. Calibration Menu")
     print("4. Change Color Map")
     print("0. Quit")
 
@@ -40,7 +40,7 @@ def display_colormap_menu():
 def display_cal_menu():
     print("1. Quick Calibration.")
     print("2. SL(shutterless) T0 Calibration.")
-    print("0. EXIT")
+    print("0. <-- Go Back to Main Menu")
 
 
 def get_cal_choice():
@@ -87,7 +87,7 @@ def calibration_process():
         input("Hit enter to start:")
         cam.shutterless_cal_T0(h, 1)
 
-        cam.close(h)
+        cam.close_camera(h)
 
 
 def main():
