@@ -52,6 +52,7 @@ if(UNIT_TESTING)
 	"Proxy1280_12USB_GetNUCProcessing"
 	"Proxy1280_12USB_SetShutterLessProcessing"
 	"Proxy1280_12USB_SetAGCProcessing"
+	"Proxy1280_12USB_GetAGCProcessing"
 	"Proxy1280_12USB_SetFloatFeature"
 	"Proxy1280_12USB_InitShutter2PtsCalibration"
 	"Proxy1280_12USB_StepShutter2PtsCalibration"
