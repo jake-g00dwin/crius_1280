@@ -613,9 +613,6 @@ static void test_shutter_calibration(void **state) {
     res = shutter_calibration(h);
     assert_true(res == eProxy1280_12USBHandleError);
 
-
-
-
     /*Now test the function with good handle.*/
     h = setup_camera();
     assert_true(h == ptr);
@@ -628,7 +625,6 @@ static void test_shutter_calibration(void **state) {
     expect_function_call(__wrap_Proxy1280_12USB_FinishShutterCalibration);
 
     /*Check it's called with the correct parameters.*/
-
 
     shutter_calibration(h);
 
@@ -739,9 +735,40 @@ static void test_fast_shutter_calibration(void **state) {
    assert_false(0);
 }
 
+/*
+ * ############################
+ * Tests for Setters/Getters
+ * ############################
+ */ 
+
+
+static void test_set_agc(void **state) {
+    HANDLE h = NULL; 
+    is_connected = false;
+    int res;
+    h = setup_camera();
+    assert_true(0);
+    tear_down(h);
+}
+
+static void test_get_agc(void **state) {
+    HANDLE h = NULL; 
+    is_connected = false;
+    int res;
+
+    h = setup_camera();
+    assert_true(0);
+    tear_down(h);
+}
+
 
 int main(void)
 {
+
+    const struct CMUnitTest setters_getters_tests[] = {
+        cmocka_unit_test(test_set_agc),
+        cmocka_unit_test(test_get_agc),
+    };
 
     const struct CMUnitTest calibration_tests[] = {
         cmocka_unit_test(test_save_calibration),
@@ -768,5 +795,6 @@ int main(void)
     };
     cmocka_run_group_tests(init_tests, NULL,NULL);
     cmocka_run_group_tests(tests, NULL, NULL);
+    cmocka_run_group_tests(setters_getters_tests, NULL, NULL);
     return cmocka_run_group_tests(calibration_tests, NULL, NULL);
 }
