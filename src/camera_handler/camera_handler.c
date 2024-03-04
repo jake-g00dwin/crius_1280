@@ -400,16 +400,6 @@ CAM_HANDLER_API int sl_calibration_t1(HANDLE h)
     res = Proxy1280_12USB_IsConnectToModule(h);
     if(res != eProxy1280_12USBSuccess){return res;}
 
-    /*Ensure that NUC is disabled*/
-    unsigned char is_nuc_enabled = 1;
-    unsigned char is_badpixels_enabled = 1;
-    res = Proxy1280_12USB_GetNUCProcessing(h, &is_badpixels_enabled, &is_nuc_enabled);  
-    if(res != eProxy1280_12USBSuccess){return res;}
-
-    if(is_nuc_enabled) {
-        /*Disable both*/
-        res = Proxy1280_12USB_SetNUCProcessing(h, 0, 0);
-    }
 
     res = Proxy1280_12USB_InitSLCalibrationT1(h);
     if(res != eProxy1280_12USBSuccess){return res;}
