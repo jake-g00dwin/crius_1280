@@ -250,6 +250,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetNUCProcessing(HANDLE paHandle, 
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetNUCProcessing(HANDLE paHandle, unsigned char *paBadPixels, unsigned char *paNUC);
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetShutterLessProcessing(HANDLE paHandle, bool bActivate);
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetAGCProcessing(HANDLE paHandle, unsigned char paeAGCProcessing);
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetAGCProcessing(HANDLE paHandle, unsigned char *paeAGCProcessing);
 eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetFloatFeature(HANDLE paHandle, int paeFeature, float paFloat);
 
 
