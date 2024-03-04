@@ -208,7 +208,8 @@ def shutterless_cal_T0(h, iStage):
     # int sl_calibration_t0(HANDLE h, int iStage);
     camlib.sl_calibration_t0.argtypes = [c_void_p, c_int]
     camlib.sl_calibration_t0.restype = c_int
-    return camlib.sl_calibration_t0(h, iStage)
+    r = camlib.sl_calibration_t0(h, iStage)
+    return r
 
 
 def shutterless_cal_T1(h):
