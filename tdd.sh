@@ -78,10 +78,13 @@ package_release() {
 
     read -p "Please copy your Windows libs then hit enter:" VAL
 
-    ZFILE="${PTH}/${F}.zip"
+    ZFILE="${F}.zip"
     echo "ZFILE: ${ZFILE}"
 
-    zip -r $ZFILE  ${PTH}/${F}/
+
+    cd $PTH
+    zip -r $ZFILE  ./$F/
+    cd $PROJECT_DIR
 }
 
 build_pytest () {
