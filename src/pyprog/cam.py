@@ -36,6 +36,8 @@ else:
     DALPROXY_LIB = SHARED_DIR + "DALProxy1280_12USB_x64.dll"
     SHARED_LIB = SHARED_DIR + "camera_handler.dll"
 
+camlib = CDLL(SHARED_LIB)
+
 
 # Used as an enum to pass into functions
 class eAGC(Enum):
@@ -56,22 +58,17 @@ DEF_COLORMAP = "inferno"
 
 
 def init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC):
-    camlib = CDLL(SHARED_LIB)
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
     camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_ubyte, c_char]
     camlib.init_camera.restype = c_void_p
     handle = camlib.init_camera(
-            c_float(fps),
-            c_bool(SL),
-            c_char(BP),
-            c_ubyte(AGC),
-            c_char(nuc))
+        c_float(fps), c_bool(SL), c_char(BP), c_ubyte(AGC), c_char(nuc)
+    )
     return handle
 
 
 def num_attached():
-    camlib = CDLL(SHARED_LIB)
 
     # int num_attached(void);
     camlib.num_attached.argtypes = []
@@ -81,7 +78,6 @@ def num_attached():
 
 
 def close_camera(h):
-    camlib = CDLL(SHARED_LIB)
 
     # int close_camera(void);
     camlib.close_camera.argtypes = [c_void_p]
@@ -91,7 +87,6 @@ def close_camera(h):
 
 
 def set_agc(h, agc_value):
-    camlib = CDLL(SHARED_LIB)
 
     # int set_agc(HANDLE h, unsigned char agc)
     camlib.set_agc.argtypes = [c_void_p, c_ubyte]
@@ -101,7 +96,6 @@ def set_agc(h, agc_value):
 
 
 def get_agc(h, agc_value):
-    camlib = CDLL(SHARED_LIB)
 
     # int get_agc(HANDLE h, unsigned char *agc)
     camlib.get_agc.argtypes = [c_void_p, POINTER(c_ubyte)]
@@ -114,7 +108,6 @@ def get_agc(h, agc_value):
 
 
 def load_frame_buffer(h):
-    camlib = CDLL(SHARED_LIB)
 
     # int load_frame_buffer(HANDLE camera_handle);
     camlib.load_frame_buffer.argtypes = [c_void_p]
@@ -126,7 +119,6 @@ def load_frame_buffer(h):
 def get_paimage():
     arr = np.zeros(NUMPIXELS, dtype=np.uint16)
     c_arr = arr.astype(np.intc)
-    camlib = CDLL(SHARED_LIB)
 
     # void get_paimage(int *arr);
     camlib.get_paimage.argtypes = [ctypes.POINTER(ctypes.c_int)]
@@ -141,7 +133,6 @@ def get_paimage():
 
 # Doesn't do anything unless called from C
 def print_paimage():
-    camlib = CDLL(SHARED_LIB)
 
     # void print_paimage(void);
     camlib.print_paimage.argtypes = []
@@ -150,7 +141,6 @@ def print_paimage():
 
 
 def load_matrix_buffer(swap_endian):
-    camlib = CDLL(SHARED_LIB)
 
     # void load_matrix_buffer(bool endian_swap);
     camlib.load_matrix_buffer.argtypes = [c_bool]
@@ -160,7 +150,7 @@ def load_matrix_buffer(swap_endian):
 
 
 def get_frame_matrix():
-    camlib = CDLL(SHARED_LIB)
+
     # C-type corresponding to numpy array
     ND_POINTER_2 = np.ctypeslib.ndpointer(dtype=np.uint16, ndim=2, flags="C")
 
@@ -174,7 +164,6 @@ def get_frame_matrix():
 
 
 def clear_paimage():
-    camlib = CDLL(SHARED_LIB)
 
     # void clear_paimage(void);
     camlib.clear_paimage.argtypes = []
@@ -183,7 +172,6 @@ def clear_paimage():
 
 
 def clear_matrix():
-    camlib = CDLL(SHARED_LIB)
 
     # void clear_matrix(void);
     camlib.clear_matrix.argtypes = []
@@ -192,7 +180,6 @@ def clear_matrix():
 
 
 def shutter_cal(h):
-    camlib = CDLL(SHARED_LIB)
 
     # int shutter_calibration(HANDLE h);
     camlib.shutter_calibration.argtypes = [c_void_p]
@@ -201,7 +188,6 @@ def shutter_cal(h):
 
 
 def two_point_shutter_cal(h, iStage):
-    camlib = CDLL(SHARED_LIB)
 
     # int shutter_2pts_calibration(HANDLE h, int iStage);
     camlib.shutter_2pts_calibration.argtypes = [c_void_p, c_int]
@@ -210,7 +196,6 @@ def two_point_shutter_cal(h, iStage):
 
 
 def shutterless_cal_T0(h, iStage):
-    camlib = CDLL(SHARED_LIB)
 
     # int sl_calibration_t0(HANDLE h, int iStage);
     camlib.sl_calibration_t0.argtypes = [c_void_p, c_int]
@@ -220,7 +205,6 @@ def shutterless_cal_T0(h, iStage):
 
 
 def shutterless_cal_T1(h):
-    camlib = CDLL(SHARED_LIB)
 
     # int sl_calibration_t1(HANDLE h);
     camlib.sl_calibration_t1.argtypes = [c_void_p]
@@ -230,7 +214,6 @@ def shutterless_cal_T1(h):
 
 
 def save_sl_current(h):
-    camlib = CDLL(SHARED_LIB)
 
     # int save_sl_current(HANDLE h)
     camlib.save_sl_current.argtypes = [c_void_p]
@@ -241,7 +224,7 @@ def save_sl_current(h):
 
 
 def load_sl_current(h):
-    camlib = CDLL(SHARED_LIB)
+
     # int load_sl_current(HANDLE h)
     camlib.load_sl_current.argtypes = [c_void_p]
     camlib.load_sl_current.restype = c_int
@@ -251,7 +234,6 @@ def load_sl_current(h):
 
 
 def fast_cal_save(h):
-    camlib = CDLL(SHARED_LIB)
 
     # int save_calibration(HANDLE h);
     camlib.save_calibration.argtypes = [c_void_p]
