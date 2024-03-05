@@ -1,7 +1,7 @@
 /**
  * @file
  * @author Jake G <jakegoodwin@gorge.works>
- * @version 0.1.3.0
+ * @version 0.1.5.0
  *
  * @section DESCRIPTION
  * The camera handler is a simplified wrapper interface for the crius SDK
