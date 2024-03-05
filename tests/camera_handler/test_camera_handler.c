@@ -8,7 +8,6 @@
 #include <string.h>
 #include <unistd.h>
 
-//#include "DALProxy1280_12USB.h"
 #include "camera_handler.h"
 #include "camera_test_wrap.h"
 
@@ -28,6 +27,8 @@ bool pa_nuc_enabled = true;
 bool pa_bad_pixels_enabled = true;
 bool sl_t0_calibration_in_progress = false;
 bool sl_t1_calibration_in_progress = false;
+enum eAGCProcessingValue last_agc_value = eNoAGC;
+
 
 /*
  * ############################
@@ -239,6 +240,10 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetAGCProcessing(HANDLE paHandle, 
     if(!is_valid_handle(paHandle)){
         return eProxy1280_12USBHandleError;
     }
+    
+    last_agc_value = paeAGCProcessing;
+    printf("set agc to: %d\n", last_agc_value);
+
     return eProxy1280_12USBSuccess;
 }
 
@@ -248,6 +253,10 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetAGCProcessing(HANDLE paHandle, 
     if(!is_valid_handle(paHandle)){
         return eProxy1280_12USBHandleError;
     }
+    printf("passed value: %d\n", *paeAGCProcessing);
+    printf("new value: %d\n", last_agc_value);
+    (*paeAGCProcessing) = last_agc_value;
+
     return eProxy1280_12USBSuccess;
 }
 
@@ -536,6 +545,7 @@ HANDLE setup_camera(void){
     my_handle = init_camera(30, true, 1, eAGCLocal, 1);
     sl_t0_calibration_in_progress = false;
     sl_t1_calibration_in_progress = false;
+    last_agc_value = eNoAGC;
     return my_handle;
 }
 
@@ -898,21 +908,38 @@ static void test_set_agc(void **state) {
     res = set_agc(h, eAGCLocal);
     assert_true(res == eProxy1280_12USBSuccess);
 
+    assert_true(last_agc_value == eAGCLocal);
+
     tear_down(h);
 }
 
 static void test_get_agc(void **state) {
     HANDLE h = NULL; 
     is_connected = false;
+    unsigned char agc_value = 0;
     int res;
 
     h = setup_camera();
 
     expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
     expect_function_call(__wrap_Proxy1280_12USB_GetAGCProcessing);
-    unsigned char agc_value = 0;
     res = get_agc(h, &agc_value);
-    
+
+    assert_true(agc_value == eNoAGC);
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_SetAGCProcessing);
+    agc_value = eAGCLocal;
+    res = set_agc(h, agc_value);
+    assert_true(res == eProxy1280_12USBSuccess);
+
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_GetAGCProcessing);
+    res = get_agc(h, &agc_value);
+    assert_true(res == eProxy1280_12USBSuccess);
+    assert_true(agc_value == eAGCLocal);
+
     tear_down(h);
 }
 
