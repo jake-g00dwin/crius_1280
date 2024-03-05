@@ -1,7 +1,7 @@
 import pytest
 import cam
-from ctypes import CDLL  # , POINTER
-from ctypes import c_size_t, c_void_p, c_char, c_char_p
+from ctypes import CDLL, byref, POINTER
+from ctypes import c_size_t, c_void_p, c_char, c_char_p, c_ubyte, c_int
 import numpy as np
 
 # import cv2 as cv
@@ -23,35 +23,30 @@ class TestAGC:
     num_pixels = 1310720
     last_set_AGC = None
 
-    def test_self(self):
-        assert True
-
     @pytest.fixture
     def camera_connection(self):
         cam.close_camera(self.cam_address)
-        self.handle = None
-        self.handle = cam.init()
+        self.handle = cam.init(AGC=cam.DEF_AGC)
         self.last_set_AGC = cam.DEF_AGC
         assert self.handle == self.cam_address.value
         yield
         cam.close_camera(self.handle)
 
-    def test_get_AGC(self, camera_connection):
-        # agc = 0
-        # (result, agc) = cam.get_agc(self.handle, agc_value=agc)
-        # result = cam.get_agc(self.handle, agc_value=agc)
-        # assert result == 0
-        # assert agc == 3
-        assert False
+    def test_self(self, camera_connection):
+        assert True
 
-    def test_set_AGC(self, camera_connection):
-        agc = 0
-        result = cam.set_agc(self.handle, agc_value=agc)
-        assert result == 0
+    def test_get_agc(self, camera_connection):
+        (r, agc) = cam.get_agc(self.handle, 0)
+        assert r == 0
+        assert agc == self.last_set_AGC
 
-        # result == cam.get_agc(self.handle, agc)
-        # assert result == 0
-        # assert agc == 0
+    def test_set_agc(self, camera_connection):
+        r = cam.set_agc(self.handle, 0)
+        assert r == 0
+
+        (r, agc) = cam.get_agc(self.handle, 0)
+        assert agc == 0
+        assert r == 0
 
 
 class TestShutterlessCalibration:

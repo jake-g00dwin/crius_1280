@@ -4,9 +4,9 @@
 # Description: Calls C interface functions for camera.
 
 import ctypes
-from ctypes import CDLL
-from ctypes import c_uint8, c_int, c_char, c_bool, c_float
-from ctypes import c_void_p, c_char_p
+from ctypes import CDLL, POINTER, byref
+from ctypes import c_int, c_char, c_bool, c_float
+from ctypes import c_void_p, c_ubyte
 from enum import Enum
 
 import cv2 as cv
@@ -59,9 +59,14 @@ def init(fps=DEF_FPS, SL=DEF_SL, BP=DEF_BP, AGC=DEF_AGC, nuc=DEF_NUC):
     camlib = CDLL(SHARED_LIB)
 
     # HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, char nuc);
-    camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_uint8, c_char]
+    camlib.init_camera.argtypes = [c_float, c_bool, c_char, c_ubyte, c_char]
     camlib.init_camera.restype = c_void_p
-    handle = camlib.init_camera(fps, SL, BP, AGC, nuc)
+    handle = camlib.init_camera(
+            c_float(fps),
+            c_bool(SL),
+            c_char(BP),
+            c_ubyte(AGC),
+            c_char(nuc))
     return handle
 
 
@@ -87,23 +92,25 @@ def close_camera(h):
 
 def set_agc(h, agc_value):
     camlib = CDLL(SHARED_LIB)
-    return 0
+
     # int set_agc(HANDLE h, unsigned char agc)
-    camlib.set_agc.argtypes = [c_void_p, c_char]
+    camlib.set_agc.argtypes = [c_void_p, c_ubyte]
     camlib.set_agc.restype = c_int
-    r = camlib.set_agc(h, c_char(agc_value))
+    r = camlib.set_agc(h, c_ubyte(agc_value))
     return r
 
 
 def get_agc(h, agc_value):
     camlib = CDLL(SHARED_LIB)
-    AGC_PTR = c_char_p(agc_value)
 
     # int get_agc(HANDLE h, unsigned char *agc)
-    camlib.get_agc.argtypes = [c_void_p, c_char_p]
+    camlib.get_agc.argtypes = [c_void_p, POINTER(c_ubyte)]
     camlib.get_agc.restype = c_int
-    r = camlib.get_agc(h, AGC_PTR)
-    return r
+
+    c_agc = c_ubyte(agc_value)
+    r = camlib.get_agc(h, byref(c_agc))
+
+    return (r, c_agc.value)
 
 
 def load_frame_buffer(h):
@@ -199,7 +206,7 @@ def two_point_shutter_cal(h, iStage):
     # int shutter_2pts_calibration(HANDLE h, int iStage);
     camlib.shutter_2pts_calibration.argtypes = [c_void_p, c_int]
     camlib.shutter_2pts_calibration.restype = c_int
-    return camlib.shutter_2pts_calibration(h, iStage)
+    return camlib.shutter_2pts_calibration(h, c_int(iStage))
 
 
 def shutterless_cal_T0(h, iStage):
@@ -208,7 +215,7 @@ def shutterless_cal_T0(h, iStage):
     # int sl_calibration_t0(HANDLE h, int iStage);
     camlib.sl_calibration_t0.argtypes = [c_void_p, c_int]
     camlib.sl_calibration_t0.restype = c_int
-    r = camlib.sl_calibration_t0(h, iStage)
+    r = camlib.sl_calibration_t0(h, c_int(iStage))
     return r
 
 
