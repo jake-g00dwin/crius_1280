@@ -31,10 +31,9 @@ uint16_t fake_image[IRIMAGE_NBPIXELS*2];
 bool is_connected = false;
 bool pa_nuc_enabled = true;
 bool pa_bad_pixels_enabled = true;
-unsigned char last_agc_value = 0;
 bool sl_t0_calibration_in_progress = false;
 bool sl_t1_calibration_in_progress = false;
-
+enum eAGCProcessingValue last_agc_value = eNoAGC;
 
 
 /*
@@ -222,7 +221,9 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SetAGCProcessing(HANDLE paHandle, 
         return eProxy1280_12USBHandleError;
     }
 
+
     last_agc_value = paeAGCProcessing;
+    printf("set agc to: %d\n", last_agc_value);
 
     return eProxy1280_12USBSuccess;
 }
@@ -235,7 +236,7 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_GetAGCProcessing(HANDLE paHandle, 
         return eProxy1280_12USBHandleError;
     }
     
-    *paeAGCProcessing = last_agc_value;
+    (*paeAGCProcessing) = last_agc_value;
 
     return eProxy1280_12USBSuccess;
 
