@@ -27,7 +27,7 @@
  * ############################
  * DEFINES AND MACROS
  * ############################
- */ 
+ */
 
 #define GETIMAGE_TIMEOUT 5000
 
@@ -39,45 +39,44 @@
 #define HEIGHT 1080
 #endif
 
-//using the extenrally linked global in camera_handler
+// using the extenrally linked global in camera_handler
 HANDLE m_Handle = NULL;
 
 int main() {
-    uint16_t frame_matrix[HEIGHT][WIDTH];
-      
-    printf("initalizing camera(may take a few moments)\n");
-    HANDLE cam = init_camera(30, true, 1, eAGCLocal, 1); 
-    
-    if(cam == NULL){
-        printf("Handle is null\n");
-        return -1;
+  uint16_t frame_matrix[HEIGHT][WIDTH];
+
+  printf("initalizing camera(may take a few moments)\n");
+  HANDLE cam = init_camera(30, true, 1, eAGCLocal, 1);
+
+  if (cam == NULL) {
+    printf("Handle is null\n");
+    return -1;
+  }
+
+  // print_paimage();
+  // int result = load_frame_buffer(&cam);
+  // printf("load_frame_buffer(): %d\n", result);
+
+  load_matrix_buffer(true);
+  get_frame_matrix(&frame_matrix[0][0]);
+
+  printf("Printing 16 , 16 elements from matrix...\n");
+  for (int row = 0; row < 16; row++) {
+    for (int col = 0; col < 16; col++) {
+      printf("%d, ", frame_matrix[row][col]);
     }
+    printf("\n");
+  }
 
+  printf("Disconnecting from camera!\n");
+  close_camera(&cam);
 
-    //print_paimage();
-    //int result = load_frame_buffer(&cam);
-    //printf("load_frame_buffer(): %d\n", result);
-   
-    load_matrix_buffer(true);
-    get_frame_matrix(&frame_matrix[0][0]);
+  char file_name[64] = "./rawimage.bin";
+  printf("writing test image: %s", file_name);
+  mode_t fmode = S_IRWXU | S_IRWXG | S_IROTH;
+  int fd = open(file_name, O_CREAT | O_WRONLY | fmode);
+  write(fd, frame_matrix, sizeof(frame_matrix));
+  close(fd);
 
-    printf("Printing 16 , 16 elements from matrix...\n");
-    for(int row = 0; row < 16; row++){
-        for(int col = 0; col < 16; col++){
-            printf("%d, ", frame_matrix[row][col]);
-        }
-        printf("\n");
-    }
-
-    printf("Disconnecting from camera!\n");
-    close_camera(&cam);
-
-    char file_name[64] = "./rawimage.bin";
-    printf("writing test image: %s", file_name);
-    mode_t fmode = S_IRWXU | S_IRWXG | S_IROTH;
-    int fd = open(file_name, O_CREAT | O_WRONLY | fmode);
-    write(fd, frame_matrix, sizeof(frame_matrix));
-    close(fd);
-
-    return 0;
+  return 0;
 }
