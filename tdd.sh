@@ -85,6 +85,8 @@ package_release() {
     cd $PTH
     zip -r $ZFILE  ./$F/
     cd $PROJECT_DIR
+
+    rm -r ${PTH}/${F}
 }
 
 build_pytest () {
