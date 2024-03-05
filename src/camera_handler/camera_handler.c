@@ -1,5 +1,4 @@
 #include "camera_handler.h"
-#include "DALProxy1280_12USB.h"
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -76,37 +75,37 @@ CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, cha
     enum eAGCProcessingValue agc_val = eNoAGC;
     eDALProxy1280_12USBErr res;
     
-    //printf("Passed fps %f, SL: %d, BP: %d, AGC: %d, nuc: %d\n", fps, SL, BP, agc, nuc);  
+    printf("Passed fps %f, SL: %d, BP: %d, AGC: %d, nuc: %d\n", fps, SL, BP, agc, nuc);  
  
 
     char name[310] = {'\0'}; 
     Proxy1280_12USB_GetModuleName(0, name, 300);
-    //printf("name: '%s'\n", name);
+    printf("name: '%s'\n", name);
     fflush(stdout);
 
     if(fps > MAX_FPS || fps < MIN_FPS) {
-        //printf("Invalid fps parameter: %f, defaulting to 30\n", fps);
+        printf("Invalid fps parameter: %f, defaulting to 30\n", fps);
         fps = 30;
     }
     
-    switch(agc_val){
-        case eNoAGC:
+    switch(agc){
+        case 0:
                 agc_val = eNoAGC; 
                 break;
-        case eAGCEqHisto:
+        case 1:
                 agc_val = eAGCEqHisto;
                 break;
-        case eAGCLocal:
+        case 2:
                 agc_val = eAGCLocal;
                 break;
-        case eAGCLinear:
+        case 3:
                 agc_val = eAGCLinear;
                 break;
-        case eAGCTotal:
+        case 4:
                 agc_val = eAGCTotal;
                 break;
         default:
-                //printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
+                printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
                 agc_val = eNoAGC;
                 break;
     }
@@ -114,43 +113,43 @@ CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, cha
     /*See how many devices are attached.*/
     int num_devices = num_attached();
     if(num_devices < 1){
-        //printf("No devices found!\n");
+        printf("No devices found!\n");
         return NULL;
     }
-    //printf("Found # device: %d\n", num_devices);
+    printf("Found # device: %d\n", num_devices);
     fflush(stdout);
 
     /*connect to module(camera)*/
     eDALProxy1280_12USBErr connect_result = Proxy1280_12USB_ConnectToModule(0, &camera_handle);
     if(connect_result != eProxy1280_12USBSuccess)
     {
-        //printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
+        printf("Error on connection attempt: %s\n", Proxy1280_12USB_GetErrorString(connect_result)); 
         return NULL;
     }
 
-    //printf("Camera handle ptr: %p\n", camera_handle);
+    printf("Camera handle ptr: %p\n", camera_handle);
 
     /*Set the configuration*/
-    //printf("Setting the camera parameters...\n");
+    printf("Setting the camera parameters...\n");
     res = Proxy1280_12USB_SetNUCProcessing(camera_handle, BP, nuc);
     if(res != eProxy1280_12USBSuccess){
-        //printf("Failed to set NUC Processing! --> %d\n", res);
+        printf("Failed to set NUC Processing! --> %d\n", res);
     }
 
     res = Proxy1280_12USB_SetShutterLessProcessing(camera_handle, SL);
     if(res != eProxy1280_12USBSuccess){
-        //printf("Failed to set ShutterLess Processing! --> %d\n", res);
+        printf("Failed to set ShutterLess Processing! --> %d\n", res);
     }
 
     res = Proxy1280_12USB_SetFloatFeature(camera_handle, efFrameRate, fps);
      if(res != eProxy1280_12USBSuccess){
-        //printf("Failed to set FloatFeature! --> %d\n", res);
+        printf("Failed to set FloatFeature! --> %d\n", res);
         return NULL;
      }
 
     res = Proxy1280_12USB_SetAGCProcessing(camera_handle, agc_val);
     if(res != eProxy1280_12USBSuccess){
-        //printf("Failed to set AGC Processing! --> %d\n", res);
+        printf("Failed to set AGC Processing! --> %d\n", res);
         return NULL;
     }
 
@@ -160,7 +159,7 @@ CAM_HANDLER_API HANDLE init_camera(float fps, bool SL, char BP, uint8_t agc, cha
         if(res != 0){
             return NULL;
         }
-        ////printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
+        printf("Im: %s\n", Proxy1280_12USB_GetErrorString(res));
     }
 
     return camera_handle;
@@ -444,7 +443,33 @@ CAM_HANDLER_API int set_agc(HANDLE h, unsigned char agc)
     res = Proxy1280_12USB_IsConnectToModule(h);
     if(res != eProxy1280_12USBSuccess){return res;}
 
-    res = Proxy1280_12USB_SetAGCProcessing(h, agc);
+    enum eAGCProcessingValue agc_val = eNoAGC;
+    switch(agc){
+        case eNoAGC:
+                agc_val = eNoAGC; 
+                break;
+        case eAGCEqHisto:
+                agc_val = eAGCEqHisto;
+                break;
+        case eAGCLocal:
+                agc_val = eAGCLocal;
+                break;
+        case eAGCLinear:
+                agc_val = eAGCLinear;
+                break;
+        case eAGCTotal:
+                agc_val = eAGCTotal;
+                break;
+        default:
+                printf("Invalid agc value: %u, defaulting to noAGC\n", agc);
+                agc_val = eNoAGC;
+                break;
+    }
+    res = Proxy1280_12USB_SetAGCProcessing(h, agc_val);
+    if(res != eProxy1280_12USBSuccess){
+        printf("Failed to set AGC Processing! --> %d\n", res);
+        return res;
+    }
 
     return res;
 }
