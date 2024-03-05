@@ -222,6 +222,27 @@ def shutterless_cal_T1(h):
     return r
 
 
+def save_sl_current(h):
+    camlib = CDLL(SHARED_LIB)
+
+    # int save_sl_current(HANDLE h)
+    camlib.save_sl_current.argtypes = [c_void_p]
+    camlib.save_sl_current.restype = c_int
+
+    r = camlib.save_sl_current(h)
+    return r
+
+
+def load_sl_current(h):
+    camlib = CDLL(SHARED_LIB)
+    # int load_sl_current(HANDLE h)
+    camlib.load_sl_current.argtypes = [c_void_p]
+    camlib.load_sl_current.restype = c_int
+
+    r = camlib.load_sl_current(h)
+    return r
+
+
 def fast_cal_save(h):
     camlib = CDLL(SHARED_LIB)
 
