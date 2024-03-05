@@ -1,7 +1,6 @@
 import pytest
 import cam
-from ctypes import CDLL, byref, POINTER
-from ctypes import c_size_t, c_void_p, c_char, c_char_p, c_ubyte, c_int
+from ctypes import c_void_p
 import numpy as np
 
 # import cv2 as cv
