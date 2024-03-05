@@ -1,4 +1,5 @@
 #include "camera_handler.h"
+#include "DALProxy1280_12USB.h"
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -457,6 +458,34 @@ CAM_HANDLER_API int get_agc(HANDLE h, unsigned char *agc)
     if(res != eProxy1280_12USBSuccess){return res;}
 
     res = Proxy1280_12USB_GetAGCProcessing(h, agc);
+
+    return res;
+}
+
+
+CAM_HANDLER_API int load_sl_current(HANDLE h)
+{
+    eDALProxy1280_12USBErr res;
+
+    /*Check if it's a valid connectionT1 handle*/
+    res = Proxy1280_12USB_IsConnectToModule(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_LoadCurrentShutterlessTables(h);
+
+    return res;
+}
+
+
+CAM_HANDLER_API int save_sl_current(HANDLE h)
+{
+    eDALProxy1280_12USBErr res;
+
+    /*Check if it's a valid connectionT1 handle*/
+    res = Proxy1280_12USB_IsConnectToModule(h);
+    if(res != eProxy1280_12USBSuccess){return res;}
+
+    res = Proxy1280_12USB_SaveCurrentShutterlessTables(h);
 
     return res;
 }

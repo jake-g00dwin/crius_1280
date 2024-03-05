@@ -448,7 +448,22 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableOffset(HANDLE paHa
     return eProxy1280_12USBSuccess;
 }
 
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentShutterlessTables(HANDLE paHandle)
+{
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
 
+    return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_LoadCurrentShutterlessTables(HANDLE paHandle)
+{
+    //function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
+}
 
 
 /*

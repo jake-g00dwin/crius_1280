@@ -179,4 +179,7 @@ CAM_HANDLER_API int get_agc(HANDLE h, unsigned char *agc);
 
 
 
+CAM_HANDLER_API int load_sl_current(HANDLE h);
+CAM_HANDLER_API int save_sl_current(HANDLE h);
+
 #endif /*CAMHANDLER*/
