@@ -3,9 +3,6 @@ import cam
 from ctypes import c_void_p
 import numpy as np
 
-# import cv2 as cv
-# import matplotlib.pyplot as plt
-
 
 def f():
     raise SystemExit(1)
