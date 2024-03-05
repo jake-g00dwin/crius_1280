@@ -453,6 +453,22 @@ eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentTableOffset(HANDLE paHa
     return eProxy1280_12USBSuccess;
 }
 
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_SaveCurrentShutterlessTables(HANDLE paHandle)
+{
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+
+    return eProxy1280_12USBSuccess;
+}
+
+
+eDALProxy1280_12USBErr __wrap_Proxy1280_12USB_LoadCurrentShutterlessTables(HANDLE paHandle)
+{
+    function_called();
+    if( !is_valid_handle(paHandle)) { return eProxy1280_12USBHandleError;}
+    
+    return eProxy1280_12USBSuccess;
+}
 
 
 
@@ -911,13 +927,44 @@ static void test_save_self(void **state) {
     assert_true(true);
 }
 
+static void test_save_sl(void **state) {
 
+    HANDLE h = NULL; 
+    is_connected = false;
+    int res;
+
+    h = setup_camera();
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_SaveCurrentShutterlessTables);
+   
+    res = save_sl_current(h); 
+    assert_true(res == eProxy1280_12USBSuccess);
+
+    tear_down(h);
+}
 
 /*
  * ############################
  * Load Tests 
  * ############################
  */ 
+
+static void test_load_sl(void **state) {
+    HANDLE h = NULL; 
+    is_connected = false;
+    int res;
+
+    h = setup_camera();
+
+    expect_function_call(__wrap_Proxy1280_12USB_IsConnectToModule);
+    expect_function_call(__wrap_Proxy1280_12USB_LoadCurrentShutterlessTables);
+   
+    res = load_sl_current(h); 
+    assert_true(res == eProxy1280_12USBSuccess);
+
+    tear_down(h);
+}
 
 static void test_load_self(void **state) {
     assert_true(true);
@@ -931,10 +978,12 @@ int main(void)
 
     const struct CMUnitTest save_tests[] = {
         cmocka_unit_test(test_save_self), 
+        cmocka_unit_test(test_save_sl),
     };
 
     const struct CMUnitTest load_tests[] = {
         cmocka_unit_test(test_load_self),
+        cmocka_unit_test(test_load_sl),
    };
 
     const struct CMUnitTest setters_getters_tests[] = {
@@ -968,10 +1017,10 @@ int main(void)
         cmocka_unit_test(test_num_attached),
         cmocka_unit_test(null_test_success),
     };
-    cmocka_run_group_tests(save_tests, NULL, NULL);
     cmocka_run_group_tests(load_tests, NULL, NULL);
     cmocka_run_group_tests(init_tests, NULL,NULL);
     cmocka_run_group_tests(tests, NULL, NULL);
     cmocka_run_group_tests(setters_getters_tests, NULL, NULL);
+    cmocka_run_group_tests(save_tests, NULL, NULL);
     return cmocka_run_group_tests(calibration_tests, NULL, NULL);
 }
